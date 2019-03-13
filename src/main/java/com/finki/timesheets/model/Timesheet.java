@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class Timesheet {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private LocalDateTime fromPeriod;
@@ -21,6 +22,9 @@ public class Timesheet {
     @ManyToOne
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
+
+    public Timesheet() {
+    }
 
     public Long getId() {
         return id;

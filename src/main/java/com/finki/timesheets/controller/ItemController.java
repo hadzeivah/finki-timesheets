@@ -1,11 +1,14 @@
 package com.finki.timesheets.controller;
 
 
+import com.finki.timesheets.model.ApiResponse;
 import com.finki.timesheets.model.Item;
-import com.finki.timesheets.model.Timesheet;
-import com.finki.timesheets.repository.ItemRepository;
+import com.finki.timesheets.model.dto.ItemDto;
+import com.finki.timesheets.model.dto.UserDto;
 import com.finki.timesheets.repository.TimesheetRepository;
+import com.finki.timesheets.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,18 +19,33 @@ import java.util.Optional;
 @RequestMapping("/items")
 public class ItemController {
 
-    private final ItemRepository itemRepository;
+    private final ItemService itemService;
     private final TimesheetRepository timesheetRepository;
 
     @Autowired
-    public ItemController(ItemRepository itemRepository, TimesheetRepository timesheetRepository) {
-        this.itemRepository = itemRepository;
+    public ItemController(ItemService itemService, TimesheetRepository timesheetRepository) {
+        this.itemService = itemService;
         this.timesheetRepository = timesheetRepository;
     }
 
     @GetMapping(params = {"timesheetId"})
     public Optional<List<Item>> findItemsByTimesheetId(@RequestParam("timesheetId") Long timesheetId) {
-        Optional<Timesheet> timesheet = timesheetRepository.findById(timesheetId);
-        return itemRepository.findItemsByTimesheet(timesheet.orElse(new Timesheet()));
+        return itemService.findItemsByTimesheet(timesheetId);
+    }
+
+    @PostMapping
+    public ApiResponse<Item> saveItem(@RequestBody ItemDto item) {
+        return new ApiResponse<>(HttpStatus.OK.value(), "Item saved successfully.", itemService.save(item));
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<UserDto> update(@RequestBody ItemDto itemDto, @PathVariable String id) {
+        return new ApiResponse<>(HttpStatus.OK.value(), "User updated successfully.", itemService.update(itemDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> delete(@PathVariable Long id) {
+        itemService.delete(id);
+        return new ApiResponse<>(HttpStatus.OK.value(), "User fetched successfully.", null);
     }
 }

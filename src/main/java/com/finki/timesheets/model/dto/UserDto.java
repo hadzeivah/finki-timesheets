@@ -1,4 +1,4 @@
-package com.finki.timesheets.model;
+package com.finki.timesheets.model.dto;
 
 public class UserDto {
 

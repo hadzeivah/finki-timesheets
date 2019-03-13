@@ -9,6 +9,7 @@ import java.util.List;
 @Table(name = "members")
 public class Member {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String firstName;
@@ -19,6 +20,9 @@ public class Member {
     @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Timesheet> timesheets;
+
+    public Member() {
+    }
 
     public Long getId() {
         return id;

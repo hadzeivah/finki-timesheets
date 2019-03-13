@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "projects")
 public class Project {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -24,6 +25,9 @@ public class Project {
     @JsonIgnore
     @OneToMany(mappedBy = "project")
     private List<Timesheet> timesheets;
+
+    public Project() {
+    }
 
     public Long getId() {
         return id;

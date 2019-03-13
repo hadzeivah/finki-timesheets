@@ -1,38 +1,15 @@
-package com.finki.timesheets.model;
+package com.finki.timesheets.model.dto;
 
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "items")
-public class Item {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ItemDto {
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "timesheet_id", referencedColumnName = "id")
-    private Timesheet timesheet;
-
-    @Column
+    private Long timesheetId;
     private LocalDateTime startDate;
-
-    @Column
     private LocalDateTime endDate;
-
-    @Column
-    private Integer hours;
-
-    @Column
+    private int hours;
     private String taskDescription;
-
-    @Column
     private String intellectualOutput;
-
-    public Item() {
-    }
 
     public Long getId() {
         return id;
@@ -42,12 +19,12 @@ public class Item {
         this.id = id;
     }
 
-    public Timesheet getTimesheet() {
-        return timesheet;
+    public Long getTimesheetId() {
+        return timesheetId;
     }
 
-    public void setTimesheet(Timesheet timesheet) {
-        this.timesheet = timesheet;
+    public void setTimesheetId(Long timesheetId) {
+        this.timesheetId = timesheetId;
     }
 
     public LocalDateTime getStartDate() {
@@ -66,14 +43,13 @@ public class Item {
         this.endDate = endDate;
     }
 
-    public Integer getHours() {
+    public int getHours() {
         return hours;
     }
 
-    public void setHours(Integer hours) {
+    public void setHours(int hours) {
         this.hours = hours;
     }
-
 
     public String getTaskDescription() {
         return taskDescription;

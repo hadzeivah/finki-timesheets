@@ -1,7 +1,7 @@
 package com.finki.timesheets.service;
 
 import com.finki.timesheets.model.User;
-import com.finki.timesheets.model.UserDto;
+import com.finki.timesheets.model.dto.UserDto;
 
 import java.util.List;
 

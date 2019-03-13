@@ -3,7 +3,7 @@ package com.finki.timesheets.controller;
 
 import com.finki.timesheets.model.ApiResponse;
 import com.finki.timesheets.model.User;
-import com.finki.timesheets.model.UserDto;
+import com.finki.timesheets.model.dto.UserDto;
 import com.finki.timesheets.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +16,12 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping
     public ApiResponse<User> saveUser(@RequestBody UserDto user){
@@ -35,7 +39,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<UserDto> update(@RequestBody UserDto userDto) {
+    public ApiResponse<UserDto> update(@RequestBody UserDto userDto, @PathVariable String id) {
         return new ApiResponse<>(HttpStatus.OK.value(), "User updated successfully.",userService.update(userDto));
     }
 
