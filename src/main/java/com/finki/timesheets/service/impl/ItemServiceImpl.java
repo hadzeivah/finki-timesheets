@@ -6,6 +6,7 @@ import com.finki.timesheets.model.dto.ItemDto;
 import com.finki.timesheets.repository.ItemRepository;
 import com.finki.timesheets.repository.TimesheetRepository;
 import com.finki.timesheets.service.ItemService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +38,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Optional<List<Item>> findItemsByTimesheet(Long timesheetId) {
-        Optional<Timesheet> timesheet = timesheetRepository.findById(timesheetId);
-        return itemRepository.findItemsByTimesheet(timesheet.orElse(new Timesheet()));
+    public Optional<List<Item>> findItemsByTimesheet(Long id) {
+        Optional<Timesheet> timesheet = timesheetRepository.findById(id);
+        return itemRepository.findItemsByTimesheet(timesheet.orElseThrow(() -> new IllegalArgumentException("Invalid timesheet Id:" + id)));
     }
 
     @Override
@@ -55,6 +56,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto update(ItemDto itemDto) {
-        return null;
+        Item item = findById(itemDto.getId());
+        if (item != null) {
+            BeanUtils.copyProperties(itemDto, item);
+            itemRepository.save(item);
+        }
+        return itemDto;
     }
 }

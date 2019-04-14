@@ -5,7 +5,6 @@ import com.finki.timesheets.model.ApiResponse;
 import com.finki.timesheets.model.Item;
 import com.finki.timesheets.model.dto.ItemDto;
 import com.finki.timesheets.model.dto.UserDto;
-import com.finki.timesheets.repository.TimesheetRepository;
 import com.finki.timesheets.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +19,10 @@ import java.util.Optional;
 public class ItemController {
 
     private final ItemService itemService;
-    private final TimesheetRepository timesheetRepository;
 
     @Autowired
-    public ItemController(ItemService itemService, TimesheetRepository timesheetRepository) {
+    public ItemController(ItemService itemService) {
         this.itemService = itemService;
-        this.timesheetRepository = timesheetRepository;
     }
 
     @GetMapping(params = {"timesheetId"})
@@ -40,12 +37,12 @@ public class ItemController {
 
     @PutMapping("/{id}")
     public ApiResponse<UserDto> update(@RequestBody ItemDto itemDto, @PathVariable String id) {
-        return new ApiResponse<>(HttpStatus.OK.value(), "User updated successfully.", itemService.update(itemDto));
+        return new ApiResponse<>(HttpStatus.OK.value(), "Item updated successfully.", itemService.update(itemDto));
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id) {
         itemService.delete(id);
-        return new ApiResponse<>(HttpStatus.OK.value(), "User fetched successfully.", null);
+        return new ApiResponse<>(HttpStatus.OK.value(), "Item fetched successfully.", null);
     }
 }
