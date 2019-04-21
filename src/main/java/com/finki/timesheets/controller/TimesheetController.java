@@ -20,8 +20,8 @@ public class TimesheetController {
         this.timesheetRepository = timesheetRepository;
     }
 
-    @GetMapping(params = {"timesheetId"})
-    public Optional<Timesheet> findById(@RequestParam("timesheetId") Long timesheetId) {
-        return timesheetRepository.findById(timesheetId);
+    @GetMapping(params = {"projectId", "memberId"})
+    public Optional<Timesheet> findById(@RequestParam("projectId") Long projectId,@RequestParam("memberId") Long memberId) {
+        return timesheetRepository.findTimesheetByProjectIdAndMemberId(projectId, memberId);
     }
 }

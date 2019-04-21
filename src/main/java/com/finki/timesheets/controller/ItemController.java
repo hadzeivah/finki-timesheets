@@ -36,7 +36,7 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<UserDto> update(@RequestBody ItemDto itemDto, @PathVariable String id) {
+    public ApiResponse<UserDto> update(@RequestBody ItemDto itemDto) {
         return new ApiResponse<>(HttpStatus.OK.value(), "Item updated successfully.", itemService.update(itemDto));
     }
 

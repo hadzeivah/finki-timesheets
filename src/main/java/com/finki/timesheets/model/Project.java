@@ -4,7 +4,9 @@ package com.finki.timesheets.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "projects")
@@ -25,6 +27,9 @@ public class Project {
     @JsonIgnore
     @OneToMany(mappedBy = "project")
     private List<Timesheet> timesheets;
+
+    @ManyToMany(mappedBy = "projects")
+    private Set<Member> members = new HashSet<>();
 
     public Project() {
     }
@@ -65,4 +70,15 @@ public class Project {
     public String getPartnerOrganisation() {
         return partnerOrganisation;
     }
+
+    public void setPartnerOrganisation(String partnerOrganisation) {
+        this.partnerOrganisation = partnerOrganisation;
+    }
+    public Set<Member> getMembers() {
+        return members;
+    }
+    public void setMembers(Set<Member> members) {
+        this.members = members;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.finki.timesheets.controller;
 
 
 import com.finki.timesheets.model.ApiResponse;
+import com.finki.timesheets.model.Project;
 import com.finki.timesheets.model.User;
 import com.finki.timesheets.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ApiResponse<List<User>> listUser(){
+    public ApiResponse<List<Project>> listProjects(){
         return new ApiResponse<>(HttpStatus.OK.value(), "Project list fetched successfully.",projectService.findAll());
     }
 }
