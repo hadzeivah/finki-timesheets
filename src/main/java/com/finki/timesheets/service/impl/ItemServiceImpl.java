@@ -51,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item findById(Long id) {
         Optional<Item> optionalItem = itemRepository.findById(id);
-        return optionalItem.orElse(null);
+        return optionalItem.orElseThrow(() -> new IllegalArgumentException("Invalid item Id:" + id));
     }
 
     @Override
