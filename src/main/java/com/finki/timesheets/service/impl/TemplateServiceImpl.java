@@ -137,22 +137,21 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     private void fillTable(XWPFDocument doc, XWPFTable table, List<Item> items) {
-        int currRow = 0;
+        int currRow = 1;
         String outpath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\ResenieTest.docx";
+        XWPFTableRow header  = table.getRow(0);
+        header.getCell(0).setText("Бр.");
+        header.addNewTableCell().setText("Име и презиме");
+        header.addNewTableCell().setText("Матичен број\n" + "Трансакциска сметка\n");
+        header.addNewTableCell().setText("Вид на активност");
+        header.addNewTableCell().setText("Бр. час.");
+        header.addNewTableCell().setText("€ \n" + "час\n");
+
 
         for(Item i : items){
-            XWPFTableRow curRow = table.getRow(currRow);
-            if(currRow == 0){
-                curRow.getCell(0).setText("Бр");
-            }else{
-                curRow.getCell(0).setText(String.valueOf(currRow));
-            }
-            if(currRow < items.size()-1){
-                table.createRow();
-                currRow++;
-            }else{
-                currRow++;
-            }
+            XWPFTableRow curRow = table.createRow();
+            currRow++;
+            curRow.getCell(0).setText(String.valueOf(currRow));
         }
         try {
             doc.write(new FileOutputStream(outpath));
