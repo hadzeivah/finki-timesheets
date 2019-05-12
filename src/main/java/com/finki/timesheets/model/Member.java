@@ -19,6 +19,12 @@ public class Member {
     @Column
     private String lastName;
 
+    @Column
+    private String embg;
+
+    @Column
+    private String transaction_account;
+
     @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Timesheet> timesheets;
@@ -72,5 +78,25 @@ public class Member {
 
     public void setProjects(Set<Project> projects) {
         this.projects = projects;
+    }
+
+    public String getEmbg() {
+        return embg;
+    }
+
+    public void setEmbg(String embg) {
+        this.embg = embg;
+    }
+
+    public String getTransactionAccount() {
+        return transaction_account;
+    }
+
+    public void setTransactionAccount(String transaction_account) {
+        this.transaction_account = transaction_account;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 }

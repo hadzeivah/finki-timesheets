@@ -1,8 +1,10 @@
 package com.finki.timesheets.service.impl;
 
 import com.finki.timesheets.model.Item;
+import com.finki.timesheets.model.Timesheet;
 import com.finki.timesheets.service.ItemService;
 import com.finki.timesheets.service.TemplateService;
+import com.finki.timesheets.service.TimesheetService;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.*;
@@ -20,9 +22,11 @@ public class TemplateServiceImpl implements TemplateService {
 
 
     private ItemService itemService;
+    private TimesheetService timesheetService;
 
-    public TemplateServiceImpl(ItemService itemService) {
+    public TemplateServiceImpl(ItemService itemService, TimesheetService timesheetService) {
         this.itemService = itemService;
+        this.timesheetService = timesheetService;
     }
 
     @Override
@@ -78,8 +82,8 @@ public class TemplateServiceImpl implements TemplateService {
         XWPFDocument doc;
         try {
             doc = new XWPFDocument(OPCPackage.open(filepath));
-            Optional<List<Item>> items = itemService.findItemsByTimesheet(1L);
-            replaceTable(doc, items.orElse(new ArrayList<>()));
+            List<Timesheet> timesheets = timesheetService.findTimesheetsByProject(1L);
+            replaceTable(doc, timesheets);
         } catch (IOException | InvalidFormatException e) {
             e.printStackTrace();
         }
@@ -87,7 +91,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
 
-    private long replaceTable(XWPFDocument doc, List<Item> items) {
+    private long replaceTable(XWPFDocument doc, List<Timesheet> timesheets) {
         XWPFTable table = null;
         long count = 0;
         for (XWPFParagraph paragraph : doc.getParagraphs()) {
@@ -132,11 +136,13 @@ public class TemplateServiceImpl implements TemplateService {
 
         }
 
-        fillTable(doc,table,items);
+        if (table != null) {
+            fillTable(doc, table,timesheets);
+        }
         return count;
     }
 
-    private void fillTable(XWPFDocument doc, XWPFTable table, List<Item> items) {
+    private void fillTable(XWPFDocument doc, XWPFTable table, List<Timesheet> timesheets) {
         int currRow = 1;
         String outpath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\ResenieTest.docx";
         XWPFTableRow header  = table.getRow(0);
@@ -148,10 +154,15 @@ public class TemplateServiceImpl implements TemplateService {
         header.addNewTableCell().setText("€ \n" + "час\n");
 
 
-        for(Item i : items){
+        for(Timesheet t : timesheets){
             XWPFTableRow curRow = table.createRow();
             currRow++;
             curRow.getCell(0).setText(String.valueOf(currRow));
+            curRow.getCell(1).setText(t.getMember().getFullName());
+            curRow.getCell(2).setText(t.getMember().getEmbg() + " " + t.getMember().getTransactionAccount());
+            curRow.getCell(3).setText("");
+            curRow.getCell(4).setText(timesheetService.calculateTotalHoursSpentByTimesheet(t).toString());
+            curRow.getCell(5).setText("");
         }
         try {
             doc.write(new FileOutputStream(outpath));
