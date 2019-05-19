@@ -4,9 +4,9 @@ import java.io.FileNotFoundException;
 
 public interface TemplateService {
 
-    void coverLetterTemplate() throws FileNotFoundException;
+    void coverLetterTemplate() throws Exception;
 
-    void invoiceTemplate();
+    void invoiceTemplate() throws Exception;
 
     void solutionContractTemplate();
 

@@ -24,6 +24,10 @@ public class Project {
     @Column
     private String partnerOrganisation;
 
+    @ManyToOne
+    @JoinColumn(name = "university_id", referencedColumnName = "id")
+    private University university;
+
     @JsonIgnore
     @OneToMany(mappedBy = "project")
     private List<Timesheet> timesheets;
@@ -81,4 +85,11 @@ public class Project {
         this.members = members;
     }
 
+    public University getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(University university) {
+        this.university = university;
+    }
 }

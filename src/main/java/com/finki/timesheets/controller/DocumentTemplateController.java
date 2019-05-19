@@ -20,10 +20,24 @@ public class DocumentTemplateController {
         this.templateService = templateService;
     }
 
-    @GetMapping()
-    public void findItemsByTimesheetId() {
+    @GetMapping("/invoice")
+    public void getInvoiceTemplate() throws Exception {
+        templateService.invoiceTemplate();
+    }
+
+    @GetMapping("/solution")
+    public void getSolutionContractTemplate() throws Exception {
         templateService.solutionContractTemplate();
     }
 
+    @GetMapping("/requirement")
+    public void getRequirementContract() throws Exception {
+        templateService.requirementContractTemplate();
+    }
+
+    @GetMapping("/coverLetter")
+    public void getCoverLetterTemplate() throws Exception {
+        templateService.coverLetterTemplate();
+    }
 
 }

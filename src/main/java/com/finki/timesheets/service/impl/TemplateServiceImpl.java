@@ -1,8 +1,8 @@
 package com.finki.timesheets.service.impl;
 
-import com.finki.timesheets.model.Item;
+import com.finki.timesheets.model.Project;
 import com.finki.timesheets.model.Timesheet;
-import com.finki.timesheets.service.ItemService;
+import com.finki.timesheets.service.ProjectService;
 import com.finki.timesheets.service.TemplateService;
 import com.finki.timesheets.service.TimesheetService;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -13,64 +13,54 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service(value = "templateService")
 public class TemplateServiceImpl implements TemplateService {
 
 
-    private ItemService itemService;
     private TimesheetService timesheetService;
+    private ProjectService projectService;
 
-    public TemplateServiceImpl(ItemService itemService, TimesheetService timesheetService) {
-        this.itemService = itemService;
+    public TemplateServiceImpl(TimesheetService timesheetService, ProjectService projectService) {
         this.timesheetService = timesheetService;
+        this.projectService = projectService;
     }
 
     @Override
-    public void coverLetterTemplate() {
+    public void coverLetterTemplate() throws Exception {
         String filepath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\Propratno06 - Copy.docx";
         String outpath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\Test.docx";
 
-        XWPFDocument doc = null;
-        try {
-            doc = new XWPFDocument(OPCPackage.open(filepath));
-        } catch (IOException | InvalidFormatException e) {
-            e.printStackTrace();
-        }
+        XWPFDocument doc = openDocument(filepath);
+
         if (doc != null) {
-            for (XWPFParagraph p : doc.getParagraphs()) {
-                List<XWPFRun> runs = p.getRuns();
-                if (runs != null) {
-                    for (XWPFRun r : runs) {
-                        String text = r.getText(0);
-                        if (text != null && text.contains("$$from$$")) {
-                            text = text.replace("$$from$$", "03.05.2019");
-                            r.setText(text, 0);
-                        }
-                        if (text != null && text.contains("$$to$$")) {
-                            text = text.replace("$$to$$", "10.05.2019");
-                            r.setText(text, 0);
-                        }
-                    }
-                }
-                try {
-                    doc.write(new FileOutputStream(outpath));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            replaceText(doc, "$$from$$", "10.05.2019", outpath);
+            replaceText(doc, "$$to$$", "10.05.2019", outpath);
         }
     }
 
     @Override
-    public void invoiceTemplate() {
+    public void invoiceTemplate() throws Exception {
+        String filepath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\Faktura06 - Copy.docx";
+        String outpath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\FakturaTest.docx";
 
+        XWPFDocument doc = openDocument(filepath);
+        Project project = this.projectService.findById(1L);
+
+        if (doc != null) {
+            replaceCell(doc, "$$university$$", project.getUniversity().getName(), outpath);
+            replaceCell(doc, "$$project$$", project.getName(), outpath);
+            replaceText(doc, "$$dean$$", project.getUniversity().getDean(), outpath);
+        }
     }
+
     @Override
     public void requirementContractTemplate() {
+        String filepath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\BaranjeTS6 - Copy.docx";
+        String outpath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\BaranjeTest.docx";
+
+        generateTimesheetTableByProject(1L, filepath, outpath);
 
     }
 
@@ -78,20 +68,25 @@ public class TemplateServiceImpl implements TemplateService {
     public void solutionContractTemplate() {
 
         String filepath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\Resenie06 - Copy.docx";
+        String outpath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\ResenieTest.docx";
 
-        XWPFDocument doc;
-        try {
-            doc = new XWPFDocument(OPCPackage.open(filepath));
-            List<Timesheet> timesheets = timesheetService.findTimesheetsByProject(1L);
-            replaceTable(doc, timesheets);
-        } catch (IOException | InvalidFormatException e) {
-            e.printStackTrace();
-        }
+        generateTimesheetTableByProject(1L, filepath, outpath);
 
     }
 
+    private void generateTimesheetTableByProject(Long projectId, String filepath, String outpath) {
+        XWPFDocument doc;
+        try {
+            doc = new XWPFDocument(OPCPackage.open(filepath));
+            List<Timesheet> timesheets = timesheetService.findTimesheetsByProject(projectId);
+            replaceTable(doc, timesheets, outpath);
+        } catch (IOException | InvalidFormatException e) {
+            e.printStackTrace();
 
-    private long replaceTable(XWPFDocument doc, List<Timesheet> timesheets) {
+        }
+    }
+
+    private void replaceTable(XWPFDocument doc, List<Timesheet> timesheets, String outpath) {
         XWPFTable table = null;
         long count = 0;
         for (XWPFParagraph paragraph : doc.getParagraphs()) {
@@ -109,9 +104,7 @@ public class TemplateServiceImpl implements TemplateService {
                     String runText = run.getText(run.getTextPosition());
                     String replaced = runText.replace(find, "");
                     run.setText(replaced, 0);
-                }
-                else
-                {
+                } else {
                     // The search string spans over more than one Run
                     StringBuilder b = new StringBuilder();
                     for (int runPos = found.getBeginRun(); runPos <= found.getEndRun(); runPos++) {
@@ -127,7 +120,7 @@ public class TemplateServiceImpl implements TemplateService {
                     XWPFRun partOne = runs.get(found.getBeginRun());
                     partOne.setText(replaced, 0);
                     // Removing the text in the other Runs.
-                    for (int runPos = found.getBeginRun()+1; runPos <= found.getEndRun(); runPos++) {
+                    for (int runPos = found.getBeginRun() + 1; runPos <= found.getEndRun(); runPos++) {
                         XWPFRun partNext = runs.get(runPos);
                         partNext.setText("", 0);
                     }
@@ -137,15 +130,13 @@ public class TemplateServiceImpl implements TemplateService {
         }
 
         if (table != null) {
-            fillTable(doc, table,timesheets);
+            fillTimesheetTable(doc, table, timesheets, outpath);
         }
-        return count;
     }
 
-    private void fillTable(XWPFDocument doc, XWPFTable table, List<Timesheet> timesheets) {
+    private void fillTimesheetTable(XWPFDocument doc, XWPFTable table, List<Timesheet> timesheets, String outpath) {
         int currRow = 1;
-        String outpath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\ResenieTest.docx";
-        XWPFTableRow header  = table.getRow(0);
+        XWPFTableRow header = table.getRow(0);
         header.getCell(0).setText("Бр.");
         header.addNewTableCell().setText("Име и презиме");
         header.addNewTableCell().setText("Матичен број\n" + "Трансакциска сметка\n");
@@ -154,7 +145,7 @@ public class TemplateServiceImpl implements TemplateService {
         header.addNewTableCell().setText("€ \n" + "час\n");
 
 
-        for(Timesheet t : timesheets){
+        for (Timesheet t : timesheets) {
             XWPFTableRow curRow = table.createRow();
             currRow++;
             curRow.getCell(0).setText(String.valueOf(currRow));
@@ -164,8 +155,59 @@ public class TemplateServiceImpl implements TemplateService {
             curRow.getCell(4).setText(timesheetService.calculateTotalHoursSpentByTimesheet(t).toString());
             curRow.getCell(5).setText("");
         }
+        saveDocument(doc, outpath);
+    }
+
+    private void replaceText(XWPFDocument doc, String find, String replace, String outpath) {
+        for (XWPFParagraph p : doc.getParagraphs()) {
+            List<XWPFRun> runs = p.getRuns();
+            if (runs != null) {
+                for (XWPFRun r : runs) {
+                    String text = r.getText(0);
+                    if (text != null && text.contains(find)) {
+                        text = text.replace(find, replace);
+                        r.setText(text, 0);
+                    }
+                }
+            }
+            saveDocument(doc, outpath);
+        }
+    }
+
+    private void replaceCell(XWPFDocument doc, String find, String replace, String outpath) {
+        for (XWPFTable tbl : doc.getTables()) {
+            for (XWPFTableRow row : tbl.getRows()) {
+                for (XWPFTableCell cell : row.getTableCells()) {
+                    for (XWPFParagraph p : cell.getParagraphs()) {
+                        for (XWPFRun r : p.getRuns()) {
+                            String text = r.getText(0);
+                            if (text != null && text.contains(find)) {
+                                text = text.replace(find, replace);
+                                r.setText(text, 0);
+                            }
+                        }
+                    }
+                }
+            }
+            saveDocument(doc, outpath);
+        }
+    }
+
+
+    private XWPFDocument openDocument(String file) throws Exception {
+        XWPFDocument document = null;
         try {
-            doc.write(new FileOutputStream(outpath));
+            document = new XWPFDocument(OPCPackage.open(file));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return document;
+    }
+
+    private void saveDocument(XWPFDocument doc, String file) {
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            doc.write(out);
         } catch (IOException e) {
             e.printStackTrace();
         }
