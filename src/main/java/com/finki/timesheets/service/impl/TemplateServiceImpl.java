@@ -10,15 +10,19 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Service(value = "templateService")
@@ -41,11 +45,28 @@ public class TemplateServiceImpl implements TemplateService {
 
     private ResponseEntity getResourceFromClassPath(String filename, HttpServletResponse response) {
         Resource resource = new ClassPathResource(CLASS_PATH + filename);
+        String downloadFileName = resource.getFilename();
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+        if(resource.exists()){
+            try{
+                InputStream fis = new FileInputStream(resource.getFile());
+                InputStreamResource inputStreamResource = new InputStreamResource(fis);
+
+                return ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg"))
+                        .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS , "Access-Control-Expose-Headers", "Content-Disposition")
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + downloadFileName)
+                        .body(inputStreamResource);
+
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Override
