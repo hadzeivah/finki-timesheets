@@ -9,8 +9,14 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +25,7 @@ import java.util.List;
 public class TemplateServiceImpl implements TemplateService {
 
 
+    private static final String CLASS_PATH = "/templates/";
     private TimesheetService timesheetService;
     private ProjectService projectService;
 
@@ -28,9 +35,23 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
+    public ResponseEntity getFileSystem(String filename, HttpServletResponse response) {
+        return getResourceFromClassPath(filename, response);
+    }
+
+    private ResponseEntity getResourceFromClassPath(String filename, HttpServletResponse response) {
+        Resource resource = new ClassPathResource(CLASS_PATH + filename);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    @Override
     public void coverLetterTemplate() throws Exception {
-        String filepath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\Propratno06 - Copy.docx";
-        String outpath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\Test.docx";
+        String filepath = CLASS_PATH + "Propratno06 - Copy.docx";
+        String outpath = CLASS_PATH + "Test.docx";
 
         XWPFDocument doc = openDocument(filepath);
 
@@ -41,9 +62,9 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public void invoiceTemplate() throws Exception {
-        String filepath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\Faktura06 - Copy.docx";
-        String outpath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\FakturaTest.docx";
+    public void invoiceTemplate() {
+        String filepath = CLASS_PATH + "Faktura06 - Copy.docx";
+        String outpath = CLASS_PATH  + "FakturaTest.docx";
 
         XWPFDocument doc = openDocument(filepath);
         Project project = this.projectService.findById(1L);
@@ -57,8 +78,8 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public void requirementContractTemplate() {
-        String filepath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\BaranjeTS6 - Copy.docx";
-        String outpath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\BaranjeTest.docx";
+        String filepath = CLASS_PATH + "BaranjeTS6 - Copy.docx";
+        String outpath = CLASS_PATH + "BaranjeTest.docx";
 
         generateTimesheetTableByProject(1L, filepath, outpath);
 
@@ -67,8 +88,8 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public void solutionContractTemplate() {
 
-        String filepath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\Resenie06 - Copy.docx";
-        String outpath = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\ResenieTest.docx";
+        String filepath = CLASS_PATH + "Resenie06 - Copy.docx";
+        String outpath = CLASS_PATH + "ResenieTest.docx";
 
         generateTimesheetTableByProject(1L, filepath, outpath);
 
@@ -194,7 +215,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
 
-    private XWPFDocument openDocument(String file) throws Exception {
+    private XWPFDocument openDocument(String file) {
         XWPFDocument document = null;
         try {
             document = new XWPFDocument(OPCPackage.open(file));

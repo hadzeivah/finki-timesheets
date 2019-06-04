@@ -3,10 +3,12 @@ package com.finki.timesheets.controller;
 
 import com.finki.timesheets.service.TemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -20,7 +22,7 @@ public class DocumentTemplateController {
         this.templateService = templateService;
     }
 
-    @GetMapping("/invoice")
+  /*  @GetMapping("/invoice")
     public void getInvoiceTemplate() throws Exception {
         templateService.invoiceTemplate();
     }
@@ -38,6 +40,10 @@ public class DocumentTemplateController {
     @GetMapping("/coverLetter")
     public void getCoverLetterTemplate() throws Exception {
         templateService.coverLetterTemplate();
+    }*/
+    @GetMapping(value = "/{filename}", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity getFileFromFileSystem(@PathVariable String filename, HttpServletResponse response) {
+        return templateService.getFileSystem(filename, response);
     }
-
 }

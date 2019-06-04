@@ -1,6 +1,9 @@
 package com.finki.timesheets.service;
 
-import java.io.FileNotFoundException;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
+
+import javax.servlet.http.HttpServletResponse;
 
 public interface TemplateService {
 
@@ -11,4 +14,6 @@ public interface TemplateService {
     void solutionContractTemplate();
 
     void requirementContractTemplate();
+
+    ResponseEntity getFileSystem(String filename, HttpServletResponse response);
 }
