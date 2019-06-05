@@ -1,19 +1,17 @@
 package com.finki.timesheets.service;
 
-import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 
-import javax.servlet.http.HttpServletResponse;
 
 public interface TemplateService {
 
-    void coverLetterTemplate() throws Exception;
+    ResponseEntity coverLetterTemplate(String filename);
 
-    void invoiceTemplate() throws Exception;
+    ResponseEntity invoiceTemplate(String filename);
 
-    void solutionContractTemplate();
+    ResponseEntity solutionContractTemplate(String filename);
 
-    void requirementContractTemplate();
+    ResponseEntity requirementContractTemplate(String filename);
 
-    ResponseEntity getFileSystem(String filename, HttpServletResponse response);
+    ResponseEntity getFileSystem(String filename);
 }

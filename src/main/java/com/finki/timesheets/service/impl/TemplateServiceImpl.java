@@ -10,6 +10,7 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,6 +29,7 @@ public class TemplateServiceImpl implements TemplateService {
 
 
     private static final String CLASS_PATH = "/templates/";
+    private static final String FILE_DIRECTORY = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\";
     private TimesheetService timesheetService;
     private ProjectService projectService;
 
@@ -39,40 +39,39 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public ResponseEntity getFileSystem(String filename, HttpServletResponse response) {
-        return getResourceFromClassPath(filename, response);
+    public ResponseEntity getFileSystem(String filename) {
+        return getResourceFromClassPath(filename + ".docx");
     }
 
-    private ResponseEntity getResourceFromClassPath(String filename, HttpServletResponse response) {
-        Resource resource = new ClassPathResource(CLASS_PATH + filename);
+    private ResponseEntity getResourceFromClassPath(String filename) {
+        Resource resource = new FileSystemResource(FILE_DIRECTORY + filename);
         String downloadFileName = resource.getFilename();
 
-        if(resource.exists()){
-            try{
+        if (resource.exists()) {
+            try {
                 InputStream fis = new FileInputStream(resource.getFile());
                 InputStreamResource inputStreamResource = new InputStreamResource(fis);
 
                 return ResponseEntity.ok()
                         .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg"))
-                        .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS , "Access-Control-Expose-Headers", "Content-Disposition")
+                        .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Access-Control-Expose-Headers", "Content-Disposition")
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + downloadFileName)
                         .body(inputStreamResource);
 
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
 
         }
 
-       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Override
-    public void coverLetterTemplate() throws Exception {
+    public ResponseEntity coverLetterTemplate(String filename) {
         String filepath = CLASS_PATH + "Propratno06 - Copy.docx";
-        String outpath = CLASS_PATH + "Test.docx";
+        String outpath = FILE_DIRECTORY + "coverLetter.docx";
 
         XWPFDocument doc = openDocument(filepath);
 
@@ -80,12 +79,13 @@ public class TemplateServiceImpl implements TemplateService {
             replaceText(doc, "$$from$$", "10.05.2019", outpath);
             replaceText(doc, "$$to$$", "10.05.2019", outpath);
         }
+        return getFileSystem(filename);
     }
 
     @Override
-    public void invoiceTemplate() {
+    public ResponseEntity invoiceTemplate(String filename) {
         String filepath = CLASS_PATH + "Faktura06 - Copy.docx";
-        String outpath = CLASS_PATH  + "FakturaTest.docx";
+        String outpath = FILE_DIRECTORY + "invoice.docx";
 
         XWPFDocument doc = openDocument(filepath);
         Project project = this.projectService.findById(1L);
@@ -95,25 +95,26 @@ public class TemplateServiceImpl implements TemplateService {
             replaceCell(doc, "$$project$$", project.getName(), outpath);
             replaceText(doc, "$$dean$$", project.getUniversity().getDean(), outpath);
         }
+        return getFileSystem(filename);
     }
 
     @Override
-    public void requirementContractTemplate() {
+    public ResponseEntity requirementContractTemplate(String filename) {
         String filepath = CLASS_PATH + "BaranjeTS6 - Copy.docx";
-        String outpath = CLASS_PATH + "BaranjeTest.docx";
+        String outpath = FILE_DIRECTORY + "requirementContract.docx";
 
         generateTimesheetTableByProject(1L, filepath, outpath);
-
+        return getFileSystem(filename);
     }
 
     @Override
-    public void solutionContractTemplate() {
+    public ResponseEntity solutionContractTemplate(String filename) {
 
         String filepath = CLASS_PATH + "Resenie06 - Copy.docx";
-        String outpath = CLASS_PATH + "ResenieTest.docx";
+        String outpath = FILE_DIRECTORY + "solutionContract.docx";
 
         generateTimesheetTableByProject(1L, filepath, outpath);
-
+        return getFileSystem(filename);
     }
 
     private void generateTimesheetTableByProject(Long projectId, String filepath, String outpath) {
@@ -237,9 +238,11 @@ public class TemplateServiceImpl implements TemplateService {
 
 
     private XWPFDocument openDocument(String file) {
+        Resource resource = new ClassPathResource(file);
         XWPFDocument document = null;
         try {
-            document = new XWPFDocument(OPCPackage.open(file));
+            InputStream fis = new FileInputStream(resource.getFile());
+            document = new XWPFDocument(fis);
         } catch (Exception e) {
             e.printStackTrace();
         }

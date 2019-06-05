@@ -21,28 +21,21 @@ public class DocumentTemplateController {
         this.templateService = templateService;
     }
 
-  /*  @GetMapping("/invoice")
-    public void getInvoiceTemplate() throws Exception {
-        templateService.invoiceTemplate();
-    }
-
-    @GetMapping("/solution")
-    public void getSolutionContractTemplate() throws Exception {
-        templateService.solutionContractTemplate();
-    }
-
-    @GetMapping("/requirement")
-    public void getRequirementContract() throws Exception {
-        templateService.requirementContractTemplate();
-    }
-
-    @GetMapping("/coverLetter")
-    public void getCoverLetterTemplate() throws Exception {
-        templateService.coverLetterTemplate();
-    }*/
     @GetMapping(value = "/{filename}", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity getFileFromFileSystem(@PathVariable String filename, HttpServletResponse response) {
-        return templateService.getFileSystem(filename, response);
+        switch (filename) {
+            case "invoice":
+                return templateService.invoiceTemplate(filename);
+            case "solution":
+                return templateService.solutionContractTemplate(filename);
+            case "requirement":
+                return templateService.requirementContractTemplate(filename);
+            case "coverLetter":
+                return templateService.coverLetterTemplate(filename);
+            default:
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        }
     }
 }
