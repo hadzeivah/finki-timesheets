@@ -18,10 +18,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 
 @Service(value = "templateService")
@@ -74,10 +76,12 @@ public class TemplateServiceImpl implements TemplateService {
         String outpath = FILE_DIRECTORY + "coverLetter.docx";
 
         XWPFDocument doc = openDocument(filepath);
+        HashMap<String, String> replacementValues = new HashMap<>();
+        replacementValues.put("$$from$$", "10.05.2019");
+        replacementValues.put("$$to$$", "10.05.2019");
 
         if (doc != null) {
-            replaceText(doc, "$$from$$", "10.05.2019", outpath);
-            replaceText(doc, "$$to$$", "10.05.2019", outpath);
+            replaceText(doc, replacementValues, outpath);
         }
         return getFileSystem(filename);
     }
@@ -90,10 +94,14 @@ public class TemplateServiceImpl implements TemplateService {
         XWPFDocument doc = openDocument(filepath);
         Project project = this.projectService.findById(1L);
 
+        HashMap<String, String> replacementValues = new HashMap<>();
+        replacementValues.put("$$dean$$", project.getUniversity().getDean());
+        replacementValues.put("$$university$$", project.getUniversity().getName());
+        replacementValues.put("$$project$$", project.getName());
+
         if (doc != null) {
-            replaceCell(doc, "$$university$$", project.getUniversity().getName(), outpath);
-            replaceCell(doc, "$$project$$", project.getName(), outpath);
-            replaceText(doc, "$$dean$$", project.getUniversity().getDean(), outpath);
+            replaceCell(doc, replacementValues, outpath);
+            replaceText(doc, replacementValues, outpath);
         }
         return getFileSystem(filename);
     }
@@ -101,7 +109,7 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public ResponseEntity requirementContractTemplate(String filename) {
         String filepath = CLASS_PATH + "BaranjeTS6 - Copy.docx";
-        String outpath = FILE_DIRECTORY + "requirementContract.docx";
+        String outpath = FILE_DIRECTORY + "requirement.docx";
 
         generateTimesheetTableByProject(1L, filepath, outpath);
         return getFileSystem(filename);
@@ -111,22 +119,16 @@ public class TemplateServiceImpl implements TemplateService {
     public ResponseEntity solutionContractTemplate(String filename) {
 
         String filepath = CLASS_PATH + "Resenie06 - Copy.docx";
-        String outpath = FILE_DIRECTORY + "solutionContract.docx";
+        String outpath = FILE_DIRECTORY + "solution.docx";
 
         generateTimesheetTableByProject(1L, filepath, outpath);
         return getFileSystem(filename);
     }
 
     private void generateTimesheetTableByProject(Long projectId, String filepath, String outpath) {
-        XWPFDocument doc;
-        try {
-            doc = new XWPFDocument(OPCPackage.open(filepath));
+        XWPFDocument doc = openDocument(filepath);
             List<Timesheet> timesheets = timesheetService.findTimesheetsByProject(projectId);
             replaceTable(doc, timesheets, outpath);
-        } catch (IOException | InvalidFormatException e) {
-            e.printStackTrace();
-
-        }
     }
 
     private void replaceTable(XWPFDocument doc, List<Timesheet> timesheets, String outpath) {
@@ -201,15 +203,27 @@ public class TemplateServiceImpl implements TemplateService {
         saveDocument(doc, outpath);
     }
 
-    private void replaceText(XWPFDocument doc, String find, String replace, String outpath) {
+    private void replaceText(XWPFDocument doc, HashMap<String, String> replacementValues, String outpath) {
         for (XWPFParagraph p : doc.getParagraphs()) {
             List<XWPFRun> runs = p.getRuns();
             if (runs != null) {
                 for (XWPFRun r : runs) {
-                    String text = r.getText(0);
-                    if (text != null && text.contains(find)) {
-                        text = text.replace(find, replace);
-                        r.setText(text, 0);
+                    replace(replacementValues, r);
+
+                }
+            }
+            saveDocument(doc, outpath);
+        }
+    }
+
+    private void replaceCell(XWPFDocument doc, HashMap<String, String> replacementValues, String outpath) {
+        for (XWPFTable tbl : doc.getTables()) {
+            for (XWPFTableRow row : tbl.getRows()) {
+                for (XWPFTableCell cell : row.getTableCells()) {
+                    for (XWPFParagraph p : cell.getParagraphs()) {
+                        for (XWPFRun r : p.getRuns()) {
+                            replace(replacementValues, r);
+                        }
                     }
                 }
             }
@@ -217,22 +231,14 @@ public class TemplateServiceImpl implements TemplateService {
         }
     }
 
-    private void replaceCell(XWPFDocument doc, String find, String replace, String outpath) {
-        for (XWPFTable tbl : doc.getTables()) {
-            for (XWPFTableRow row : tbl.getRows()) {
-                for (XWPFTableCell cell : row.getTableCells()) {
-                    for (XWPFParagraph p : cell.getParagraphs()) {
-                        for (XWPFRun r : p.getRuns()) {
-                            String text = r.getText(0);
-                            if (text != null && text.contains(find)) {
-                                text = text.replace(find, replace);
-                                r.setText(text, 0);
-                            }
-                        }
-                    }
-                }
+    private void replace(HashMap<String, String> replacementValues, XWPFRun r) {
+        String text = r.getText(0);
+        if (text != null) {
+            String replace = replacementValues.get(text.trim());
+            if (replace != null) {
+                text = text.replace(text, replace);
+                r.setText(text, 0);
             }
-            saveDocument(doc, outpath);
         }
     }
 
