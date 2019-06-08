@@ -1,0 +1,11 @@
+cd ..<form [formGroup]="templatesForm" (ngSubmit)="downloadClasspathFile()">
+  <label>
+    <input type="checkbox" formControlName="selectAll">
+    Select/Deselect all
+  </label>
+  <label formArrayName="templateTypes" *ngFor="let type of templatesForm.controls['templateTypes'].controls; let i = index">
+    <input type="checkbox" [formControlName]="i">{{templateTypes[i].type}}
+  </label>
+
+  <button mat-raised-button color="primary">Submit</button>
+</form>
