@@ -30,18 +30,40 @@
     <th mat-header-cell *matHeaderCellDef> Salary</th>
     <td mat-cell *matCellDef="let element"> {{element.salary}}</td>
   </ng-container>
-  <!-- Delete Column -->
+<!--  &lt;!&ndash; Delete Column &ndash;&gt;
   <ng-container matColumnDef="delete">
     <th mat-header-cell *matHeaderCellDef> Salary</th>
     <td *matCellDef="let element"> <button class="btn btn-success" (click)="deleteUser(element)"> Delete</button> </td>
   </ng-container>
-  <!-- Edit Column -->
+  &lt;!&ndash; Edit Column &ndash;&gt;
   <ng-container matColumnDef="edit">
     <th mat-header-cell *matHeaderCellDef>
       <button class="btn btn-danger" style="width:100px" (click)="addUser()"> Add User </button>
     </th>
     <td  *matCellDef="let element"> <button class="btn btn-success" (click)="editUser(element)" style="margin-left: 20px;"> Edit</button></td>
+  </ng-container>-->
+
+
+  <!-- actions -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>
+      <button mat-icon-button color="primary" (click)="addUser()">
+        <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+      </button>
+    </th>
+    <td mat-cell *matCellDef="let element; let i=index;">
+
+      <button  mat-icon-button color="primary" (click)="editUser(element)">
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button mat-icon-button color="primary"  (click)="deleteUser(element)">
+        <mat-icon>delete</mat-icon>
+      </button>
+
+    </td>
   </ng-container>
+
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

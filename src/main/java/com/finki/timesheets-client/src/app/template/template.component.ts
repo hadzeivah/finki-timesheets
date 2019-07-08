@@ -9,7 +9,6 @@ import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 })
 export class TemplateComponent implements OnInit {
 
-  classpathFileName: string;
   templatesForm: FormGroup;
   templateTypes = [
     {id: 1, type: 'invoice'},

@@ -1,26 +1,22 @@
 import {Component, OnInit} from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Project} from '../model/Project';
 import {ProjectService} from '../services/project.service';
+import {ActivatedRoute, Router} from "@angular/router";
+import {Member} from "../model/Member";
 
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
-  styleUrls: ['./project-list.component.css'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+  styleUrls: ['./project-list.component.css']
 })
 export class ProjectListComponent implements OnInit {
   dataSource: Project[] = [];
-  columnsToDisplay = ['name'];
-  expandedElement: Project | null;
+  selectedProject: Project;
+  selectedMember: Member;
 
-  constructor(private projectService: ProjectService) {
+  constructor(private projectService: ProjectService,
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -34,5 +30,13 @@ export class ProjectListComponent implements OnInit {
         }, err => console.log('HTTP Error', err),
       );
 
+  }
+
+  onSelectProject(project: Project) {
+    this.selectedProject = project;
+  }
+
+  onSelectMember(member: Member) {
+    this.selectedMember = member;
   }
 }

@@ -22,6 +22,7 @@ import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, Mat
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
 import { TemplateComponent } from './template/template.component';
 import {LayoutModule} from '@angular/cdk/layout';
+import { TimesheetPageComponent } from './pages/timesheet-page/timesheet-page.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import {LayoutModule} from '@angular/cdk/layout';
     NavComponent,
     NavigationBarComponent,
     TemplateComponent,
+    TimesheetPageComponent,
   ],
   imports: [
     BrowserModule,

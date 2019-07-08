@@ -11,7 +11,7 @@ import {ApiService} from '../core/api.service';
 export class ListUserComponent implements OnInit {
 
   dataSource: User[];
-  displayedColumns: string[] = ['firstName', 'lastName', 'username', 'age', 'delete', 'edit'];
+  displayedColumns: string[] = ['firstName', 'lastName', 'username', 'age', 'actions'];
 
   constructor(private router: Router, private apiService: ApiService) { }
 

@@ -5,6 +5,7 @@ import {ListUserComponent} from './list-user/list-user.component';
 import {EditUserComponent} from './edit-user/edit-user.component';
 import {TimesheetComponent} from './timesheet/timesheet.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
+import {TimesheetPageComponent} from "./pages/timesheet-page/timesheet-page.component";
 
 const routes: Routes = [
   {
@@ -29,7 +30,7 @@ const routes: Routes = [
     children: [
       {
         path: 'timesheet/:projectId/:memberId',
-        component: TimesheetComponent
+        component: TimesheetPageComponent
       }
     ]
   },
