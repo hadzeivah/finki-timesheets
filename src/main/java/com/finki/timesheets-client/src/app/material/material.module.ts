@@ -8,7 +8,7 @@ import {
   MatInputModule,
   MatListModule, MatMenuModule,
   MatNativeDateModule,
-  MatNavList,
+  MatSelectModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
   MatSortModule,
@@ -21,7 +21,7 @@ import {
     MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule],
   exports: [CommonModule, MatToolbarModule, MatButtonModule, MatCardModule, MatInputModule, MatDialogModule,
     MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule,
-    MatListModule, MatIconModule, MatMenuModule]
+    MatListModule, MatIconModule, MatMenuModule,MatSelectModule]
 })
 export class CustomMaterialModule {
 }

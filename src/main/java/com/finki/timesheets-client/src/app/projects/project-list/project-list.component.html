@@ -1,6 +1,8 @@
 <h2>My Projects</h2>
+<button mat-fab color="primary" (click)="addProjectDialog()"> + </button>
+
 <ul class="projects">
-  <li *ngFor="let project of dataSource"
+  <li *ngFor="let project of projects"
       [class.selected]="project === selectedProject"
       (click)="onSelectProject(project)">
     <span class="badge">{{project.id}}</span> {{project.name}}
@@ -10,6 +12,8 @@
 <div *ngIf="selectedProject">
 
   <h2>{{selectedProject.name | uppercase}} Members </h2>
+
+  <button mat-fab color="primary" (click)="addMemberDialog()"> + </button>
 
   <ul class="projects">
     <li *ngFor="let member of selectedProject.members"

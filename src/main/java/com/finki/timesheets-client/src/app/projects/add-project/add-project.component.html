@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>Add project</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label >Project Name:</mat-label>
+    <input matInput formControlName="name" placeholder="Project name" name=name class="form-control"
+           id="name">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label >Project Number:</mat-label>
+    <input matInput formControlName="projectNumber" placeholder="Project Number" name=projectNumber class="form-control"
+           id="projectNumber">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label >partnerOrganisation:</mat-label>
+    <input matInput formControlName="partnerOrganisation" placeholder="Partner Organisation" name=partnerOrganisation class="form-control"
+           id="partnerOrganisation">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Add members" formControlName="members">
+      <mat-option *ngFor="let member of members">{{member.firstName}} {{member.lastName}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No</button>
+  <button mat-button [mat-dialog-close]="data.name" cdkFocusInitial>OK</button>
+</div>

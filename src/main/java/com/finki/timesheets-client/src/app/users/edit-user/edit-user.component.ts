@@ -1,9 +1,9 @@
 import { Component, OnInit , Inject} from '@angular/core';
 import {Router} from "@angular/router";
-import {User} from "../model/user.model";
+import {User} from "../../model/user.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {first} from "rxjs/operators";
-import {ApiService} from "../core/api.service";
+import {ApiService} from "../../core/api.service";
 
 @Component({
   selector: 'app-edit-user',

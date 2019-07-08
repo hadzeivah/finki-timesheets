@@ -1,8 +1,8 @@
 import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './login/login.component';
-import {AddUserComponent} from './add-user/add-user.component';
-import {ListUserComponent} from './list-user/list-user.component';
-import {EditUserComponent} from './edit-user/edit-user.component';
+import {AddUserComponent} from './users/add-user/add-user.component';
+import {ListUserComponent} from './users/list-user/list-user.component';
+import {EditUserComponent} from './users/edit-user/edit-user.component';
 import {TimesheetComponent} from './timesheet/timesheet.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {TimesheetPageComponent} from "./pages/timesheet-page/timesheet-page.component";
