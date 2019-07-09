@@ -16,6 +16,8 @@ export class ProjectListComponent implements OnInit {
   projects: Project[] = [];
   selectedProject: Project;
   selectedMember: Member;
+  searchProject: string;
+  searchMember: string;
 
   constructor(private projectService: ProjectService,
               public dialog: MatDialog) {

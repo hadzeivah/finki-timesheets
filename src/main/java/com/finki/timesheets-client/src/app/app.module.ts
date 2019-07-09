@@ -25,6 +25,7 @@ import {LayoutModule} from '@angular/cdk/layout';
 import { TimesheetPageComponent } from './pages/timesheet-page/timesheet-page.component';
 import {AddProjectComponent} from "./projects/add-project/add-project.component";
 import { AddMemberComponent } from './projects/add-member/add-member.component';
+import {FilterPipe} from "./utils/filter-pipe";
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { AddMemberComponent } from './projects/add-member/add-member.component';
     TimesheetPageComponent,
     AddProjectComponent,
     AddMemberComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,

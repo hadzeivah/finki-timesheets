@@ -13,7 +13,8 @@ import {
   MatProgressSpinnerModule,
   MatSortModule,
   MatTableModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatChipsModule
 } from '@angular/material';
 
 @NgModule({
@@ -21,7 +22,7 @@ import {
     MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule],
   exports: [CommonModule, MatToolbarModule, MatButtonModule, MatCardModule, MatInputModule, MatDialogModule,
     MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule,
-    MatListModule, MatIconModule, MatMenuModule,MatSelectModule]
+    MatListModule, MatIconModule, MatMenuModule,MatSelectModule, MatChipsModule]
 })
 export class CustomMaterialModule {
 }

@@ -1,8 +1,12 @@
-<h2>My Projects</h2>
-<button mat-fab color="primary" (click)="addProjectDialog()"> + </button>
+<mat-card-title>My Projects</mat-card-title>
+
+<mat-form-field>
+  <input matInput placeholder="Search projects" type="text" [(ngModel)]="searchProject">
+  <button mat-fab matSuffix color="primary" (click)="addProjectDialog()">+</button>
+</mat-form-field>
 
 <ul class="projects">
-  <li *ngFor="let project of projects"
+  <li *ngFor="let project of projects | filter:searchProject"
       [class.selected]="project === selectedProject"
       (click)="onSelectProject(project)">
     <span class="badge">{{project.id}}</span> {{project.name}}
@@ -11,21 +15,24 @@
 
 <div *ngIf="selectedProject">
 
-  <h2>{{selectedProject.name | uppercase}} Members </h2>
+  <mat-card-title>{{selectedProject.name | uppercase}} Members</mat-card-title>
 
-  <button mat-fab color="primary" (click)="addMemberDialog()"> + </button>
-
+  <mat-form-field>
+    <input matInput placeholder="Search members" type="text" [(ngModel)]="searchMember">
+    <button mat-fab matSuffix color="primary" (click)="addMemberDialog()">+</button>
+  </mat-form-field>
   <ul class="projects">
-    <li *ngFor="let member of selectedProject.members"
+    <li *ngFor="let member of selectedProject.members | filter:searchMember"
         [class.selected]="member === selectedMember"
         (click)="onSelectMember(member)">
       <span class="badge">{{member.id}}</span>
-      <a [routerLink]="['/dashboard/timesheet/', selectedProject.id, member.id]">{{ member.firstName}} {{ member.lastName}}</a>
+      <a
+        [routerLink]="['/dashboard/timesheet/', selectedProject.id, member.id]">{{ member.firstName}} {{ member.lastName}}</a>
     </li>
   </ul>
 </div>
 <div *ngIf="selectedMember">
-<app-template> </app-template>
+  <app-template></app-template>
 </div>
 
 

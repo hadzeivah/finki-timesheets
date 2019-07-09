@@ -9,3 +9,11 @@
 table {
   width: 100%;
 }
+
+mat-divider{
+  padding: 10px;
+}
+.templates{
+  display: flex;
+  align-content: flex-end;
+}
