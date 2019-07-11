@@ -3,9 +3,10 @@ import {LoginComponent} from './login/login.component';
 import {AddUserComponent} from './users/add-user/add-user.component';
 import {ListUserComponent} from './users/list-user/list-user.component';
 import {EditUserComponent} from './users/edit-user/edit-user.component';
-import {TimesheetComponent} from './timesheet/timesheet.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {TimesheetPageComponent} from "./pages/timesheet-page/timesheet-page.component";
+import {DocumentPageComponent} from "./pages/document-page/document-page.component";
+import {ProjectTableComponent} from "./projects/project-table/project-table.component";
 
 const routes: Routes = [
   {
@@ -25,11 +26,19 @@ const routes: Routes = [
     component: EditUserComponent
   },
   {
+    path: 'documents',
+    component: DocumentPageComponent
+  },
+  {
+    path: 'projects',
+    component: ProjectTableComponent
+  },
+  {
     path: 'dashboard',
     component: DashboardComponent,
     children: [
       {
-        path: 'timesheet/:projectId/:memberId',
+        path: 'timesheet/project/:projectId/member/:memberId',
         component: TimesheetPageComponent
       }
     ]

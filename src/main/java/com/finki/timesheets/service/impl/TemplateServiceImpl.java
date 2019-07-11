@@ -19,12 +19,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service(value = "templateService")
 public class TemplateServiceImpl implements TemplateService {
@@ -34,6 +33,7 @@ public class TemplateServiceImpl implements TemplateService {
     private static final String FILE_DIRECTORY = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\";
     private TimesheetService timesheetService;
     private ProjectService projectService;
+    private List<String> filenamesToZip;
 
     public TemplateServiceImpl(TimesheetService timesheetService, ProjectService projectService) {
         this.timesheetService = timesheetService;
@@ -87,12 +87,11 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public ResponseEntity invoiceTemplate(String filename) {
+    public ResponseEntity invoiceTemplate(String filename, Project project) {
         String filepath = CLASS_PATH + "Faktura06 - Copy.docx";
         String outpath = FILE_DIRECTORY + "invoice.docx";
 
         XWPFDocument doc = openDocument(filepath);
-        Project project = this.projectService.findById(1L);
 
         HashMap<String, String> replacementValues = new HashMap<>();
         replacementValues.put("$$dean$$", project.getUniversity().getDean());
@@ -107,21 +106,21 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public ResponseEntity requirementContractTemplate(String filename) {
+    public ResponseEntity requirementContractTemplate(String filename , Long projectId) {
         String filepath = CLASS_PATH + "BaranjeTS6 - Copy.docx";
         String outpath = FILE_DIRECTORY + "requirement.docx";
 
-        generateTimesheetTableByProject(1L, filepath, outpath);
+        generateTimesheetTableByProject(projectId, filepath, outpath);
         return getFileSystem(filename);
     }
 
     @Override
-    public ResponseEntity solutionContractTemplate(String filename) {
+    public ResponseEntity solutionContractTemplate(String filename , Long projectId) {
 
         String filepath = CLASS_PATH + "Resenie06 - Copy.docx";
         String outpath = FILE_DIRECTORY + "solution.docx";
 
-        generateTimesheetTableByProject(1L, filepath, outpath);
+        generateTimesheetTableByProject(projectId, filepath, outpath);
         return getFileSystem(filename);
     }
 
@@ -262,5 +261,17 @@ public class TemplateServiceImpl implements TemplateService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static byte[] zipBytes(String filename, byte[] input) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ZipOutputStream zos = new ZipOutputStream(baos);
+        ZipEntry entry = new ZipEntry(filename);
+        entry.setSize(input.length);
+        zos.putNextEntry(entry);
+        zos.write(input);
+        zos.closeEntry();
+        zos.close();
+        return baos.toByteArray();
     }
 }

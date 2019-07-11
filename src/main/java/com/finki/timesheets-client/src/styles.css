@@ -31,3 +31,7 @@ mat-form-field.mat-form-field {
   -webkit-align-items: stretch;
   align-items: stretch;
 }
+.column-container{
+  display: flex;
+  flex-direction: column;
+}

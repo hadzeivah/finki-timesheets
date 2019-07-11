@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {AppConstants} from "../app.constants";
 import {Observable} from "rxjs";
@@ -9,30 +9,31 @@ import * as fileSaver from 'file-saver';
 })
 export class DownloadService {
 
-  baseUrl = AppConstants.baseURL + 'templates/';
+  baseUrl = AppConstants.baseURL + 'templates';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
-  downloadClasspathFile(filename: string): Observable<HttpResponse<Blob>>{
+  downloadClasspathFile(filename: string, projectId: number): Observable<HttpResponse<Blob>> {
 
     let headers = new HttpHeaders();
-    headers = headers.append('Accept',"application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8");
+    headers = headers.append('Accept', "application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8");
 
-    return this.http.get(this.baseUrl + filename ,{
-      headers: headers ,
+    return this.http.get(this.baseUrl + "/project/" + projectId + "/" + filename, {
+      headers: headers,
       observe: 'response',
       responseType: 'blob'
     })
   }
 
-  getFileNameFromResponseContentDisposition (res: HttpResponse<Blob>) {
+  getFileNameFromResponseContentDisposition(res: HttpResponse<Blob>) {
     const contentDisposition = res.headers.get('content-disposition') || '';
     const matches = /filename=([^;]+)/ig.exec(contentDisposition);
     return (matches[1] || 'untitled').trim();
   };
 
-  saveFile(data: any, filename?: string){
-    const blob = new Blob([data] , {type: "application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8"})
+  saveFile(data: any, filename?: string) {
+    const blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8"});
     fileSaver.saveAs(blob, filename)
   }
 

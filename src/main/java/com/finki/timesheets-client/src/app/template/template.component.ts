@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {DownloadService} from "../services/download.service";
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-template',
@@ -8,6 +9,8 @@ import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
   styleUrls: ['./template.component.css']
 })
 export class TemplateComponent implements OnInit {
+
+  @Input() selectedProjectId: number;
 
   templatesForm: FormGroup;
   templateTypes = [
@@ -17,7 +20,9 @@ export class TemplateComponent implements OnInit {
     {id: 4, type: 'coverLetter'}
   ];
 
-  constructor(private downloadService: DownloadService, private fb: FormBuilder) {
+  constructor(private downloadService: DownloadService,
+              private fb: FormBuilder,
+              private route: ActivatedRoute) {
 
     const formControls = this.templateTypes.map(type => new FormControl(false));
     const selectAllControl = new FormControl(false);
@@ -29,6 +34,10 @@ export class TemplateComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.selectedProjectId == undefined)
+    this.route.paramMap.subscribe(params => {
+      this.selectedProjectId = +params.get("projectId");
+    });
     this.onChanges();
   }
 
@@ -36,9 +45,8 @@ export class TemplateComponent implements OnInit {
     const selectedPreferences = this.templatesForm.value.templateTypes
       .map((checked, index) => checked ? this.templateTypes[index].type : null)
       .filter(value => value !== null);
-    console.log(selectedPreferences);
 
-    this.downloadService.downloadClasspathFile(selectedPreferences[0])
+    this.downloadService.downloadClasspathFile(selectedPreferences[0], this.selectedProjectId)
       .subscribe(response => {
         const filename = this.downloadService.getFileNameFromResponseContentDisposition(response);
         this.downloadService.saveFile(response.body, filename)
@@ -63,10 +71,7 @@ export class TemplateComponent implements OnInit {
           this.templatesForm.get('selectAll')
             .patchValue(allSelected,
               {emitEvent: false})
-
         }
-
       })
-
   }
 }

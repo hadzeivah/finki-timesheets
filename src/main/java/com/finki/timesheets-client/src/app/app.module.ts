@@ -26,6 +26,8 @@ import { TimesheetPageComponent } from './pages/timesheet-page/timesheet-page.co
 import {AddProjectComponent} from "./projects/add-project/add-project.component";
 import { AddMemberComponent } from './projects/add-member/add-member.component';
 import {FilterPipe} from "./utils/filter-pipe";
+import { ProjectTableComponent } from './projects/project-table/project-table.component';
+import { DocumentPageComponent } from './pages/document-page/document-page.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import {FilterPipe} from "./utils/filter-pipe";
     TimesheetPageComponent,
     AddProjectComponent,
     AddMemberComponent,
-    FilterPipe
+    FilterPipe,
+    ProjectTableComponent,
+    DocumentPageComponent
   ],
   imports: [
     BrowserModule,

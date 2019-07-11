@@ -1,6 +1,9 @@
 package com.finki.timesheets.controller;
 
 
+import com.finki.timesheets.model.Project;
+import com.finki.timesheets.service.MemberService;
+import com.finki.timesheets.service.ProjectService;
 import com.finki.timesheets.service.TemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,27 +18,36 @@ import javax.servlet.http.HttpServletResponse;
 public class DocumentTemplateController {
 
     private TemplateService templateService;
+    private ProjectService projectService;
 
     @Autowired
-    public DocumentTemplateController(TemplateService templateService) {
+    public DocumentTemplateController(TemplateService templateService, ProjectService projectService) {
         this.templateService = templateService;
+        this.projectService = projectService;
     }
 
-    @GetMapping(value = "/{filename}", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8")
+    @GetMapping(value = "project/{projectId}/{filename}", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity getFileFromFileSystem(@PathVariable String filename, HttpServletResponse response) {
-        switch (filename) {
-            case "invoice":
-                return templateService.invoiceTemplate(filename);
-            case "solution":
-                return templateService.solutionContractTemplate(filename);
-            case "requirement":
-                return templateService.requirementContractTemplate(filename);
-            case "coverLetter":
-                return templateService.coverLetterTemplate(filename);
-            default:
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity getFileFromFileSystem(@PathVariable String filename, HttpServletResponse response, @PathVariable Long projectId) {
 
+        Project project = this.projectService.findById(projectId);
+
+        if (project != null) {
+
+            switch (filename) {
+                case "invoice":
+                    return templateService.invoiceTemplate(filename, project);
+                case "solution":
+                    return templateService.solutionContractTemplate(filename, projectId);
+                case "requirement":
+                    return templateService.requirementContractTemplate(filename, projectId);
+                case "coverLetter":
+                    return templateService.coverLetterTemplate(filename);
+                default:
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+            }
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

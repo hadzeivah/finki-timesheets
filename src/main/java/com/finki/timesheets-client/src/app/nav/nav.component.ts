@@ -20,11 +20,11 @@ export class NavComponent {
   myWorkRoutes: ROUTE[] = [
     {
       icon: 'assignment',
-      route: 'sales/activities',
-      title: 'Activities',
+      route: 'documents',
+      title: 'Documents',
     }, {
       icon: 'dashboard',
-      route: 'sales/dashboards',
+      route: 'dashboard',
       title: 'Dashboards',
     }
   ];
@@ -32,7 +32,7 @@ export class NavComponent {
   customerRoutes: ROUTE[] = [
     {
       icon: 'contacts',
-      route: 'dashboard',
+      route: 'projects',
       title: 'Projects',
     }, {
       icon: 'people',
