@@ -1,4 +1,3 @@
-import {FormGroup} from '@angular/forms';
 
 export abstract class Item {
   id: number;

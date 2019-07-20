@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {Timesheet} from '../model/Timesheet';
 import {AppConstants} from '../app.constants';
-import {catchError} from 'rxjs/operators';
 
 
 @Injectable({

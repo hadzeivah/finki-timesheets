@@ -2,10 +2,10 @@ package com.finki.timesheets.service.impl;
 
 import com.finki.timesheets.model.Item;
 import com.finki.timesheets.model.Timesheet;
-import com.finki.timesheets.model.dto.ItemDto;
 import com.finki.timesheets.repository.ItemRepository;
 import com.finki.timesheets.repository.TimesheetRepository;
 import com.finki.timesheets.service.ItemService;
+import javassist.NotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,15 +26,15 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item save(ItemDto item) {
-        Item newItem = new Item();
-        newItem.setTimesheet(timesheetRepository.findById(item.getTimesheetId()).get());
-        newItem.setStartDate(item.getStartDate());
-        newItem.setEndDate(item.getEndDate());
-        newItem.setHours(item.getHours());
-        newItem.setTaskDescription(item.getTaskDescription());
-        newItem.setIntellectualOutput(item.getIntellectualOutput());
-        return itemRepository.save(newItem);
+    public Item save(Item newItem) throws NotFoundException {
+        Item item = new Item();
+        item.setTimesheet(timesheetRepository.findById(newItem.getTimesheet().getId()).orElseThrow(() -> new NotFoundException("Timesheet not found")));
+        item.setStartDate(newItem.getStartDate());
+        item.setEndDate(newItem.getEndDate());
+        item.setHours(newItem.getHours());
+        item.setTaskDescription(newItem.getTaskDescription());
+        item.setIntellectualOutput(newItem.getIntellectualOutput());
+        return itemRepository.save(item);
     }
 
     @Override
@@ -55,12 +55,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto update(ItemDto itemDto) {
-        Item item = findById(itemDto.getId());
+    public Item update(Item prevItem) {
+        Item item = findById(prevItem.getId());
         if (item != null) {
-            BeanUtils.copyProperties(itemDto, item);
+            BeanUtils.copyProperties(prevItem, item);
             itemRepository.save(item);
         }
-        return itemDto;
+        return item;
     }
 }

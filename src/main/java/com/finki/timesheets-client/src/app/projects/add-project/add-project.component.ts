@@ -1,8 +1,9 @@
 import {Component, Inject} from "@angular/core";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {Project} from "../../model/Project";
-import {MemberService} from "../../services/member.service";
-import {Member} from "../../model/Member";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {University} from "../../model/University";
+import {UniversityService} from "../../services/university.service";
 
 @Component({
   selector: 'app-add-project',
@@ -11,25 +12,44 @@ import {Member} from "../../model/Member";
 })
 export class AddProjectComponent {
 
-  members: Member[];
+  universities: University[];
+  addProjectForm: FormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<AddProjectComponent>,
-    private memberService: MemberService,
-    @Inject(MAT_DIALOG_DATA) public data: Project) {
-    this.getMembers();
+    @Inject(MAT_DIALOG_DATA) public data: Project,
+    private fb: FormBuilder,
+    private universityService: UniversityService) {
+
+    this.getUniversities();
+    this.addProjectForm = this.fb.group({
+      name: ['', Validators.required],
+      projectNumber: ['', Validators.required],
+      partnerOrganisation: ['', Validators.required],
+      universityId: ['', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required]
+    });
+
+    // if(data.id){
+    //   this.addProjectForm.patchValue()
+    // }
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  getMembers() {
-    this.memberService.findMembers()
+  getUniversities() {
+    this.universityService.findUniversities()
       .subscribe(data => {
-          this.members = data.result;
+          this.universities = data.result;
         }, err => console.log('HTTP Error', err),
       );
 
+  }
+
+  save() {
+    this.dialogRef.close(this.addProjectForm.value);
   }
 }

@@ -1,29 +1,49 @@
 <h1 mat-dialog-title>Add project</h1>
 <div mat-dialog-content>
-  <mat-form-field>
-    <mat-label >Project Name:</mat-label>
-    <input matInput formControlName="name" placeholder="Project name" name=name class="form-control"
-           id="name">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label >Project Number:</mat-label>
-    <input matInput formControlName="projectNumber" placeholder="Project Number" name=projectNumber class="form-control"
-           id="projectNumber">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label >partnerOrganisation:</mat-label>
-    <input matInput formControlName="partnerOrganisation" placeholder="Partner Organisation" name=partnerOrganisation class="form-control"
-           id="partnerOrganisation">
-  </mat-form-field>
+  <form [formGroup]="addProjectForm">
+    <mat-form-field>
+      <mat-label>Project Name:</mat-label>
+      <input matInput formControlName="name" placeholder="Project name" name=name class="form-control"
+             id="name">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Project Number:</mat-label>
+      <input matInput formControlName="projectNumber" placeholder="Project Number" name=projectNumber
+             class="form-control"
+             id="projectNumber">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Partner Organisation:</mat-label>
+      <input matInput formControlName="partnerOrganisation" placeholder="Partner Organisation" name=partnerOrganisation
+             class="form-control"
+             id="partnerOrganisation">
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-select placeholder="Add members" formControlName="members">
-      <mat-option *ngFor="let member of members">{{member.firstName}} {{member.lastName}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="Add university" formControlName="universityId">
+        <mat-option value="{{university.id}}" *ngFor="let university of universities">{{university.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="startDatePicker" placeholder="Choose a date"
+             formControlName="startDate">
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="endDatePicker" placeholder="Choose a date"
+             formControlName="endDate">
+      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker></mat-datepicker>
+    </mat-form-field>
+
+
+  </form>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No</button>
-  <button mat-button [mat-dialog-close]="data.name" cdkFocusInitial>OK</button>
+  <button mat-button color="primary" (click)="save()" cdkFocusInitial>Save</button>
 </div>
