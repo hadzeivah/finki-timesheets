@@ -62,4 +62,8 @@ public class Timesheet {
     public LocalDateTime getToPeriod() {
         return toPeriod;
     }
+
+    public void setToPeriod(LocalDateTime toPeriod) {
+        this.toPeriod = toPeriod;
+    }
 }

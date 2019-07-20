@@ -2,7 +2,6 @@
 
 <mat-form-field>
   <input matInput placeholder="Search projects" type="text" [(ngModel)]="searchProject">
-  <button mat-fab matSuffix color="primary" (click)="addProjectDialog()">+</button>
 </mat-form-field>
 
 <ul class="projects">
@@ -30,5 +29,7 @@
         [routerLink]="['/dashboard/timesheet/project',selectedProject.id,'member', member.id]">{{ member.firstName}} {{ member.lastName}}</a>
     </li>
   </ul>
+  <app-template></app-template>
 </div>
+
 

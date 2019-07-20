@@ -30,19 +30,6 @@
     <th mat-header-cell *matHeaderCellDef> Salary</th>
     <td mat-cell *matCellDef="let element"> {{element.salary}}</td>
   </ng-container>
-<!--  &lt;!&ndash; Delete Column &ndash;&gt;
-  <ng-container matColumnDef="delete">
-    <th mat-header-cell *matHeaderCellDef> Salary</th>
-    <td *matCellDef="let element"> <button class="btn btn-success" (click)="deleteUser(element)"> Delete</button> </td>
-  </ng-container>
-  &lt;!&ndash; Edit Column &ndash;&gt;
-  <ng-container matColumnDef="edit">
-    <th mat-header-cell *matHeaderCellDef>
-      <button class="btn btn-danger" style="width:100px" (click)="addUser()"> Add User </button>
-    </th>
-    <td  *matCellDef="let element"> <button class="btn btn-success" (click)="editUser(element)" style="margin-left: 20px;"> Edit</button></td>
-  </ng-container>-->
-
 
   <!-- actions -->
   <ng-container matColumnDef="actions">

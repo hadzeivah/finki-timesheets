@@ -4,6 +4,7 @@ package com.finki.timesheets.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,11 @@ public class Project {
 
     @Column
     private String partnerOrganisation;
+
+    @Column
+    private LocalDateTime startDate;
+    @Column
+    private LocalDateTime endDate;
 
     @ManyToOne
     @JoinColumn(name = "university_id", referencedColumnName = "id")
@@ -91,5 +97,21 @@ public class Project {
 
     public void setUniversity(University university) {
         this.university = university;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
     }
 }

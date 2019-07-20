@@ -28,7 +28,7 @@ public class DocumentTemplateController {
 
     @GetMapping(value = "project/{projectId}/{filename}", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity getFileFromFileSystem(@PathVariable String filename, HttpServletResponse response, @PathVariable Long projectId) {
+    public ResponseEntity getFileFromFileSystem(@PathVariable String filename, @PathVariable Long projectId) {
 
         Project project = this.projectService.findById(projectId);
 
@@ -42,7 +42,7 @@ public class DocumentTemplateController {
                 case "requirement":
                     return templateService.requirementContractTemplate(filename, projectId);
                 case "coverLetter":
-                    return templateService.coverLetterTemplate(filename);
+                    return templateService.coverLetterTemplate(filename,project);
                 default:
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 

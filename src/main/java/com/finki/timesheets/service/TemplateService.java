@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface TemplateService {
 
-    ResponseEntity coverLetterTemplate(String filename);
+    ResponseEntity coverLetterTemplate(String filename , Project project);
 
     ResponseEntity invoiceTemplate(String filename, Project project);
 

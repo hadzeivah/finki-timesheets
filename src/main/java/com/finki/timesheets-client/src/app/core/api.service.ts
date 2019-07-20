@@ -11,7 +11,7 @@ export class ApiService {
   constructor(private http: HttpClient) {
   }
 
-  baseUrl = AppConstants.baseURL + 'users';
+  baseUrl = AppConstants.baseURL + 'users/';
 
   login(loginPayload): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(AppConstants.baseURL + 'token/generate-token', loginPayload);

@@ -5,8 +5,7 @@ import com.finki.timesheets.model.Timesheet;
 import com.finki.timesheets.service.ProjectService;
 import com.finki.timesheets.service.TemplateService;
 import com.finki.timesheets.service.TimesheetService;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.openxml4j.opc.OPCPackage;
+import com.finki.timesheets.service.utils.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 import org.springframework.core.io.ClassPathResource;
@@ -20,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -71,14 +72,18 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public ResponseEntity coverLetterTemplate(String filename) {
+    public ResponseEntity coverLetterTemplate(String filename, Project project) {
         String filepath = CLASS_PATH + "Propratno06 - Copy.docx";
         String outpath = FILE_DIRECTORY + "coverLetter.docx";
 
         XWPFDocument doc = openDocument(filepath);
         HashMap<String, String> replacementValues = new HashMap<>();
-        replacementValues.put("$$from$$", "10.05.2019");
-        replacementValues.put("$$to$$", "10.05.2019");
+
+        String from = StringUtils.formatDateToString_DDMMYYYY(project.getStartDate() != null ? project.getStartDate() : LocalDateTime.now());
+        String to = StringUtils.formatDateToString_DDMMYYYY(project.getEndDate() != null ? project.getEndDate() : LocalDateTime.now());
+
+        replacementValues.put("$$from$$", from);
+        replacementValues.put("$$to$$", to);
 
         if (doc != null) {
             replaceText(doc, replacementValues, outpath);
@@ -106,7 +111,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public ResponseEntity requirementContractTemplate(String filename , Long projectId) {
+    public ResponseEntity requirementContractTemplate(String filename, Long projectId) {
         String filepath = CLASS_PATH + "BaranjeTS6 - Copy.docx";
         String outpath = FILE_DIRECTORY + "requirement.docx";
 
@@ -115,7 +120,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public ResponseEntity solutionContractTemplate(String filename , Long projectId) {
+    public ResponseEntity solutionContractTemplate(String filename, Long projectId) {
 
         String filepath = CLASS_PATH + "Resenie06 - Copy.docx";
         String outpath = FILE_DIRECTORY + "solution.docx";
@@ -126,8 +131,8 @@ public class TemplateServiceImpl implements TemplateService {
 
     private void generateTimesheetTableByProject(Long projectId, String filepath, String outpath) {
         XWPFDocument doc = openDocument(filepath);
-            List<Timesheet> timesheets = timesheetService.findTimesheetsByProject(projectId);
-            replaceTable(doc, timesheets, outpath);
+        List<Timesheet> timesheets = timesheetService.findTimesheetsByProject(projectId);
+        replaceTable(doc, timesheets, outpath);
     }
 
     private void replaceTable(XWPFDocument doc, List<Timesheet> timesheets, String outpath) {
@@ -263,15 +268,28 @@ public class TemplateServiceImpl implements TemplateService {
         }
     }
 
-    public static byte[] zipBytes(String filename, byte[] input) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ZipOutputStream zos = new ZipOutputStream(baos);
-        ZipEntry entry = new ZipEntry(filename);
-        entry.setSize(input.length);
-        zos.putNextEntry(entry);
-        zos.write(input);
-        zos.closeEntry();
-        zos.close();
-        return baos.toByteArray();
+    public void ZipMultipleFiles() {
+        try {
+            List<String> srcFiles = Arrays.asList("test1.txt", "test2.txt");
+            FileOutputStream fos = new FileOutputStream("multiCompressed.zip");
+            ZipOutputStream zipOut = new ZipOutputStream(fos);
+            for (String srcFile : srcFiles) {
+                File fileToZip = new File(srcFile);
+                FileInputStream fis = new FileInputStream(fileToZip);
+                ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+                zipOut.putNextEntry(zipEntry);
+                byte[] bytes = new byte[1024];
+                int length;
+                while ((length = fis.read(bytes)) >= 0) {
+                    zipOut.write(bytes, 0, length);
+                }
+                fis.close();
+            }
+            zipOut.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
