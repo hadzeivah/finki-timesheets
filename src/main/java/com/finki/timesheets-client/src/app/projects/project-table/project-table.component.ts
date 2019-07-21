@@ -5,6 +5,7 @@ import {AddProjectComponent} from "../add-project/add-project.component";
 import {MatDialog, MatDialogConfig} from "@angular/material";
 import {BehaviorSubject} from "rxjs";
 import {Datasource} from "../../timesheet/timesheet.component";
+import {Member} from "../../model/Member";
 
 @Component({
   selector: 'app-project-table',
@@ -13,6 +14,8 @@ import {Datasource} from "../../timesheet/timesheet.component";
 })
 export class ProjectTableComponent implements OnInit {
   projects: Project[];
+  selectedProject: Project;
+  members: Member[];
   subject = new BehaviorSubject(this.projects);
   dataSource = new Datasource(this.subject.asObservable());
   displayedColumns: string[] = ['projectName', 'projectNumber', 'partnerOrganisation', 'startDate', 'endDate', 'actions'];
@@ -29,6 +32,7 @@ export class ProjectTableComponent implements OnInit {
     this.projectService.findProjects()
       .subscribe(data => {
           this.projects = data.result;
+          this.subject.next(this.projects);
         }, err => console.log('HTTP Error', err),
       );
 
@@ -42,12 +46,11 @@ export class ProjectTableComponent implements OnInit {
     const dialogRef = this.dialog.open(AddProjectComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
-      const newProject: Project = Object.assign({},result);
-      this.projectService.addProject(newProject).subscribe(project =>
-      {
-        this.projects.push(project.result);
-        this.subject.next(this.projects);
-      }, err => console.log('HTTP Error', err),
+      const newProject: Project = Object.assign({}, result);
+      this.projectService.addProject(newProject).subscribe(project => {
+          this.projects.push(project.result);
+          this.subject.next(this.projects);
+        }, err => console.log('HTTP Error', err),
       );
     });
 
@@ -62,7 +65,11 @@ export class ProjectTableComponent implements OnInit {
     this.projectService.deleteProject(project.id)
       .subscribe(data => {
         this.projects = this.projects.filter(p => p !== project);
+        this.subject.next(this.projects);
       });
   }
 
+  displayMembers(project: Project) {
+    this.selectedProject = project;
+  }
 }

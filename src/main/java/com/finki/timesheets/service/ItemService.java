@@ -1,13 +1,13 @@
 package com.finki.timesheets.service;
 
 import com.finki.timesheets.model.Item;
-import javassist.NotFoundException;
+import com.finki.timesheets.model.dto.ItemDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ItemService {
-    Item save(Item item) throws NotFoundException;
+    Item save(ItemDto item);
 
     Optional<List<Item>> findItemsByTimesheet(Long timesheetId);
 
@@ -15,5 +15,5 @@ public interface ItemService {
 
     Item findById(Long id);
 
-    Item update(Item item);
+    ItemDto update(ItemDto itemDto);
 }

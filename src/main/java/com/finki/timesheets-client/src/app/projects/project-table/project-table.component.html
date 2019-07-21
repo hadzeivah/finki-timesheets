@@ -52,5 +52,11 @@
 
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr mat-row *matRowDef="let project; columns: displayedColumns;" (click)="displayMembers(project)"></tr>
 </table>
+
+<div *ngIf="selectedProject">
+
+<members-list [membersOnProject]="selectedProject.members"></members-list>
+
+</div>

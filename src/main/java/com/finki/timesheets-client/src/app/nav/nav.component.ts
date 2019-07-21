@@ -38,6 +38,11 @@ export class NavComponent {
       icon: 'people',
       route: 'list-user',
       title: 'Users',
+    },
+    {
+      icon: 'people',
+      route: 'members',
+      title: 'Members',
     }
   ];
 

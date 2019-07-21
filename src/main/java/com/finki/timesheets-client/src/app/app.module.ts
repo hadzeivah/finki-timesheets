@@ -28,6 +28,7 @@ import { AddMemberComponent } from './projects/add-member/add-member.component';
 import {FilterPipe} from "./utils/filter-pipe";
 import { ProjectTableComponent } from './projects/project-table/project-table.component';
 import { DocumentPageComponent } from './pages/document-page/document-page.component';
+import { MembersComponent } from './members/members.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { DocumentPageComponent } from './pages/document-page/document-page.compo
     AddMemberComponent,
     FilterPipe,
     ProjectTableComponent,
-    DocumentPageComponent
+    DocumentPageComponent,
+    MembersComponent
   ],
   imports: [
     BrowserModule,

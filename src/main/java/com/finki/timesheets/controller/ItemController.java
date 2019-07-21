@@ -3,6 +3,7 @@ package com.finki.timesheets.controller;
 
 import com.finki.timesheets.model.ApiResponse;
 import com.finki.timesheets.model.Item;
+import com.finki.timesheets.model.dto.ItemDto;
 import com.finki.timesheets.service.ItemService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,13 @@ public class ItemController {
     }
 
     @PostMapping
-    public ApiResponse<Item> saveItem(@RequestBody Item item) throws NotFoundException {
+    public ApiResponse<Item> saveItem(@RequestBody ItemDto item) {
         return new ApiResponse<>(HttpStatus.OK.value(), "Item saved successfully.", itemService.save(item));
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Item> update(@RequestBody Item item) {
-        return new ApiResponse<>(HttpStatus.OK.value(), "Item updated successfully.", itemService.update(item));
+    public ApiResponse<ItemDto> update(@RequestBody ItemDto itemDto) {
+        return new ApiResponse<>(HttpStatus.OK.value(), "Item updated successfully.", itemService.update(itemDto));
     }
 
     @DeleteMapping("/{id}")

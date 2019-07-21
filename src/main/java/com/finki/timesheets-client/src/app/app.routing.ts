@@ -7,6 +7,7 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {TimesheetPageComponent} from "./pages/timesheet-page/timesheet-page.component";
 import {DocumentPageComponent} from "./pages/document-page/document-page.component";
 import {ProjectTableComponent} from "./projects/project-table/project-table.component";
+import {MembersComponent} from "./members/members.component";
 
 const routes: Routes = [
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
   {
     path: 'projects',
     component: ProjectTableComponent
+  },
+  {
+    path: 'members',
+    component: MembersComponent
   },
   {
     path: 'dashboard',
