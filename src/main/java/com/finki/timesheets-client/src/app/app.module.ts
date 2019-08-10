@@ -7,9 +7,9 @@ import { AddUserComponent } from './users/add-user/add-user.component';
 import { EditUserComponent } from './users/edit-user/edit-user.component';
 import { ListUserComponent } from './users/list-user/list-user.component';
 import {ApiService} from './core/api.service';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {routes, routing} from './app.routing';
+import {routing} from './app.routing';
 import {TokenInterceptor} from './core/interceptor';
 import { TimesheetComponent } from './timesheet/timesheet.component';
 import {CustomMaterialModule} from './material/material.module';
@@ -19,7 +19,6 @@ import { ProjectListComponent } from './projects/project-list/project-list.compo
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavComponent } from './nav/nav.component';
 import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
-import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
 import { TemplateComponent } from './template/template.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import { TimesheetPageComponent } from './pages/timesheet-page/timesheet-page.component';
@@ -29,8 +28,9 @@ import {FilterPipe} from "./utils/filter-pipe";
 import { ProjectTableComponent } from './projects/project-table/project-table.component';
 import { DocumentPageComponent } from './pages/document-page/document-page.component';
 import { MembersComponent } from './members/members.component';
-import {TranslateModule, TranslateService} from "@ngx-translate/core";
-import {root} from "rxjs/internal-compatibility";
+import {TranslateLoader, TranslateModule, TranslateService} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import {NavigationBarComponent} from "./navigation-bar/navigation-bar.component";
 
 @NgModule({
   declarations: [
@@ -67,8 +67,13 @@ import {root} from "rxjs/internal-compatibility";
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    TranslateModule.forRoot()
-  ],
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })  ],
   providers: [ ErrorHandler, ApiService, TimesheetService, TranslateService , {provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi : true}],
@@ -76,3 +81,8 @@ import {root} from "rxjs/internal-compatibility";
   entryComponents: [AddProjectComponent, AddMemberComponent]
 })
 export class AppModule { }
+
+// required for AOT compilation
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}

@@ -29,7 +29,7 @@ export class NavComponent {
     }
   ];
 
-  customerRoutes: ROUTE[] = [
+  managementRoutes: ROUTE[] = [
     {
       icon: 'contacts',
       route: 'projects',

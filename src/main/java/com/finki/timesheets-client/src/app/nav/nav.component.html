@@ -4,13 +4,12 @@
 
     <mat-toolbar>
       <mat-toolbar-row>
-        <h2 class="toolbar-title"> {{ 'APP_TOOLBAR_TITLE' | translate}} </h2>
+        <h2 class="toolbar-title"> {{ 'FINKI_TIMESHEETS' | translate}} </h2>
       </mat-toolbar-row>
     </mat-toolbar>
 
     <mat-nav-list>
-
-      <h2 matSubheader> {{ 'MY_WORK' }} </h2>
+      <h2 matSubheader> {{ 'MY_WORKSPACE' | translate }} </h2>
 
       <a mat-list-item routerLink="/" style="height: 0;"></a>
 
@@ -27,9 +26,9 @@
 
       <mat-divider></mat-divider>
 
-      <h2 matSubheader> {{ 'CUSTOMERS'  }} </h2>
+      <h2 matSubheader> {{ 'MANAGEMENT' | translate  }} </h2>
 
-      <a *ngFor="let item of customerRoutes"
+      <a *ngFor="let item of managementRoutes"
          mat-list-item
          (click)="sidenav.close()"
          routerLinkActive
