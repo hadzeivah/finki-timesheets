@@ -35,7 +35,7 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Project> update(@RequestBody Project project) {
+    public ApiResponse<Project> update(@RequestBody Project project) throws NotFoundException {
         return new ApiResponse<>(HttpStatus.OK.value(), "Project updated successfully.", projectService.update(project));
     }
 

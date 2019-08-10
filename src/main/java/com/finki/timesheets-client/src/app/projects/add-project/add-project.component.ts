@@ -31,9 +31,9 @@ export class AddProjectComponent {
       endDate: ['', Validators.required]
     });
 
-    // if(data.id){
-    //   this.addMemberForm.patchValue()
-    // }
+     if(data){
+       this.updateFormFields();
+     }
   }
 
   onNoClick(): void {
@@ -51,5 +51,18 @@ export class AddProjectComponent {
 
   save() {
     this.dialogRef.close(this.addProjectForm.value);
+  }
+
+  updateFormFields(){
+
+    this.addProjectForm.patchValue(
+      {
+        name: this.data.name,
+        projectNumber: this.data.projectNumber,
+        partnerOrganisation: this.data.partnerOrganisation,
+        universityId: this.data.universityId,
+        startDate: this.data.startDate,
+        endDate: this.data.endDate
+      })
   }
 }

@@ -1,0 +1,24 @@
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title>Documents</mat-card-title>
+    <mat-card-subtitle>download templates</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+
+    <form class="column-container">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Choose project" aria-label="Project" [matAutocomplete]="auto"
+               [formControl]="projectCtrl">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let project of projects | filter: projectCtrl.value " [value]="project.name"
+                      (click)="onProjectSelected(project)">
+            <span>{{project.name}}</span> |
+            <small>{{project.partnerOrganisation}}</small>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+    </form>
+    <app-template [selectedProjectId]="selectedProject?.id"></app-template>
+  </mat-card-content>
+</mat-card>

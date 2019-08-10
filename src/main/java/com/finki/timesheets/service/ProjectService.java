@@ -12,7 +12,7 @@ public interface ProjectService {
 
     void delete(Long id);
 
-    Project update(Project project);
+    Project update(Project project) throws NotFoundException;
 
     Project save(Project project) throws NotFoundException;
 }

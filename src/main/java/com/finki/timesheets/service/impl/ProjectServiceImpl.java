@@ -5,6 +5,7 @@ import com.finki.timesheets.repository.ProjectRepository;
 import com.finki.timesheets.service.ProjectService;
 import com.finki.timesheets.service.UniversityService;
 import javassist.NotFoundException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,8 +38,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project update(Project project) {
-        return null;
+    public Project update(Project project) throws NotFoundException {
+        project.setUniversity(universityService.findById(1L).orElseThrow(() -> new NotFoundException("University not found")));
+        return projectRepository.save(project);
     }
 
     @Override

@@ -20,7 +20,8 @@ export class AddMemberComponent implements OnInit {
     this.projects = data;
     this.addMemberForm = this.fb.group({
       firstName: ['', Validators.required],
-      lastName: ['', Validators.required]
+      lastName: ['', Validators.required],
+      project: ['', Validators.required]
     });
   }
 

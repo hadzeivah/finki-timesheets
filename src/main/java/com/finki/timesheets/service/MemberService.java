@@ -9,4 +9,10 @@ public interface MemberService {
     List<Member> findAll();
 
     Member findById(Long id);
+
+    void delete(Long id);
+
+    Member update(Member project);
+
+    Member save(Member project);
 }

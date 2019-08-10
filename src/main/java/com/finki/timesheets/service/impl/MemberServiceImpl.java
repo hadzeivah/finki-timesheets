@@ -29,4 +29,19 @@ public class MemberServiceImpl implements MemberService {
     public Member findById(Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid member Id:" + id));
     }
+
+    @Override
+    public void delete(Long id) {
+        memberRepository.deleteById(id);
+    }
+
+    @Override
+    public Member update(Member member) {
+        return memberRepository.save(member);
+    }
+
+    @Override
+    public Member save(Member member) {
+        return memberRepository.save(member);
+    }
 }
