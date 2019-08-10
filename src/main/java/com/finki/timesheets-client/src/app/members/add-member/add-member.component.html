@@ -1,5 +1,6 @@
 <h1 mat-dialog-title>Add project member</h1>
 <div mat-dialog-content>
+  <form [formGroup]="addMemberForm">
   <mat-form-field>
     <mat-label>First Name:</mat-label>
     <input matInput formControlName="firstName" placeholder="First Name" name=firstName class="form-control"
@@ -17,7 +18,7 @@
       <mat-option value="primary" *ngFor="let project of projects">{{project.name}}</mat-option>
     </mat-select>
   </mat-form-field>
-
+  </form>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No</button>

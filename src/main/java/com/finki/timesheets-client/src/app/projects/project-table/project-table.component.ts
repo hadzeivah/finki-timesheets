@@ -46,12 +46,14 @@ export class ProjectTableComponent implements OnInit {
     const dialogRef = this.dialog.open(AddProjectComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
-      const newProject: Project = Object.assign({}, result);
-      this.projectService.addProject(newProject).subscribe(project => {
-          this.projects.push(project.result);
-          this.subject.next(this.projects);
-        }, err => console.log('HTTP Error', err),
-      );
+      if(result){
+        const newProject: Project = Object.assign({}, result);
+        this.projectService.addProject(newProject).subscribe(project => {
+            this.projects.push(project.result);
+            this.subject.next(this.projects);
+          }, err => console.log('HTTP Error', err),
+        );
+      }
     });
 
   }

@@ -9,7 +9,7 @@ import { ListUserComponent } from './users/list-user/list-user.component';
 import {ApiService} from './core/api.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {routing} from './app.routing';
+import {routes, routing} from './app.routing';
 import {TokenInterceptor} from './core/interceptor';
 import { TimesheetComponent } from './timesheet/timesheet.component';
 import {CustomMaterialModule} from './material/material.module';
@@ -24,11 +24,13 @@ import { TemplateComponent } from './template/template.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import { TimesheetPageComponent } from './pages/timesheet-page/timesheet-page.component';
 import {AddProjectComponent} from "./projects/add-project/add-project.component";
-import { AddMemberComponent } from './projects/add-member/add-member.component';
+import { AddMemberComponent } from './members/add-member/add-member.component';
 import {FilterPipe} from "./utils/filter-pipe";
 import { ProjectTableComponent } from './projects/project-table/project-table.component';
 import { DocumentPageComponent } from './pages/document-page/document-page.component';
 import { MembersComponent } from './members/members.component';
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
+import {root} from "rxjs/internal-compatibility";
 
 @NgModule({
   declarations: [
@@ -64,9 +66,10 @@ import { MembersComponent } from './members/members.component';
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    TranslateModule.forRoot()
   ],
-  providers: [ ErrorHandler, ApiService, TimesheetService, {provide: HTTP_INTERCEPTORS,
+  providers: [ ErrorHandler, ApiService, TimesheetService, TranslateService , {provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi : true}],
   bootstrap: [AppComponent],

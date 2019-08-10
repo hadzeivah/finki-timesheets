@@ -17,7 +17,6 @@ export class TokenInterceptor implements HttpInterceptor {
       });
     }
     return next.handle(request).pipe(
-      retry(1),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           // refresh token

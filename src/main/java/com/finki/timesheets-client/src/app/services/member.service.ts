@@ -18,7 +18,7 @@ export class MemberService {
   findMembers(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(this.baseUrl);
   }
-  addMember(member: Item): Observable<ApiResponse> {
+  addMember(member: Member): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.baseUrl, member);
   }
   deleteMember(id: number): Observable<ApiResponse> {

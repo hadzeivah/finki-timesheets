@@ -32,7 +32,7 @@ export class AddProjectComponent {
     });
 
     // if(data.id){
-    //   this.addProjectForm.patchValue()
+    //   this.addMemberForm.patchValue()
     // }
   }
 

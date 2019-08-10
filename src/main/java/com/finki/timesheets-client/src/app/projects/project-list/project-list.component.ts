@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Member} from "../../model/Member";
 import {AddProjectComponent} from "../add-project/add-project.component";
 import {MatDialog} from "@angular/material";
-import {AddMemberComponent} from "../add-member/add-member.component";
+import {AddMemberComponent} from "../../members/add-member/add-member.component";
 
 @Component({
   selector: 'app-project-list',
