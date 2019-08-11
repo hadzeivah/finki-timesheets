@@ -15,6 +15,7 @@ export class AddProjectComponent {
   universities: University[];
   addProjectForm: FormGroup;
   project: Project;
+  title: string = "Add projects";
 
   constructor(
     public dialogRef: MatDialogRef<AddProjectComponent>,
@@ -33,9 +34,11 @@ export class AddProjectComponent {
     });
 
     if (data) {
+      this.title = "Edit projects";
       this.updateFormFields();
     }
   }
+
   onNoClick(): void {
     this.dialogRef.close();
   }

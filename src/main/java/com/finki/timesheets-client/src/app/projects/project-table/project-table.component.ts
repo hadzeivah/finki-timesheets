@@ -15,7 +15,7 @@ export class ProjectTableComponent implements OnInit {
   selectedProject: Project;
   members: Member[];
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['projectName', 'projectNumber', 'partnerOrganisation','startDate', 'endDate', 'actions'];
+  displayedColumns: string[] = ['projectName', 'projectNumber', 'partnerOrganisation', 'startDate', 'endDate', 'actions'];
 
   constructor(private projectService: ProjectService,
               public dialog: MatDialog) {
@@ -34,41 +34,35 @@ export class ProjectTableComponent implements OnInit {
 
   }
 
-  addProject() {
+  addProjectDialog(editedProject?: Project) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.width = '250px';
 
+    if (editedProject) {
+      dialogConfig.data = editedProject;
+    }
     const dialogRef = this.dialog.open(AddProjectComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(project => {
       if (project) {
-        this.projectService.addProject(project).subscribe(() => {
-            this.loadProjects();
-          }, err => console.log('HTTP Error', err),
-        )
+
+        if (editedProject) {
+          project.id = editedProject.id;
+          this.projectService.updateProject(project).subscribe(() => {
+              this.loadProjects();
+            }, err => console.log('HTTP Error', err),
+          )
+        }
+        else
+        {
+          this.projectService.addProject(project).subscribe(() => {
+              this.loadProjects();
+            }, err => console.log('HTTP Error', err),
+          );
+        }
       }
     });
-
-  }
-  editProject(project : Project) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '250px';
-    dialogConfig.data = project;
-
-    const dialogRef = this.dialog.open(AddProjectComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(updatedProject => {
-      if (updatedProject) {
-        updatedProject.id =  project.id;
-        this.projectService.updateProject(updatedProject).subscribe(() => {
-            this.loadProjects();
-          }, err => console.log('HTTP Error', err),
-        )
-      }
-    });
-
   }
 
   deleteProject(project: Project): void {

@@ -25,6 +25,9 @@ public class Member {
     @Column
     private String transaction_account;
 
+    @Enumerated(EnumType.STRING)
+    private Position position;
+
     @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Timesheet> timesheets;
@@ -32,8 +35,8 @@ public class Member {
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "project_member",
-    joinColumns = {@JoinColumn(name = "member_id")},
-    inverseJoinColumns = {@JoinColumn(name = "project_id")})
+            joinColumns = {@JoinColumn(name = "member_id")},
+            inverseJoinColumns = {@JoinColumn(name = "project_id")})
     private Set<Project> projects = new HashSet<>();
 
     public Member() {
@@ -98,5 +101,13 @@ public class Member {
 
     public String getFullName() {
         return firstName + " " + lastName;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

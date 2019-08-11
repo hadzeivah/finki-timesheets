@@ -6,6 +6,24 @@
     <td mat-cell *matCellDef="let element"> {{element.fullName}}</td>
   </ng-container>
 
+  <!-- EMBG -->
+  <ng-container matColumnDef="embg">
+    <th mat-header-cell *matHeaderCellDef> EMBG </th>
+    <td mat-cell *matCellDef="let element"> {{element.embg}}</td>
+  </ng-container>
+
+  <!--Transaction Account -->
+  <ng-container matColumnDef="transactionAccount">
+    <th mat-header-cell *matHeaderCellDef> Transaction Account</th>
+    <td mat-cell *matCellDef="let element"> {{element.transactionAccount}}</td>
+  </ng-container>
+
+  <!--Project Name -->
+  <ng-container matColumnDef="position">
+    <th mat-header-cell *matHeaderCellDef> Position </th>
+    <td mat-cell *matCellDef="let element"> {{element.position}}</td>
+  </ng-container>
+
 
   <!-- actions -->
   <ng-container matColumnDef="actions">
@@ -16,7 +34,7 @@
     </th>
     <td mat-cell *matCellDef="let element; let i=index;">
 
-      <button mat-icon-button color="primary" (click)="editUser(element)">
+      <button mat-icon-button color="primary" (click)="addMemberDialog(element)">
         <mat-icon>edit</mat-icon>
       </button>
 

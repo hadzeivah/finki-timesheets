@@ -1,23 +1,39 @@
 <h1 mat-dialog-title>Add project member</h1>
 <div mat-dialog-content>
   <form [formGroup]="addMemberForm">
-  <mat-form-field>
-    <mat-label>First Name:</mat-label>
-    <input matInput formControlName="firstName" placeholder="First Name" name=firstName class="form-control"
-           id="firstName">
-  </mat-form-field>
+    <mat-form-field>
+      <mat-label>First Name:</mat-label>
+      <input matInput formControlName="firstName" placeholder="First Name" name=firstName class="form-control"
+             id="firstName">
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Last Name:</mat-label>
-    <input matInput formControlName="lastName" placeholder="First Name" name=lastName class="form-control"
-           id="lastName">
-  </mat-form-field>
+    <mat-form-field>
+      <mat-label>Last Name:</mat-label>
+      <input matInput formControlName="lastName" placeholder="Last Name" name=lastName class="form-control"
+             id="lastName">
+    </mat-form-field>
 
-  <mat-form-field color="primary">
-    <mat-select placeholder="Add project" formControlName="project">
-      <mat-option value="project" *ngFor="let project of projects">{{project.name}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+
+    <mat-form-field>
+      <mat-label> EMBG:</mat-label>
+      <input matInput formControlName="embg" placeholder="Embg" name=embg class="form-control"
+             id="embg">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Transaction Account:</mat-label>
+      <input matInput formControlName="transactionAccount" placeholder="Transaction Account" name=transactionAccount
+             class="form-control"
+             id="transactionAccount">
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <mat-select placeholder="Add position" formControlName="position">
+        <mat-option [value]="position" *ngFor="let position of positions">{{position}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
   </form>
 </div>
 <div mat-dialog-actions>
