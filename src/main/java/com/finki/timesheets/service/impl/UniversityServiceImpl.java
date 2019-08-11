@@ -32,8 +32,9 @@ public class UniversityServiceImpl implements UniversityService {
 
     @Override
     public void delete(Long id) {
-      universityRepository.deleteById(id);
+        universityRepository.deleteById(id);
     }
+
     @Override
     public University update(University university) {
         return null;

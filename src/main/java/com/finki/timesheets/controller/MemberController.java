@@ -3,8 +3,6 @@ package com.finki.timesheets.controller;
 
 import com.finki.timesheets.model.ApiResponse;
 import com.finki.timesheets.model.Member;
-import com.finki.timesheets.model.Member;
-import com.finki.timesheets.service.MemberService;
 import com.finki.timesheets.service.MemberService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +24,8 @@ public class MemberController {
     }
 
     @GetMapping
-    public ApiResponse<List<Member>> listMembers(){
-        return new ApiResponse<>(HttpStatus.OK.value(), "Members list fetched successfully.",memberService.findAll());
+    public ApiResponse<List<Member>> listMembers() {
+        return new ApiResponse<>(HttpStatus.OK.value(), "Members list fetched successfully.", memberService.findAll());
     }
 
     @PostMapping

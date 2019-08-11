@@ -24,8 +24,8 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ApiResponse<List<Project>> listProjects(){
-        return new ApiResponse<>(HttpStatus.OK.value(), "Project list fetched successfully.",projectService.findAll());
+    public ApiResponse<List<Project>> listProjects() {
+        return new ApiResponse<>(HttpStatus.OK.value(), "Project list fetched successfully.", projectService.findAll());
     }
 
     @PostMapping

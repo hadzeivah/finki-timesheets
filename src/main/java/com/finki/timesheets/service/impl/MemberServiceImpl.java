@@ -1,11 +1,8 @@
 package com.finki.timesheets.service.impl;
 
 import com.finki.timesheets.model.Member;
-import com.finki.timesheets.model.Project;
 import com.finki.timesheets.repository.MemberRepository;
-import com.finki.timesheets.repository.ProjectRepository;
 import com.finki.timesheets.service.MemberService;
-import com.finki.timesheets.service.ProjectService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

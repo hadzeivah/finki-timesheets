@@ -6,7 +6,6 @@ import com.finki.timesheets.model.dto.ItemDto;
 import com.finki.timesheets.repository.ItemRepository;
 import com.finki.timesheets.repository.TimesheetRepository;
 import com.finki.timesheets.service.ItemService;
-import javassist.NotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

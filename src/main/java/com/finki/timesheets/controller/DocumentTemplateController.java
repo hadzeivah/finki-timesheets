@@ -2,7 +2,6 @@ package com.finki.timesheets.controller;
 
 
 import com.finki.timesheets.model.Project;
-import com.finki.timesheets.service.MemberService;
 import com.finki.timesheets.service.ProjectService;
 import com.finki.timesheets.service.TemplateService;
 import javassist.NotFoundException;
@@ -10,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -31,7 +28,7 @@ public class DocumentTemplateController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity getFileFromFileSystem(@PathVariable String filename, @PathVariable Long projectId) throws NotFoundException {
 
-        Project project = this.projectService.findById(projectId).orElseThrow(() -> new NotFoundException("University not found"));
+        Project project = this.projectService.findById(projectId).orElseThrow(() -> new NotFoundException("Project not found"));
 
         switch (filename) {
             case "invoice":
@@ -41,7 +38,7 @@ public class DocumentTemplateController {
             case "requirement":
                 return templateService.requirementContractTemplate(filename, projectId);
             case "coverLetter":
-                return templateService.coverLetterTemplate(filename,project);
+                return templateService.coverLetterTemplate(filename, project);
             default:
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 

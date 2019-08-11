@@ -5,7 +5,6 @@ import com.finki.timesheets.model.ApiResponse;
 import com.finki.timesheets.model.Item;
 import com.finki.timesheets.model.dto.ItemDto;
 import com.finki.timesheets.service.ItemService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

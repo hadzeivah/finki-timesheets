@@ -33,6 +33,6 @@ public class TimesheetServiceImpl implements TimesheetService {
 
         Optional<List<Item>> items = itemService.findItemsByTimesheet(timesheet.getId());
 
-        return  items.get().stream().mapToLong(Item::getHours).sum();
+        return items.get().stream().mapToLong(Item::getHours).sum();
     }
 }
