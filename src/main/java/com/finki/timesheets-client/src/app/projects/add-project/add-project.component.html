@@ -20,8 +20,8 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-select placeholder="Add university" formControlName="universityId">
-        <mat-option value="{{university.id}}" *ngFor="let university of universities">{{university.name}}</mat-option>
+      <mat-select placeholder="Add university" formControlName="university">
+        <mat-option [value]="university" *ngFor="let university of universities">{{university.name}}</mat-option>
       </mat-select>
     </mat-form-field>
 

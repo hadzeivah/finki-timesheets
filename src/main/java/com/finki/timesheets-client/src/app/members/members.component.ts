@@ -77,6 +77,7 @@ export class MembersComponent implements OnInit {
     const dialogRef = this.dialog.open(AddMemberComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
       this.membersService.addMember(result).subscribe(member => {
           this.members.push(member.result);
           this.subject.next(this.members);

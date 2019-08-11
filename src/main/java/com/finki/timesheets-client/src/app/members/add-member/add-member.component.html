@@ -15,12 +15,12 @@
 
   <mat-form-field color="primary">
     <mat-select placeholder="Add project" formControlName="project">
-      <mat-option value="primary" *ngFor="let project of projects">{{project.name}}</mat-option>
+      <mat-option value="project" *ngFor="let project of projects">{{project.name}}</mat-option>
     </mat-select>
   </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No</button>
-  <button mat-button [mat-dialog-close]="" cdkFocusInitial>OK</button>
+  <button mat-button (click)="onSaveClick()" [mat-dialog-close]="" cdkFocusInitial>Save</button>
 </div>

@@ -12,7 +12,7 @@ public interface MemberService {
 
     void delete(Long id);
 
-    Member update(Member project);
+    Member update(Member member);
 
-    Member save(Member project);
+    Member save(Member member);
 }

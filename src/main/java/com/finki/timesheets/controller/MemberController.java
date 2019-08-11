@@ -18,31 +18,31 @@ import java.util.List;
 @RequestMapping("/members")
 public class MemberController {
 
-    private final MemberService projectService;
+    private final MemberService memberService;
 
     @Autowired
-    public MemberController(MemberService projectService) {
-        this.projectService = projectService;
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @GetMapping
     public ApiResponse<List<Member>> listMembers(){
-        return new ApiResponse<>(HttpStatus.OK.value(), "Members list fetched successfully.",projectService.findAll());
+        return new ApiResponse<>(HttpStatus.OK.value(), "Members list fetched successfully.",memberService.findAll());
     }
 
     @PostMapping
-    public ApiResponse<Member> saveItem(@RequestBody Member project) throws NotFoundException {
-        return new ApiResponse<>(HttpStatus.OK.value(), "Member saved successfully.", projectService.save(project));
+    public ApiResponse<Member> saveItem(@RequestBody Member member) throws NotFoundException {
+        return new ApiResponse<>(HttpStatus.OK.value(), "Member saved successfully.", memberService.save(member));
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Member> update(@RequestBody Member project) throws NotFoundException {
-        return new ApiResponse<>(HttpStatus.OK.value(), "Member updated successfully.", projectService.update(project));
+    public ApiResponse<Member> update(@RequestBody Member member) throws NotFoundException {
+        return new ApiResponse<>(HttpStatus.OK.value(), "Member updated successfully.", memberService.update(member));
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id) {
-        projectService.delete(id);
+        memberService.delete(id);
         return new ApiResponse<>(HttpStatus.OK.value(), "Member fetched successfully.", null);
     }
 }

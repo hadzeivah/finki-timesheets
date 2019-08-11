@@ -1,4 +1,5 @@
 import {Member} from "./Member";
+import {University} from "./University";
 
 export class Project {
   id: number;
@@ -7,7 +8,7 @@ export class Project {
   partnerOrganisation: string;
   startDate: any;
   endDate: any;
-  universityId: number;
+  university: University;
   members: Member[];
 }
 

@@ -42,7 +42,6 @@ export class ProjectTableComponent implements OnInit {
     const dialogRef = this.dialog.open(AddProjectComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(project => {
-
       if (project) {
         this.projectService.addProject(project).subscribe(() => {
             this.loadProjects();

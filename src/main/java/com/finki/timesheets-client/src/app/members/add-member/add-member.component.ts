@@ -33,4 +33,7 @@ export class AddMemberComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onSaveClick() {
+    this.dialogRef.close(this.addMemberForm.value);
+  }
 }

@@ -14,6 +14,7 @@ export class AddProjectComponent {
 
   universities: University[];
   addProjectForm: FormGroup;
+  project: Project;
 
   constructor(
     public dialogRef: MatDialogRef<AddProjectComponent>,
@@ -26,16 +27,15 @@ export class AddProjectComponent {
       name: ['', Validators.required],
       projectNumber: ['', Validators.required],
       partnerOrganisation: ['', Validators.required],
-      universityId: ['', Validators.required],
+      university: [null, Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required]
     });
 
-     if(data){
-       this.updateFormFields();
-     }
+    if (data) {
+      this.updateFormFields();
+    }
   }
-
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -50,19 +50,21 @@ export class AddProjectComponent {
   }
 
   save() {
-    this.dialogRef.close(this.addProjectForm.value);
+    this.project = <Project>this.addProjectForm.value;
+    this.dialogRef.close(this.project);
   }
 
-  updateFormFields(){
+  updateFormFields() {
 
     this.addProjectForm.patchValue(
       {
         name: this.data.name,
         projectNumber: this.data.projectNumber,
         partnerOrganisation: this.data.partnerOrganisation,
-        universityId: this.data.universityId,
+        university: this.data.university,
         startDate: this.data.startDate,
         endDate: this.data.endDate
       })
   }
 }
+

@@ -3,7 +3,6 @@ package com.finki.timesheets.controller;
 
 import com.finki.timesheets.model.ApiResponse;
 import com.finki.timesheets.model.Project;
-import com.finki.timesheets.model.User;
 import com.finki.timesheets.service.ProjectService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,9 @@ public class ProjectController {
 
     @PutMapping("/{id}")
     public ApiResponse<Project> update(@RequestBody Project project) throws NotFoundException {
+        if (!projectService.findById(project.getId()).isPresent()) {
+            return new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "Project with id" + project.getId() + "not found", null);
+        }
         return new ApiResponse<>(HttpStatus.OK.value(), "Project updated successfully.", projectService.update(project));
     }
 
