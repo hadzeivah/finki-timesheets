@@ -6,10 +6,10 @@
       <mat-card-subtitle>{{timesheet?.project.partnerOrganisation}}</mat-card-subtitle>
       <mat-card-subtitle>{{timesheet?.project.projectNumber}}</mat-card-subtitle>
       <mat-card-subtitle>
-        <mat-chip-list >
-          <mat-chip  color="primary" selected>{{timesheet?.fromPeriod | date }} </mat-chip>
+        <mat-chip-list>
+          <mat-chip color="primary" selected>{{timesheet?.fromPeriod | date }} </mat-chip>
           -
-          <mat-chip  color="primary" selected>{{timesheet?.toPeriod | date}}</mat-chip>
+          <mat-chip color="primary" selected>{{timesheet?.toPeriod | date}}</mat-chip>
         </mat-chip-list>
       </mat-card-subtitle>
 
@@ -65,7 +65,7 @@
                   <span *ngIf="!element.editing"> {{element.hours}}</span>
 
                 </td>
-                <td mat-footer-cell *matFooterCellDef> {{getTotalCost()}} h / {{getTotalCost()/24}} days </td>
+                <td mat-footer-cell *matFooterCellDef> {{getTotalCost()}} h / {{getTotalCost() / 24}} days</td>
               </ng-container>
 
               <!-- Task Description Column -->
