@@ -6,3 +6,8 @@
 .form-container > * {
   width: 100%;
 }
+
+::ng-deep.selected {
+  background-color: #CFD8DC !important;
+  color: white;
+}

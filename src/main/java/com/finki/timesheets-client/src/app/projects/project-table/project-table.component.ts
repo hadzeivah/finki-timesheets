@@ -53,9 +53,7 @@ export class ProjectTableComponent implements OnInit {
               this.loadProjects();
             }, err => console.log('HTTP Error', err),
           )
-        }
-        else
-        {
+        } else {
           this.projectService.addProject(project).subscribe(() => {
               this.loadProjects();
             }, err => console.log('HTTP Error', err),

@@ -4,7 +4,7 @@ import {AppConstants} from "../app.constants";
 import {Observable} from "rxjs";
 import {ApiResponse} from "../model/api.response";
 import {Member} from "../model/Member";
-import {Position} from "../model/Position";
+import {PositionType} from "../model/PositionType";
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,7 @@ export class MemberService {
     return this.http.put<ApiResponse>(`${this.baseUrl}/${member.id}`, member);
   }
 
-  getMemberTypes(): Observable<Position[]> {
-    return this.http.get<Position[]>(this.baseUrl + '/positions' )
+  getMemberTypes(): Observable<PositionType[]> {
+    return this.http.get<PositionType[]>(this.baseUrl + '/positions' )
   }
 }

@@ -20,14 +20,14 @@ CREATE TABLE members
   id                   SERIAL PRIMARY KEY,
   first_name           VARCHAR(50) NOT NULL,
   last_name            VARCHAR(50),
-  position_id          SERIAL REFERENCES position
+  position_id          SERIAL REFERENCES positionType
 );
 
 ALTER TABLE members
   add embg       TEXT,
   add transactionAccount TEXT;
 
-CREATE TABLE position (
+CREATE TABLE positionType (
   id          SERIAL PRIMARY KEY,
   name        TEXT NOT NULL,
   description TEXT

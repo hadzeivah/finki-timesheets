@@ -1,4 +1,4 @@
-export enum Position {
+export enum PositionType {
 
   MANAGER = "MANAGER ",
   TEACHER = "TEACHER",

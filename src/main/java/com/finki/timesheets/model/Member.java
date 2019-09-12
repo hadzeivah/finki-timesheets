@@ -3,7 +3,6 @@ package com.finki.timesheets.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +25,7 @@ public class Member {
     private String transactionAccount;
 
     @Enumerated(EnumType.STRING)
-    private Position position;
+    private PositionType positionType;
 
     @JsonIgnore
     @OneToMany(mappedBy = "member")
@@ -37,9 +36,12 @@ public class Member {
     @JoinTable(name = "project_member",
             joinColumns = {@JoinColumn(name = "member_id")},
             inverseJoinColumns = {@JoinColumn(name = "project_id")})
-    private Set<Project> projects = new HashSet<>();
+    private Set<Project> projects;
 
-    public Member() {
+    public Member(){}
+    public Member(Set<Project> projects) {
+        this.projects = projects;
+        this.projects.forEach(project -> project.getMembers().add(this));
     }
 
     public Long getId() {
@@ -103,11 +105,11 @@ public class Member {
         return firstName + " " + lastName;
     }
 
-    public Position getPosition() {
-        return position;
+    public PositionType getPositionType() {
+        return positionType;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setPositionType(PositionType positionType) {
+        this.positionType = positionType;
     }
 }

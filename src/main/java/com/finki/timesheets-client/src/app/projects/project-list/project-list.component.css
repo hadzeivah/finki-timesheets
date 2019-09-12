@@ -32,11 +32,6 @@ tr.example-element-row:not(.example-expanded-row):active {
   opacity: 0.5;
 }
 
-/* projectsComponent's private CSS styles */
-.selected {
-  background-color: #CFD8DC !important;
-  color: white;
-}
 .projects {
   margin: 0 0 2em 0;
   list-style-type: none;

@@ -1,4 +1,5 @@
 import {Project} from "./Project";
+import {PositionType} from "./PositionType";
 
 export class Member {
 
@@ -8,7 +9,7 @@ export class Member {
     fullName: String = this.firstName + " "  + this.lastName;
     embg: String;
     transactionAccount: String;
-    position: Position;
+    positionType: PositionType;
     projects: Project[];
 
 }

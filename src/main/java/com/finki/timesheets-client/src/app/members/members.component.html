@@ -18,12 +18,11 @@
     <td mat-cell *matCellDef="let element"> {{element.transactionAccount}}</td>
   </ng-container>
 
-  <!--Project Name -->
-  <ng-container matColumnDef="position">
-    <th mat-header-cell *matHeaderCellDef> Position </th>
-    <td mat-cell *matCellDef="let element"> {{element.position}}</td>
+  <!--PositionType Name -->
+  <ng-container matColumnDef="positionType">
+    <th mat-header-cell *matHeaderCellDef> PositionType </th>
+    <td mat-cell *matCellDef="let element"> {{element.positionType}}</td>
   </ng-container>
-
 
   <!-- actions -->
   <ng-container matColumnDef="actions">

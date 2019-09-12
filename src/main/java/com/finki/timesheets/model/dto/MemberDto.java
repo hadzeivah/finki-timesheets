@@ -1,11 +1,10 @@
 package com.finki.timesheets.model.dto;
 
-import com.finki.timesheets.model.Position;
+import com.finki.timesheets.model.PositionType;
 import com.finki.timesheets.model.Project;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import java.util.List;
 import java.util.Set;
 
 public class MemberDto {
@@ -16,7 +15,7 @@ public class MemberDto {
     private String embg;
     private String transactionAccount;
     @Enumerated(EnumType.STRING)
-    private Position position;
+    private PositionType positionType;
     private Set<Project> projects;
 
     public Long getId() {
@@ -59,12 +58,12 @@ public class MemberDto {
         this.transactionAccount = transactionAccount;
     }
 
-    public Position getPosition() {
-        return position;
+    public PositionType getPositionType() {
+        return positionType;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setPositionType(PositionType positionType) {
+        this.positionType = positionType;
     }
 
     public Set<Project> getProjects() {
