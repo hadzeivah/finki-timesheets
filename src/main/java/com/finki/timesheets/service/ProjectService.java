@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface ProjectService {
     List<Project> findAll();
 
-    Optional<Project> findById(Long id);
+    Project findById(Long id) throws NotFoundException;
 
     void delete(Long id);
 

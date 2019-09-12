@@ -48,11 +48,9 @@ export class ProjectListComponent implements OnInit {
   addMemberDialog() {
     const dialogRef = this.dialog.open(AddMemberComponent, {
       width: '250px',
-      data: this.projects
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
 
   }

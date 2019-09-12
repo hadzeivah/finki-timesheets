@@ -84,9 +84,11 @@ public class Project {
     public void setPartnerOrganisation(String partnerOrganisation) {
         this.partnerOrganisation = partnerOrganisation;
     }
+
     public Set<Member> getMembers() {
         return members;
     }
+
     public void setMembers(Set<Member> members) {
         this.members = members;
     }

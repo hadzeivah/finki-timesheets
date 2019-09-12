@@ -1,46 +1,23 @@
-package com.finki.timesheets.model;
+package com.finki.timesheets.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.finki.timesheets.model.Position;
+import com.finki.timesheets.model.Project;
 
-import javax.persistence.*;
-import java.util.HashSet;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.List;
 import java.util.Set;
 
-@Entity
-@Table(name = "members")
-public class Member {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MemberDto {
+
     private Long id;
-    @Column
     private String firstName;
-
-    @Column
     private String lastName;
-
-    @Column
     private String embg;
-
-    @Column
     private String transactionAccount;
-
     @Enumerated(EnumType.STRING)
     private Position position;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "member")
-    private List<Timesheet> timesheets;
-
-    @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.MERGE})
-    @JoinTable(name = "project_member",
-            joinColumns = {@JoinColumn(name = "member_id")},
-            inverseJoinColumns = {@JoinColumn(name = "project_id")})
-    private Set<Project> projects = new HashSet<>();
-
-    public Member() {
-    }
+    private Set<Project> projects;
 
     public Long getId() {
         return id;
@@ -49,7 +26,6 @@ public class Member {
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public String getFirstName() {
         return firstName;
@@ -65,22 +41,6 @@ public class Member {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public List<Timesheet> getTimesheets() {
-        return timesheets;
-    }
-
-    public void setTimesheets(List<Timesheet> timesheets) {
-        this.timesheets = timesheets;
-    }
-
-    public Set<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(Set<Project> projects) {
-        this.projects = projects;
     }
 
     public String getEmbg() {
@@ -99,15 +59,19 @@ public class Member {
         this.transactionAccount = transactionAccount;
     }
 
-    public String getFullName() {
-        return firstName + " " + lastName;
-    }
-
     public Position getPosition() {
         return position;
     }
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
     }
 }

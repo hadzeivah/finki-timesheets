@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,9 +39,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Optional<List<Item>> findItemsByTimesheet(Long id) {
+    public List<Item> findItemsByTimesheet(Long id) {
         Optional<Timesheet> timesheet = timesheetRepository.findById(id);
-        return itemRepository.findItemsByTimesheet(timesheet.orElseThrow(() -> new IllegalArgumentException("Invalid timesheet Id:" + id)));
+        return itemRepository.findItemsByTimesheet(timesheet.orElseThrow(() -> new IllegalArgumentException("Invalid timesheet Id:" + id))).orElse(new ArrayList<>());
     }
 
     @Override

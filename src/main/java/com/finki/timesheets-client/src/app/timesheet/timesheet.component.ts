@@ -7,6 +7,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {DataSource} from '@angular/cdk/table';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
+import {MatCalendarCellCssClasses} from "@angular/material";
 
 @Component({
   selector: 'app-timesheet',
@@ -26,6 +27,22 @@ export class TimesheetComponent implements OnInit {
   itemList: FormArray;
   projectId: number;
   memberId: number;
+  datesToHighlight = [
+    "2019-01-01T18:30:00.000Z",
+    "2019-01-07T18:30:00.000Z",
+    "2019-05-01T18:30:00.000Z",
+    "2019-05-24T18:30:00.000Z",
+    "2019-07-02T18:30:00.000Z",
+    "2019-09-08T18:30:00.000Z",
+    "2019-10-11T18:30:00.000Z",
+    "2019-23-11T18:30:00.000Z",
+    "2019-12-08T18:30:00.000Z"];
+
+  weekendFilter = (d: Date): boolean => {
+    const day = d.getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  };
 
   constructor(private timesheetService: TimesheetService,
               private itemService: ItemService,
@@ -180,6 +197,16 @@ export class TimesheetComponent implements OnInit {
       intellectualOutput: item.intellectualOutput
     });
 
+  }
+
+  dateClass() {
+    return (date: Date): MatCalendarCellCssClasses => {
+      const highlightDate = this.datesToHighlight
+        .map(strDate => new Date(strDate))
+        .some(d => d.getDate() === date.getDate() && d.getMonth() === date.getMonth());
+
+      return highlightDate ? 'special-date' : '';
+    };
   }
 }
 

@@ -1,13 +1,15 @@
+import {Project} from "./Project";
 
 export class Member {
 
     id: number;
-    firstName: string;
-    lastName: string;
-    fullName: string = this.firstName + " "  + this.lastName;
-    embg: string;
-    transactionAccount:string;
+    firstName: String;
+    lastName: String;
+    fullName: String = this.firstName + " "  + this.lastName;
+    embg: String;
+    transactionAccount: String;
     position: Position;
+    projects: Project[];
 
 }
 

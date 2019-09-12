@@ -1,6 +1,7 @@
 package com.finki.timesheets.service.impl;
 
 import com.finki.timesheets.model.Member;
+import com.finki.timesheets.model.Timesheet;
 import com.finki.timesheets.repository.MemberRepository;
 import com.finki.timesheets.service.MemberService;
 import org.springframework.stereotype.Service;

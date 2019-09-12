@@ -25,7 +25,7 @@ CREATE TABLE members
 
 ALTER TABLE members
   add embg       TEXT,
-  add transaction_account TEXT;
+  add transactionAccount TEXT;
 
 CREATE TABLE position (
   id          SERIAL PRIMARY KEY,

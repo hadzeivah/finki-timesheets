@@ -34,6 +34,13 @@
       </mat-select>
     </mat-form-field>
 
+
+    <mat-form-field>
+      <mat-select placeholder="Add project" formControlName="projects" multiple>
+        <mat-option [value]="project" *ngFor="let project of projects">{{project.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
   </form>
 </div>
 <div mat-dialog-actions>

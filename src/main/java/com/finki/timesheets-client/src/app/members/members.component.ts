@@ -56,22 +56,18 @@ export class MembersComponent implements OnInit {
     const dialogRef = this.dialog.open(AddMemberComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(member => {
-
       if (member) {
         if (editedMember) {
           member.id = editedMember.id;
-
-          this.membersService.updateMember(member).subscribe(() => {
-            this.loadMembers();
-          }, err => console.log('HTTP Error', err));
-
-        } else {
-
-          this.membersService.addMember(member).subscribe(() => {
+          this.membersService.updateMember(member)
+            .subscribe(() => {
               this.loadMembers();
-            }, err => console.log('HTTP Error', err),
-          );
-
+            })
+        } else {
+          this.membersService.addMember(member)
+            .subscribe(() => {
+              this.loadMembers();
+            });
         }
       }
     });

@@ -28,7 +28,7 @@ public class DocumentTemplateController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity getFileFromFileSystem(@PathVariable String filename, @PathVariable Long projectId) throws NotFoundException {
 
-        Project project = this.projectService.findById(projectId).orElseThrow(() -> new NotFoundException("Project not found"));
+        Project project = this.projectService.findById(projectId);
 
         switch (filename) {
             case "invoice":

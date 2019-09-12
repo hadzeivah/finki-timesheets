@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface ItemService {
     Item save(ItemDto item);
 
-    Optional<List<Item>> findItemsByTimesheet(Long timesheetId);
+    List<Item> findItemsByTimesheet(Long timesheetId);
 
     void delete(Long id);
 

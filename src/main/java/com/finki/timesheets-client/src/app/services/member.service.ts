@@ -21,15 +21,15 @@ export class MemberService {
   }
 
   addMember(member: Member): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.baseUrl, member);
+    return this.http.post<ApiResponse>(`${this.baseUrl}`, member);
   }
 
   deleteMember(id: number): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(this.baseUrl + '/' + id);
+    return this.http.delete<ApiResponse>(`${this.baseUrl}/${id}`);
   }
 
   updateMember(member: Member): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(this.baseUrl + '/' + member.id, member);
+    return this.http.put<ApiResponse>(`${this.baseUrl}/${member.id}`, member);
   }
 
   getMemberTypes(): Observable<Position[]> {

@@ -26,6 +26,11 @@ public class Timesheet {
     public Timesheet() {
     }
 
+    public Timesheet(Project project , Member member) {
+        this.project = project;
+        this.member = member;
+    }
+
     public Long getId() {
         return id;
     }

@@ -17,3 +17,8 @@ mat-divider{
   display: flex;
   align-content: flex-end;
 }
+
+::ng-deep.special-date {
+  background-color: dodgerblue;
+  border-radius: 50%;
+}

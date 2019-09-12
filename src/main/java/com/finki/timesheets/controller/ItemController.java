@@ -25,7 +25,7 @@ public class ItemController {
     }
 
     @GetMapping(params = {"timesheetId"})
-    public Optional<List<Item>> findItemsByTimesheetId(@RequestParam("timesheetId") Long timesheetId) {
+    public List<Item> findItemsByTimesheetId(@RequestParam("timesheetId") Long timesheetId) {
         return itemService.findItemsByTimesheet(timesheetId);
     }
 
