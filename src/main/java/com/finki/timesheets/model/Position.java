@@ -16,7 +16,7 @@ public class Position {
     private String description;
 
     @Column
-    private String salary;
+    private Integer salary;
 
     public Position() { }
 
@@ -44,11 +44,11 @@ public class Position {
         this.description = description;
     }
 
-    public String getSalary() {
+    public Integer getSalary() {
         return salary;
     }
 
-    public void setSalary(String salary) {
+    public void setSalary(Integer salary) {
         this.salary = salary;
     }
 }

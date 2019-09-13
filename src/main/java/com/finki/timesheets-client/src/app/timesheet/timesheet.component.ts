@@ -6,8 +6,9 @@ import {ItemService} from '../services/item.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {DataSource} from '@angular/cdk/table';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {MatCalendarCellCssClasses} from "@angular/material";
+import {PositionService} from "../services/position.service";
 
 @Component({
   selector: 'app-timesheet',
@@ -27,6 +28,7 @@ export class TimesheetComponent implements OnInit {
   itemList: FormArray;
   projectId: number;
   memberId: number;
+  positionSalaryMap: Map<string, number>;
   datesToHighlight = [
     "2019-01-01T18:30:00.000Z",
     "2019-01-07T18:30:00.000Z",
@@ -45,10 +47,10 @@ export class TimesheetComponent implements OnInit {
   };
 
   constructor(private timesheetService: TimesheetService,
+              private positionsService: PositionService,
               private itemService: ItemService,
               private fb: FormBuilder,
-              private route: ActivatedRoute,
-              private router: Router) {
+              private route: ActivatedRoute) {
 
     this.form = this.fb.group({
       startDate: ['', Validators.required],
@@ -62,6 +64,19 @@ export class TimesheetComponent implements OnInit {
       items: this.fb.array([this.createItem()])
     });
     this.itemList = this.itemsForm.get('items') as FormArray;
+  }
+
+  ngOnInit() {
+    this.positionsService.findSalaryGroupedByPosition()
+      .subscribe(positionSalary => {
+        this.positionSalaryMap = positionSalary;
+      });
+
+    this.route.params.subscribe((params) => {
+      this.projectId = +params['projectId'];
+      this.memberId = +params['memberId'];
+      this.getTimesheet();
+    });
   }
 
   get itemsFormGroup() {
@@ -83,13 +98,6 @@ export class TimesheetComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.projectId = +params['projectId'];
-      this.memberId = +params['memberId'];
-      this.getTimesheet();
-    });
-  }
 
   getTimesheet() {
 
@@ -126,7 +134,7 @@ export class TimesheetComponent implements OnInit {
 
   }
 
-  getTotalCost() {
+  getTotalTimeSpent() {
     if (this.values) {
       return this.values.map(t => t.hours).reduce((acc, value) => acc + value, 0);
     }
@@ -207,6 +215,11 @@ export class TimesheetComponent implements OnInit {
 
       return highlightDate ? 'special-date' : '';
     };
+  }
+
+  public getTotalCost() : number {
+    let member = this.timesheet != null ? this.timesheet.member : null;
+    return member != null ? this.positionSalaryMap[member.positionType] * this.getTotalTimeSpent()/24 : 0;
   }
 }
 

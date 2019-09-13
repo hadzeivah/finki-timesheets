@@ -71,7 +71,8 @@
                   <span *ngIf="!element.editing"> {{element.hours}}</span>
 
                 </td>
-                <td mat-footer-cell *matFooterCellDef> {{getTotalCost()}} h / {{getTotalCost() / 24}} days</td>
+                <td mat-footer-cell *matFooterCellDef> {{getTotalTimeSpent()}} h / {{getTotalTimeSpent() / 24}}days
+                </td>
               </ng-container>
 
               <!-- Task Description Column -->
@@ -131,7 +132,9 @@
                   </button>
 
                 </td>
-                <td mat-footer-cell *matFooterCellDef></td>
+                <td mat-footer-cell *matFooterCellDef>
+                  Total cost : {{getTotalCost() | currency: 'EUR'}}
+                </td>
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
