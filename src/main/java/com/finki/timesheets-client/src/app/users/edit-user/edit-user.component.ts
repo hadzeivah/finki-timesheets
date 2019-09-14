@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 import {User} from "../../model/user.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {first} from "rxjs/operators";
-import {ApiService} from "../../core/api.service";
+import {AuthService} from "../../core/auth.service";
 
 @Component({
   selector: 'app-edit-user',
@@ -14,7 +14,7 @@ export class EditUserComponent implements OnInit {
 
   user: User;
   editForm: FormGroup;
-  constructor(private formBuilder: FormBuilder,private router: Router, private apiService: ApiService) { }
+  constructor(private formBuilder: FormBuilder,private router: Router, private apiService: AuthService) { }
 
   ngOnInit() {
     let userId = window.localStorage.getItem("editUserId");

@@ -1,7 +1,7 @@
 import { Component, OnInit , Inject} from '@angular/core';
 import {Router} from '@angular/router';
 import {User} from '../../model/user.model';
-import {ApiService} from '../../core/api.service';
+import {AuthService} from '../../core/auth.service';
 
 @Component({
   selector: 'app-list-user',
@@ -13,7 +13,7 @@ export class ListUserComponent implements OnInit {
   dataSource: User[];
   displayedColumns: string[] = ['firstName', 'lastName', 'username', 'age', 'actions'];
 
-  constructor(private router: Router, private apiService: ApiService) { }
+  constructor(private router: Router, private apiService: AuthService) { }
 
   ngOnInit() {
     if (!window.localStorage.getItem('token')) {

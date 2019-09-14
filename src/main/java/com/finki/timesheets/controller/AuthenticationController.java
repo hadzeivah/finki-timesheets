@@ -13,20 +13,26 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/token")
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtTokenUtil jwtTokenUtil;
+
+    private final UserService userService;
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private UserService userService;
+    public AuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserService userService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userService = userService;
+    }
 
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
     public ApiResponse<AuthToken> register(@RequestBody LoginUser loginUser) throws AuthenticationException {
@@ -34,7 +40,8 @@ public class AuthenticationController {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword()));
         final User user = userService.findOne(loginUser.getUsername());
         final String token = jwtTokenUtil.generateToken(user);
-        return new ApiResponse<>(200, "success",new AuthToken(token, user.getUsername()));
+        final Date expiresAt = jwtTokenUtil.getExpirationDateFromToken(token);
+        return new ApiResponse<>(200, "success", new AuthToken(token, user.getUsername(), expiresAt));
     }
 
 }

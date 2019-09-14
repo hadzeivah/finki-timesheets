@@ -6,7 +6,7 @@ import {LoginComponent} from './login/login.component';
 import {AddUserComponent} from './users/add-user/add-user.component';
 import {EditUserComponent} from './users/edit-user/edit-user.component';
 import {ListUserComponent} from './users/list-user/list-user.component';
-import {ApiService} from './core/api.service';
+import {AuthService} from './core/auth.service';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {routing} from './app.routing';
@@ -81,7 +81,7 @@ import {NavigationBarComponent} from "./navigation-bar/navigation-bar.component"
         deps: [HttpClient]
       }
     })],
-  providers: [ErrorHandler, ApiService, TimesheetService, TranslateService, {
+  providers: [ErrorHandler, AuthService, TimesheetService, TranslateService, {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true
