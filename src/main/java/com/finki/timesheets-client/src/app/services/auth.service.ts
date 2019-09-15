@@ -4,26 +4,23 @@ import {User} from '../model/user.model';
 import {Observable} from 'rxjs';
 import {ApiResponse} from '../model/api.response';
 import {AppConstants} from '../app.constants';
-import {tap} from "rxjs/operators";
-import * as moment from "moment";
+import {JwtHelperService} from '@auth0/angular-jwt';
 
 @Injectable()
 export class AuthService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, public jwtHelper: JwtHelperService) {
   }
 
   baseUrl = AppConstants.baseURL + 'users/';
 
   login(loginPayload): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(AppConstants.baseURL + 'token/generate-token', loginPayload)
-      .pipe(tap(res => this.setSession(res)))
+    return this.http.post<ApiResponse>(AppConstants.baseURL + 'token/generate-token', loginPayload);
 
   }
 
   static logout() {
     localStorage.removeItem("token");
-    localStorage.removeItem("expires_at");
   }
 
   getUsers(): Observable<ApiResponse> {
@@ -46,22 +43,8 @@ export class AuthService {
     return this.http.delete<ApiResponse>(this.baseUrl + id);
   }
 
-  private setSession(authResult) {
-    const expiresAt = moment().add(authResult.expiresIn, 'second');
-    localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()));
-  }
-
-  public isLoggedIn() {
-    return this.getExpiration().isValid() || moment().isBefore(this.getExpiration());
-  }
-
-  isLoggedOut() {
-    return !this.isLoggedIn();
-  }
-
-  getExpiration() {
-    const expiration = localStorage.getItem("expires_at");
-    const expiresAt = JSON.parse(expiration);
-    return moment(expiresAt);
+  public isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    return !this.jwtHelper.isTokenExpired(token);
   }
 }

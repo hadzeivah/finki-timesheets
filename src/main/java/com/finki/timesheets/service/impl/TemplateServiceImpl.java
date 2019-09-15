@@ -2,7 +2,6 @@ package com.finki.timesheets.service.impl;
 
 import com.finki.timesheets.model.Project;
 import com.finki.timesheets.model.Timesheet;
-import com.finki.timesheets.service.ProjectService;
 import com.finki.timesheets.service.TemplateService;
 import com.finki.timesheets.service.TimesheetService;
 import com.finki.timesheets.service.utils.StringUtils;
@@ -18,9 +17,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -33,21 +35,45 @@ public class TemplateServiceImpl implements TemplateService {
     private static final String CLASS_PATH = "/templates/";
     private static final String FILE_DIRECTORY = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\";
     private TimesheetService timesheetService;
-    private ProjectService projectService;
-    private List<String> filenamesToZip;
 
-    public TemplateServiceImpl(TimesheetService timesheetService, ProjectService projectService) {
+
+    public TemplateServiceImpl(TimesheetService timesheetService) {
         this.timesheetService = timesheetService;
-        this.projectService = projectService;
     }
 
     @Override
-    public ResponseEntity getFileSystem(String filename) {
-        return getResourceFromClassPath(filename + ".docx");
+    public ResponseEntity downloadAllTemplates(ArrayList<String> filenames, Project project) {
+
+        String outpath = FILE_DIRECTORY + "documents.zip";
+        coverLetterTemplate("coverLetter", project);
+        requirementContractTemplate("requirement", project.getId());
+        invoiceTemplate("invoice", project);
+        solutionContractTemplate("solution", project.getId());
+
+        ArrayList<String> filenamesAsDocx = new ArrayList<>();
+
+
+        filenames.forEach(filename -> {
+            switch (filename) {
+                case "invoice":
+                    invoiceTemplate(filename, project);
+                case "solution":
+                    solutionContractTemplate(filename, project.getId());
+                case "requirement":
+                    requirementContractTemplate(filename, project.getId());
+                case "coverLetter":
+                    coverLetterTemplate(filename, project);
+            }
+            filenamesAsDocx.add(filename + ".docx");
+        });
+
+        ZipMultipleFiles(outpath, filenamesAsDocx);
+        return getResourceFromFileDirectory(outpath);
     }
 
-    private ResponseEntity getResourceFromClassPath(String filename) {
-        Resource resource = new FileSystemResource(FILE_DIRECTORY + filename);
+    @Override
+    public ResponseEntity getResourceFromFileDirectory(String filename) {
+        Resource resource = new FileSystemResource(filename);
         String downloadFileName = resource.getFilename();
 
         if (resource.exists()) {
@@ -88,7 +114,7 @@ public class TemplateServiceImpl implements TemplateService {
         if (doc != null) {
             replaceText(doc, replacementValues, outpath);
         }
-        return getFileSystem(filename);
+        return getResourceFromFileDirectory(outpath);
     }
 
     @Override
@@ -107,7 +133,7 @@ public class TemplateServiceImpl implements TemplateService {
             replaceCell(doc, replacementValues, outpath);
             replaceText(doc, replacementValues, outpath);
         }
-        return getFileSystem(filename);
+        return getResourceFromFileDirectory(outpath);
     }
 
     @Override
@@ -116,7 +142,7 @@ public class TemplateServiceImpl implements TemplateService {
         String outpath = FILE_DIRECTORY + "requirement.docx";
 
         generateTimesheetTableByProject(projectId, filepath, outpath);
-        return getFileSystem(filename);
+        return getResourceFromFileDirectory(outpath);
     }
 
     @Override
@@ -126,7 +152,7 @@ public class TemplateServiceImpl implements TemplateService {
         String outpath = FILE_DIRECTORY + "solution.docx";
 
         generateTimesheetTableByProject(projectId, filepath, outpath);
-        return getFileSystem(filename);
+        return getResourceFromFileDirectory(outpath);
     }
 
     private void generateTimesheetTableByProject(Long projectId, String filepath, String outpath) {
@@ -137,7 +163,7 @@ public class TemplateServiceImpl implements TemplateService {
 
     private void replaceTable(XWPFDocument doc, List<Timesheet> timesheets, String outpath) {
         XWPFTable table = null;
-        long count = 0;
+        int count = 0;
         for (XWPFParagraph paragraph : doc.getParagraphs()) {
             List<XWPFRun> runs = paragraph.getRuns();
             String find = "%TABLE";
@@ -268,15 +294,15 @@ public class TemplateServiceImpl implements TemplateService {
         }
     }
 
-    public void ZipMultipleFiles() {
+    private void ZipMultipleFiles(String outpath, ArrayList<String> srcFiles) {
         try {
-            List<String> srcFiles = Arrays.asList("test1.txt", "test2.txt");
-            FileOutputStream fos = new FileOutputStream("multiCompressed.zip");
+            FileOutputStream fos = new FileOutputStream(outpath);
             ZipOutputStream zipOut = new ZipOutputStream(fos);
             for (String srcFile : srcFiles) {
-                File fileToZip = new File(srcFile);
-                FileInputStream fis = new FileInputStream(fileToZip);
-                ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+                Resource fileToZip = new FileSystemResource(FILE_DIRECTORY + srcFile);
+                FileInputStream fis = new FileInputStream(fileToZip.getFile());
+                String filename = fileToZip.getFilename() != null ? fileToZip.getFilename() : "";
+                ZipEntry zipEntry = new ZipEntry(filename);
                 zipOut.putNextEntry(zipEntry);
                 byte[] bytes = new byte[1024];
                 int length;

@@ -6,11 +6,11 @@ import {LoginComponent} from './login/login.component';
 import {AddUserComponent} from './users/add-user/add-user.component';
 import {EditUserComponent} from './users/edit-user/edit-user.component';
 import {ListUserComponent} from './users/list-user/list-user.component';
-import {AuthService} from './core/auth.service';
+import {AuthService} from './services/auth.service';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {routing} from './app.routing';
-import {TokenInterceptor} from './core/interceptor';
+import {TokenInterceptor} from './services/interceptor';
 import {TimesheetComponent} from './timesheet/timesheet.component';
 import {CustomMaterialModule} from './material/material.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -38,6 +38,7 @@ import {MembersComponent} from './members/members.component';
 import {TranslateLoader, TranslateModule, TranslateService} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NavigationBarComponent} from "./navigation-bar/navigation-bar.component";
+import {JwtHelperService, JWT_OPTIONS  } from "@auth0/angular-jwt";
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import {NavigationBarComponent} from "./navigation-bar/navigation-bar.component"
         deps: [HttpClient]
       }
     })],
-  providers: [ErrorHandler, AuthService, TimesheetService, TranslateService, {
+  providers: [ErrorHandler, AuthService, TimesheetService, TranslateService, JwtHelperService,
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS } ,{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true

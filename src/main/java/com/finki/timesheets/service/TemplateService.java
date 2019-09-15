@@ -3,6 +3,8 @@ package com.finki.timesheets.service;
 import com.finki.timesheets.model.Project;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+
 
 public interface TemplateService {
 
@@ -14,5 +16,8 @@ public interface TemplateService {
 
     ResponseEntity requirementContractTemplate(String filename, Long projectId);
 
-    ResponseEntity getFileSystem(String filename);
+    ResponseEntity getResourceFromFileDirectory(String filename);
+
+    ResponseEntity downloadAllTemplates(ArrayList<String> filenames, Project project);
+
 }

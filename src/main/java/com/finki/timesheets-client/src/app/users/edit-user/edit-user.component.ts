@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 import {User} from "../../model/user.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {first} from "rxjs/operators";
-import {AuthService} from "../../core/auth.service";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-edit-user',

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {AuthService} from "../core/auth.service";
+import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -22,6 +22,6 @@ export class NavigationBarComponent implements OnInit {
   }
 
   public isUserLoggedIn(){
-    return this.authService.isLoggedIn();
+    return this.authService.isAuthenticated();
   }
 }

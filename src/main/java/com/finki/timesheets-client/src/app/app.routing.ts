@@ -8,6 +8,7 @@ import {TimesheetPageComponent} from "./pages/timesheet-page/timesheet-page.comp
 import {DocumentPageComponent} from "./pages/document-page/document-page.component";
 import {ProjectTableComponent} from "./projects/project-table/project-table.component";
 import {MembersComponent} from "./members/members.component";
+import {AuthGuardService as AuthGuard } from "./services/guards/auth-guard.service";
 
 const routes: Routes = [
   {
@@ -16,31 +17,38 @@ const routes: Routes = [
   },
   {
     path: 'add-user',
-    component: AddUserComponent
+    component: AddUserComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'list-user',
-    component: ListUserComponent
+    component: ListUserComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'edit-user',
-    component: EditUserComponent
+    component: EditUserComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'documents',
-    component: DocumentPageComponent
+    component: DocumentPageComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'projects',
-    component: ProjectTableComponent
+    component: ProjectTableComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'members',
-    component: MembersComponent
+    component: MembersComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'timesheet/project/:projectId/member/:memberId',

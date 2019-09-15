@@ -46,7 +46,7 @@ export class TemplateComponent implements OnInit {
       .map((checked, index) => checked ? this.templateTypes[index].type : null)
       .filter(value => value !== null);
 
-    this.downloadService.downloadClasspathFile(selectedPreferences[0], this.selectedProjectId)
+    this.downloadService.downloadClasspathFile(selectedPreferences, this.selectedProjectId)
       .subscribe(response => {
         const filename = this.downloadService.getFileNameFromResponseContentDisposition(response);
         this.downloadService.saveFile(response.body, filename)

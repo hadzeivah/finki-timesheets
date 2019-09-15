@@ -6,17 +6,15 @@ public class AuthToken {
 
     private String token;
     private String username;
-    private Date expiresAt;
 
 
     public AuthToken(){
 
     }
 
-    public AuthToken(String token, String username, Date expiresAt){
+    public AuthToken(String token, String username){
         this.token = token;
         this.username = username;
-        this.expiresAt = expiresAt;
     }
 
     public AuthToken(String token){
@@ -37,13 +35,5 @@ public class AuthToken {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Date getExpiresAt() {
-        return expiresAt;
-    }
-
-    public void setExpiresAt(Date expiresAt) {
-        this.expiresAt = expiresAt;
     }
 }

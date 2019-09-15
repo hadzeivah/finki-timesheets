@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl} from "@angular/forms";
+import {FormControl, Validators} from "@angular/forms";
 import {Project} from "../../model/Project";
 import {ProjectService} from "../../services/project.service";
 import {Member} from "../../model/Member";
@@ -11,7 +11,7 @@ import {Member} from "../../model/Member";
 })
 export class DocumentPageComponent implements OnInit {
 
-  projectCtrl = new FormControl();
+  projectCtrl = new FormControl('', Validators.required);
   projects: Project[];
   members: Member[];
   selectedProject: Project;
@@ -34,7 +34,6 @@ export class DocumentPageComponent implements OnInit {
 
   onProjectSelected(project: Project) {
     this.selectedProject = project;
-    console.log(this.selectedProject);
   }
 
 }
