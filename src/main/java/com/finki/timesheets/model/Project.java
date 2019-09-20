@@ -42,6 +42,9 @@ public class Project {
     @ManyToMany(mappedBy = "projects")
     private Set<Member> members = new HashSet<>();
 
+    @OneToMany(mappedBy = "position")
+    private Set<PositionSalary> salaries;
+
     public Project() {
     }
 
@@ -116,5 +119,13 @@ public class Project {
 
     public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
+    }
+
+    public Set<PositionSalary> getSalaries() {
+        return salaries;
+    }
+
+    public void setSalaries(Set<PositionSalary> salaries) {
+        this.salaries = salaries;
     }
 }

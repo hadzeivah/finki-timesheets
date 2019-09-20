@@ -6,8 +6,8 @@ export class Project {
   name: string;
   projectNumber: string;
   partnerOrganisation: string;
-  startDate: any;
-  endDate: any;
+  startDate: string;
+  endDate: string;
   university: University;
   members: Member[];
 }

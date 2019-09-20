@@ -1,9 +1,12 @@
 import {Component, Inject} from "@angular/core";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {Project} from "../../model/Project";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {University} from "../../model/University";
 import {UniversityService} from "../../services/university.service";
+import {PositionService} from "../../services/position.service";
+import {Position} from "../../model/Position";
+import {ProjectPositionDto} from "../../model/ProjectPositionDto";
 
 @Component({
   selector: 'app-add-project',
@@ -14,14 +17,19 @@ export class AddProjectComponent {
 
   universities: University[];
   addProjectForm: FormGroup;
+  addPositionsGroup: FormGroup;
   project: Project;
   title: string = "Add projects";
+  isLinear = false;
+  seedData: Position[];
+  projectPosition: ProjectPositionDto;
 
   constructor(
     public dialogRef: MatDialogRef<AddProjectComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Project,
     private fb: FormBuilder,
-    private universityService: UniversityService) {
+    private universityService: UniversityService,
+    private positionService: PositionService) {
 
     this.getUniversities();
     this.addProjectForm = this.fb.group({
@@ -39,6 +47,48 @@ export class AddProjectComponent {
     }
   }
 
+  ngOnInit() {
+    this.addPositionsGroup = this.fb.group({
+      positions: this.fb.array([])
+    });
+    this.positionService.findPositionByProject(1).subscribe();
+    this.positionService.findPositions().subscribe(positions => {
+      this.seedData = positions;
+      this.seedPositionFormArray();
+    });
+  }
+
+  get positionsFormArray() {
+    return (<FormArray>this.addPositionsGroup.get('positions'));
+  }
+
+  createPositionGroup() {
+    return this.fb.group({
+      positionType: '',
+      salary: ''
+    });
+  }
+
+  addPositionToPositionsFormArray() {
+    this.positionsFormArray.push(this.createPositionGroup());
+  }
+
+  removePositionToPositionsFormArray(index) {
+    this.positionsFormArray.removeAt(index);
+  }
+
+  seedPositionFormArray() {
+    this.seedData.forEach(position => {
+      const formGroup = this.createPositionGroup();
+      formGroup.addControl('salary', this.getFormControl());
+      let positionTypeObj = {
+        positionType: position.name
+      };
+      formGroup.patchValue(positionTypeObj);
+      this.positionsFormArray.push(formGroup);
+    });
+  }
+
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -54,7 +104,8 @@ export class AddProjectComponent {
 
   save() {
     this.project = <Project>this.addProjectForm.value;
-    this.dialogRef.close(this.project);
+    this.projectPosition = new ProjectPositionDto(this.project,this.positionsFormArray.value);
+    this.dialogRef.close(this.projectPosition);
   }
 
   updateFormFields() {
@@ -68,6 +119,10 @@ export class AddProjectComponent {
         startDate: this.data.startDate,
         endDate: this.data.endDate
       })
+  }
+
+  getFormControl() {
+    return this.fb.control(null);
   }
 }
 

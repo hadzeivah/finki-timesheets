@@ -38,7 +38,8 @@ import {MembersComponent} from './members/members.component';
 import {TranslateLoader, TranslateModule, TranslateService} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NavigationBarComponent} from "./navigation-bar/navigation-bar.component";
-import {JwtHelperService, JWT_OPTIONS  } from "@auth0/angular-jwt";
+import {JwtHelperService, JWT_OPTIONS} from "@auth0/angular-jwt";
+import {MatStepperModule} from "@angular/material/stepper";
 
 @NgModule({
   declarations: [
@@ -81,13 +82,13 @@ import {JwtHelperService, JWT_OPTIONS  } from "@auth0/angular-jwt";
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })],
+    }),
+    MatStepperModule
+  ],
   providers: [ErrorHandler, AuthService, TimesheetService, TranslateService, JwtHelperService,
-    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS } ,{
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptor,
-    multi: true
-  }, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},],
+    {provide: JWT_OPTIONS, useValue: JWT_OPTIONS},
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},],
   bootstrap: [AppComponent],
   entryComponents: [AddProjectComponent, AddMemberComponent]
 })

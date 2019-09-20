@@ -4,6 +4,7 @@ import {ProjectService} from "../../services/project.service";
 import {AddProjectComponent} from "../add-project/add-project.component";
 import {MatDialog, MatDialogConfig, MatTableDataSource} from "@angular/material";
 import {Member} from "../../model/Member";
+import {PositionService} from "../../services/position.service";
 
 @Component({
   selector: 'app-project-table',
@@ -37,26 +38,26 @@ export class ProjectTableComponent implements OnInit {
   addProjectDialog(editedProject?: Project) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
-    dialogConfig.width = '250px';
+    dialogConfig.width = '600';
 
     if (editedProject) {
       dialogConfig.data = editedProject;
     }
     const dialogRef = this.dialog.open(AddProjectComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(project => {
-      if (project) {
+    dialogRef.afterClosed().subscribe(projectPosition => {
+      if (projectPosition) {
 
         if (editedProject) {
-          project.id = editedProject.id;
-          this.projectService.updateProject(project).subscribe(() => {
+          projectPosition.project.id = editedProject.id;
+          this.projectService.updateProject( projectPosition.project).subscribe(() => {
               this.loadProjects();
-            }, err => console.log('HTTP Error', err),
+            }
           )
         } else {
-          this.projectService.addProject(project).subscribe(() => {
+          this.projectService.addProject(projectPosition).subscribe(() => {
               this.loadProjects();
-            }, err => console.log('HTTP Error', err),
+            }
           );
         }
       }

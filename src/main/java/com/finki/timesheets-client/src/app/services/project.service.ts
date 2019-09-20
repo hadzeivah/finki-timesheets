@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ApiResponse} from '../model/api.response';
 import {Project} from "../model/Project";
+import {ProjectPositionDto} from "../model/ProjectPositionDto";
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,8 @@ export class ProjectService {
   findProjects(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(this.baseUrl);
   }
-  addProject(project: Project): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.baseUrl, project);
+  addProject(projectDto: ProjectPositionDto): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.baseUrl, projectDto);
   }
   deleteProject(id: number): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(this.baseUrl + '/' + id);

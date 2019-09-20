@@ -1,20 +1,86 @@
 <ng-container>
-  <mat-card class="example-card">
+  <mat-card class="round-card">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>{{timesheet?.project.name}}</mat-card-title>
-      <mat-card-subtitle>{{timesheet?.project.partnerOrganisation}}</mat-card-subtitle>
-      <mat-card-subtitle>{{timesheet?.project.projectNumber}}</mat-card-subtitle>
+      <mat-card-title>Project name: {{timesheet?.project.name}}</mat-card-title>
+      <mat-card-subtitle>Partner Organisation: {{timesheet?.project.partnerOrganisation}}</mat-card-subtitle>
+      <mat-card-subtitle>Project number: {{timesheet?.project.projectNumber}}</mat-card-subtitle>
+      <mat-card-subtitle>Project member: {{timesheet?.member.fullName}}</mat-card-subtitle>
+      <mat-card-subtitle>Position: {{timesheet?.member.positionType}}</mat-card-subtitle>
       <mat-card-subtitle>
+        Period:
         <mat-chip-list>
           <mat-chip color="primary" selected>{{timesheet?.fromPeriod | date }} </mat-chip>
           -
           <mat-chip color="primary" selected>{{timesheet?.toPeriod | date}}</mat-chip>
         </mat-chip-list>
       </mat-card-subtitle>
+      <form [formGroup]="filterForm">
+        <mat-form-field appearance="outline" floatLabel="auto">
+          <input matInput
+                 [matDatepicker]="fromDate"
+                 placeholder="From Date"
+                 formControlName="fromDate">
+          <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+          <mat-datepicker #fromDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="auto">
+          <input matInput
+                 [matDatepicker]="toDate"
+                 placeholder="To Date"
+                 formControlName="toDate">
+          <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+          <mat-datepicker #toDate></mat-datepicker>
+        </mat-form-field>
+        <button mat-button color="primary" class="primary" (click)="applyFilter()">Submit</button>
+      </form>
 
     </mat-card-header>
+
+
     <mat-card-content>
+      <!--Item Form-->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="space-container">
+          <!-- Start Date Form Field-->
+          <mat-form-field appearance="outline" floatLabel="auto">
+            <input matInput [matDatepicker]="startDatePicker"
+                   [matDatepickerFilter]="weekendFilter"
+                   placeholder="Choose a date"
+                   formControlName="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+          </mat-form-field>
+          <!-- End Date Form Field-->
+          <mat-form-field appearance="outline" floatLabel="auto">
+            <input matInput [matDatepicker]="endDatePicker"
+                   [matDatepickerFilter]="weekendFilter"
+                   placeholder="Choose a date"
+                   formControlName="endDate">
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Hours Form Field-->
+          <mat-form-field appearance="outline" floatLabel="auto">
+            <mat-label>Hours</mat-label>
+            <input matInput placeholder="Hours" formControlName="hours">
+          </mat-form-field>
+          <!--Task Description Form Field-->
+          <mat-form-field appearance="outline">
+            <mat-label>Task description</mat-label>
+            <input matInput placeholder="Task description" formControlName="taskDescription">
+          </mat-form-field>
+
+          <!-- Intellectual output Form Field-->
+          <mat-form-field appearance="outline" floatLabel="auto">
+            <mat-label>Intellectual output</mat-label>
+            <input matInput placeholder="Intellectual output" formControlName="intellectualOutput">
+          </mat-form-field>
+
+          <button [disabled]="!form.valid" mat-button color="primary">Submit</button>
+        </div>
+      </form>
       <div class="container">
         <!-- ITEMS -->
         <div class="item">
@@ -143,55 +209,7 @@
             </table>
           </form>
         </div>
-        <mat-divider [vertical]="true"></mat-divider>
-        <div class="container">
-          <!--Item Form-->
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="row">
-              <!-- Start Date Form Field-->
-              <mat-form-field appearance="outline">
-                <input matInput [matDatepicker]="startDatePicker"
-                       [matDatepickerFilter]="weekendFilter"
-                       placeholder="Choose a date"
-                       formControlName="startDate">
-                <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #startDatePicker></mat-datepicker>
-              </mat-form-field>
-              <!-- End Date Form Field-->
-              <mat-form-field appearance="outline">
-                <input matInput [matDatepicker]="endDatePicker"
-                       [matDatepickerFilter]="weekendFilter"
-                       placeholder="Choose a date"
-                       formControlName="endDate">
-                <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #endDatePicker></mat-datepicker>
-              </mat-form-field>
-            </div>
 
-            <div class="row">
-
-              <!-- Hours Form Field-->
-              <mat-form-field appearance="outline">
-                <mat-label>Hours</mat-label>
-                <input matInput placeholder="Hours" formControlName="hours">
-              </mat-form-field>
-              <!--Task Description Form Field-->
-              <mat-form-field appearance="outline">
-                <mat-label>Task description</mat-label>
-                <input matInput placeholder="Task description" formControlName="taskDescription">
-              </mat-form-field>
-            </div>
-            <div>
-              <!-- Intellectual output Form Field-->
-              <mat-form-field appearance="outline">
-                <mat-label>Intellectual output</mat-label>
-                <input matInput placeholder="Intellectual output" formControlName="intellectualOutput">
-              </mat-form-field>
-
-              <button [disabled]="!form.valid" mat-button color="primary">Submit</button>
-            </div>
-          </form>
-        </div>
       </div>
     </mat-card-content>
   </mat-card>

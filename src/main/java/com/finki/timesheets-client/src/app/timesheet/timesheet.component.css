@@ -2,6 +2,12 @@
   display: flex;
   direction: ltr;
 }
+
+.space-container {
+  display: flex;
+  justify-content: space-around;
+}
+
 .item {
   flex-grow: 2
 }
@@ -10,10 +16,7 @@ table {
   width: 100%;
 }
 
-mat-divider{
-  padding: 10px;
-}
-.templates{
+.templates {
   display: flex;
   align-content: flex-end;
 }

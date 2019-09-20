@@ -1,49 +1,108 @@
 <h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content>
-  <form [formGroup]="addProjectForm">
-    <mat-form-field>
-      <mat-label>Project Name:</mat-label>
-      <input matInput formControlName="name" placeholder="Project name" name=name class="form-control"
-             id="name">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Project Number:</mat-label>
-      <input matInput formControlName="projectNumber" placeholder="Project Number" name=projectNumber
-             class="form-control"
-             id="projectNumber">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Partner Organisation:</mat-label>
-      <input matInput formControlName="partnerOrganisation" placeholder="Partner Organisation" name=partnerOrganisation
-             class="form-control"
-             id="partnerOrganisation">
-    </mat-form-field>
+  <mat-vertical-stepper [linear]="isLinear" #stepper>
+    <mat-step [stepControl]="addProjectForm">
+      <form [formGroup]="addProjectForm" class="column-container">
+        <ng-template matStepLabel>Create project</ng-template>
 
-    <mat-form-field>
-      <mat-select placeholder="Add university" formControlName="university">
-        <mat-option [value]="university" *ngFor="let university of universities">{{university.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+        <mat-form-field>
+          <mat-label>Project Name:</mat-label>
+          <input matInput formControlName="name" placeholder="Project name" name=name class="form-control"
+                 id="name">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Project Number:</mat-label>
+          <input matInput formControlName="projectNumber" placeholder="Project Number" name=projectNumber
+                 class="form-control"
+                 id="projectNumber">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Partner Organisation:</mat-label>
+          <input matInput formControlName="partnerOrganisation" placeholder="Partner Organisation"
+                 name=partnerOrganisation
+                 class="form-control"
+                 id="partnerOrganisation">
+        </mat-form-field>
 
-
-    <mat-form-field>
-      <input matInput [matDatepicker]="startDatePicker" placeholder="Choose a date"
-             formControlName="startDate">
-      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #startDatePicker></mat-datepicker>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput [matDatepicker]="endDatePicker" placeholder="Choose a date"
-             formControlName="endDate">
-      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #endDatePicker></mat-datepicker>
-    </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="Add university" formControlName="university">
+            <mat-option [value]="university" *ngFor="let university of universities">{{university.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
 
-  </form>
+        <mat-form-field>
+          <input matInput [matDatepicker]="startDatePicker" placeholder="Choose a date"
+                 formControlName="startDate">
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [matDatepicker]="endDatePicker" placeholder="Choose a date"
+                 formControlName="endDate">
+          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+
+      </form>
+
+    </mat-step>
+    <mat-step [stepControl]="addPositionsGroup">
+      <form [formGroup]="addPositionsGroup">
+        <ng-template matStepLabel>Fill out project details</ng-template>
+        <div formArrayName="positions">
+          <div *ngFor="let position of positionsFormArray.controls; let i = index;">
+            <div [formGroupName]="i" class="container">
+
+              <mat-form-field>
+                <mat-label>Position Type Name:</mat-label>
+                <input matInput formControlName="positionType" placeholder="Position type" name=positionType
+                       class="form-control"
+                       id="positionType">
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Salary:</mat-label>
+                <input matInput formControlName="salary" placeholder="Salary" name=salary class="form-control"
+                       id="salary">
+              </mat-form-field>
+
+              <mat-icon
+                (click)="removePositionToPositionsFormArray(i)">
+                delete
+              </mat-icon>
+
+            </div>
+          </div>
+
+          <button mat-icon-button color="primary" (click)="addPositionToPositionsFormArray()">
+            <mat-icon>add</mat-icon>
+          </button>
+
+        </div>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      You are now done.
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No</button>
   <button mat-button color="primary" (click)="save()" cdkFocusInitial>Save</button>
 </div>
+
+

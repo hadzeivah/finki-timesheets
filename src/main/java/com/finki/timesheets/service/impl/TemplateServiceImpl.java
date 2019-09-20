@@ -33,7 +33,7 @@ public class TemplateServiceImpl implements TemplateService {
 
 
     private static final String CLASS_PATH = "/templates/";
-    private static final String FILE_DIRECTORY = "C:\\Users\\pc\\Desktop\\Ivan_Chorbev-Templates\\";
+    private static final String FILE_DIRECTORY = "D:\\Ivan_Chorbev-Templates\\";
     private TimesheetService timesheetService;
 
 
