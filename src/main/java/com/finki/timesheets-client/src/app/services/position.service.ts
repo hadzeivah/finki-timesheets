@@ -13,12 +13,8 @@ export class PositionService {
   constructor(private http: HttpClient) {
   }
 
-  findSalaryGroupedByPosition(): Observable<Map<string,number>> {
-    return this.http.get<Map<string,number>>(`${this.baseUrl}/salary`);
-  }
-
-  findPositionByProject(id: number): Observable<Position[]> {
-    return this.http.get<Position[]>(`${this.baseUrl}/project/${id}`);
+  findSalaryGroupedByPosition(id: number): Observable<Map<string,number>> {
+    return this.http.get<Map<string,number>>(`${this.baseUrl}/salaries/project/${id}`);
   }
 
   findPositions(): Observable<Position[]> {

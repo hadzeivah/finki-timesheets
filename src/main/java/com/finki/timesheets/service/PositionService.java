@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface PositionService {
 
-    Map<String,Integer> getAllPositionsAndSalaryMap();
+    Map<String,Integer> getAllPositionsAndSalaryMapByProject(Long id);
     List<Position> findAll();
     List<PositionSalary> saveAll(Project project, List<PositionDto> positions);
 

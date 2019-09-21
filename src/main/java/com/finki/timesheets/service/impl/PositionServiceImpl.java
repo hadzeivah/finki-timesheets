@@ -31,8 +31,8 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public Map<String, Integer> getAllPositionsAndSalaryMap() {
-        return this.positionRepository.findAll().stream().collect(Collectors.toMap(Position::getName, Position::getSalary));
+    public Map<String, Integer> getAllPositionsAndSalaryMapByProject(Long id) {
+        return this.positionSalaryRepository.findAllByProjectId(id).stream().collect(Collectors.toMap(p -> p.getPosition().getName(), PositionSalary::getSalary));
     }
 
     @Override
@@ -43,14 +43,18 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public List<PositionSalary> saveAll(Project project, List<PositionDto> positions) {
 
-        Map<String , Position> positionMap = findAll().stream().collect(Collectors.toMap(Position::getName, Function.identity()));
+        Map<String, Position> positionMap = findAll().stream().collect(Collectors.toMap(Position::getName, Function.identity()));
 
         List<PositionSalary> positionSalaries = new ArrayList<>();
         positions.forEach(position -> {
+            Position positionFromType = positionMap.get(position.getPositionType());
+            if (positionFromType == null) {
+                positionFromType = this.positionRepository.save(new Position(position.getPositionType(), position.getPositionType()));
+            }
             PositionSalary positionSalary = new PositionSalary(
-                    new PositionSalaryKey(positionMap.get(position.getPositionType()).getId(),project.getId()),
+                    new PositionSalaryKey(positionFromType.getId(), project.getId()),
                     project,
-                    positionMap.get(position.getPositionType()),
+                    positionFromType,
                     position.getSalary());
             positionSalaries.add(positionSalary);
         });

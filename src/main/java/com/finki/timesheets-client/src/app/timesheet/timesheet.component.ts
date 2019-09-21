@@ -82,15 +82,14 @@ export class TimesheetComponent implements OnInit {
 
   ngOnInit() {
     this.buildInsertForm();
-    this.positionsService.findSalaryGroupedByPosition()
-      .subscribe(positionSalary => {
-        this.positionSalaryMap = positionSalary;
-      });
-
     this.route.params.subscribe((params) => {
       this.projectId = +params['projectId'];
       this.memberId = +params['memberId'];
       this.getTimesheet();
+      this.positionsService.findSalaryGroupedByPosition(this.projectId)
+        .subscribe(positionSalary => {
+          this.positionSalaryMap = positionSalary;
+        });
     });
   }
 

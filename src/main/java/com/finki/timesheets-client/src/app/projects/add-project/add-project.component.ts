@@ -51,7 +51,6 @@ export class AddProjectComponent {
     this.addPositionsGroup = this.fb.group({
       positions: this.fb.array([])
     });
-    this.positionService.findPositionByProject(1).subscribe();
     this.positionService.findPositions().subscribe(positions => {
       this.seedData = positions;
       this.seedPositionFormArray();
