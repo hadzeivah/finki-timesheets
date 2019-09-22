@@ -30,7 +30,6 @@ public class Project {
     @Column
     private LocalDateTime endDate;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "university_id", referencedColumnName = "id")
     private University university;

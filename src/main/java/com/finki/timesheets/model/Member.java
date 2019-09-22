@@ -38,7 +38,9 @@ public class Member {
             inverseJoinColumns = {@JoinColumn(name = "project_id")})
     private Set<Project> projects;
 
-    public Member(){}
+    public Member() {
+    }
+
     public Member(Set<Project> projects) {
         this.projects = projects;
         this.projects.forEach(project -> project.getMembers().add(this));

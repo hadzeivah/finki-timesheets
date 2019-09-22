@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Project} from "../../model/Project";
 import {ProjectService} from "../../services/project.service";
 import {AddProjectComponent} from "../add-project/add-project.component";
 import {MatDialog, MatDialogConfig, MatTableDataSource} from "@angular/material";
 import {Member} from "../../model/Member";
 import {PositionService} from "../../services/position.service";
+import {MatSidenav} from "@angular/material/sidenav";
 
 @Component({
   selector: 'app-project-table',
@@ -17,6 +18,7 @@ export class ProjectTableComponent implements OnInit {
   members: Member[];
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['projectName', 'projectNumber', 'partnerOrganisation', 'startDate', 'endDate', 'actions'];
+  @ViewChild('drawer') public drawer: MatSidenav;
 
   constructor(private projectService: ProjectService,
               public dialog: MatDialog) {
@@ -32,37 +34,45 @@ export class ProjectTableComponent implements OnInit {
           this.dataSource.data = data.result;
         }, err => console.log('HTTP Error', err),
       );
-
   }
 
-  addProjectDialog(editedProject?: Project) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '600';
+  addProjectDialog() {
 
-    if (editedProject) {
-      dialogConfig.data = editedProject;
-    }
-    const dialogRef = this.dialog.open(AddProjectComponent, dialogConfig);
+    const dialogRef = this.dialog.open(AddProjectComponent, {
+      autoFocus: true,
+      width: '600'
+    });
 
     dialogRef.afterClosed().subscribe(projectPosition => {
       if (projectPosition) {
 
-        if (editedProject) {
-          projectPosition.project.id = editedProject.id;
-          this.projectService.updateProject( projectPosition.project).subscribe(() => {
-              this.loadProjects();
-            }
-          )
-        } else {
-          this.projectService.addProject(projectPosition).subscribe(() => {
-              this.loadProjects();
-            }
-          );
-        }
+        this.projectService.addProject(projectPosition).subscribe(() => {
+            this.loadProjects();
+          }
+        );
       }
     });
   }
+
+  editProjectDialog(editedProject: Project) {
+
+    const dialogRef = this.dialog.open(AddProjectComponent, {
+      autoFocus: true,
+      width: '600',
+      data: editedProject,
+    });
+
+    dialogRef.afterClosed().subscribe(projectPosition => {
+      if (projectPosition) {
+        projectPosition.project.id = editedProject.id;
+        this.projectService.updateProject(projectPosition).subscribe(() => {
+            this.loadProjects();
+          }
+        )
+      }
+    });
+  }
+
 
   deleteProject(project: Project): void {
 
@@ -72,7 +82,8 @@ export class ProjectTableComponent implements OnInit {
       });
   }
 
-  displayMembers(project: Project) {
+  onSelectedProject(project: Project) {
     this.selectedProject = project;
+    return this.drawer.open();
   }
 }

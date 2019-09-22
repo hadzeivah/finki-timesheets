@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Member} from "../model/Member";
 import {MemberService} from "../services/member.service";
 import {MatDialog, MatDialogConfig, MatTableDataSource} from "@angular/material";
 import {AddMemberComponent} from "./add-member/add-member.component";
 import {Project} from "../model/Project";
 import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
+import {MatSidenav} from "@angular/material/sidenav";
 
 @Component({
   selector: 'members-list',
@@ -18,26 +19,24 @@ export class MembersComponent implements OnInit {
   selectedProject: Project;
 
   @Input()
-  set membersOnProject(value: Member[]) {
-    this.dataSource.data = value;
-  }
-
-  @Input()
   set project(value: Project) {
     this.selectedProject = value;
+    this.displayedColumns = ['fullName', 'positionType', 'actions'];
+    this.dataSource.data = value.members;
   }
 
   constructor(private membersService: MemberService,
               public dialog: MatDialog) {
-  }
-
-  ngOnInit() {
-    if (this.isDataSourceEmpty())
+    if (!this.isProjectSelectedMode())
       this.loadMembers();
   }
 
-  isDataSourceEmpty() {
-    return this.dataSource.data.length == 0;
+  ngOnInit() {
+    console.log("ng on init")
+  }
+
+  isProjectSelectedMode() {
+    return isNotNullOrUndefined(this.selectedProject);
   }
 
   loadMembers() {
@@ -58,15 +57,15 @@ export class MembersComponent implements OnInit {
   addMemberDialog(editedMember?: Member) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
-    dialogConfig.width = '250px';
+    dialogConfig.width = '500px';
 
     dialogConfig.data = {
-      showProjectsFiled: !this.isDataSourceEmpty()
+      showProjectsFiled: !this.isProjectSelectedMode()
     };
     if (editedMember) {
       dialogConfig.data = {
         editedMember: editedMember,
-        showProjectsFiled: !this.isDataSourceEmpty()
+        showProjectsFiled: !this.isProjectSelectedMode()
       }
     }
 
@@ -82,9 +81,8 @@ export class MembersComponent implements OnInit {
             })
         } else {
 
-          if(isNotNullOrUndefined(this.selectedProject))
-            console.log(member);
-          member.projects.push(this.selectedProject);
+          if (isNotNullOrUndefined(this.selectedProject))
+            member.projects.push(this.selectedProject);
           this.membersService.addMember(member)
             .subscribe(() => {
               this.loadMembers();

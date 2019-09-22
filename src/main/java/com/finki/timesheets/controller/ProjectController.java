@@ -33,15 +33,18 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ApiResponse<Project> saveItem(@RequestBody ProjectPositionDto projectPosition) throws NotFoundException {
+    public ApiResponse<Project> saveProject(@RequestBody ProjectPositionDto projectPosition) throws NotFoundException {
         Project project = projectService.save(projectPosition.getProject());
-        this.positionService.saveAll(project,projectPosition.getPositions());
+        this.positionService.saveOrUpdateAll(project,projectPosition.getPositions());
         return new ApiResponse<>(HttpStatus.OK.value(), "Project saved successfully.",project);
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Project> update(@RequestBody Project project) throws NotFoundException {
-        return new ApiResponse<>(HttpStatus.OK.value(), "Project updated successfully.", projectService.update(project));
+    public ApiResponse<Project> update(@RequestBody ProjectPositionDto projectPosition) throws NotFoundException {
+
+        Project project = projectService.update(projectPosition.getProject());
+        this.positionService.saveOrUpdateAll(project,projectPosition.getPositions());
+        return new ApiResponse<>(HttpStatus.OK.value(), "Project updated successfully.",project);
     }
 
     @DeleteMapping("/{id}")

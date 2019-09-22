@@ -12,6 +12,6 @@ public interface PositionService {
 
     Map<String,Integer> getAllPositionsAndSalaryMapByProject(Long id);
     List<Position> findAll();
-    List<PositionSalary> saveAll(Project project, List<PositionDto> positions);
-
+    List<PositionSalary> saveOrUpdateAll(Project project, List<PositionDto> positions);
+    List<PositionSalary> findAllByProjectId(Long id);
 }

@@ -14,9 +14,8 @@ export class PositionService {
   }
 
   findSalaryGroupedByPosition(id: number): Observable<Map<string,number>> {
-    return this.http.get<Map<string,number>>(`${this.baseUrl}/salaries/project/${id}`);
+    return this.http.get<Map<string,number>>(`${this.baseUrl}/salaries/map/project/${id}`);
   }
-
   findPositions(): Observable<Position[]> {
     return this.http.get<Position[]>(`${this.baseUrl}`);
   }

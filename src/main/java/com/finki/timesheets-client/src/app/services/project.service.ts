@@ -24,7 +24,7 @@ export class ProjectService {
   deleteProject(id: number): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(this.baseUrl + '/' + id);
   }
-  updateProject(project: Project): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(this.baseUrl +  '/' + project.id, project);
+  updateProject(projectDto: ProjectPositionDto): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(this.baseUrl +  '/' + projectDto.project.id, projectDto);
   }
 }

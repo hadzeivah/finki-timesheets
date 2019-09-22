@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content>
-  <mat-vertical-stepper [linear]="isLinear" #stepper>
+  <mat-horizontal-stepper linear="true" #stepper>
     <mat-step [stepControl]="addProjectForm">
       <form [formGroup]="addProjectForm" class="column-container">
         <ng-template matStepLabel>Create project</ng-template>
@@ -25,7 +25,7 @@
         </mat-form-field>
 
         <mat-form-field>
-          <mat-select placeholder="Add university" formControlName="university">
+          <mat-select placeholder="Add university" formControlName="university" [compareWith]="compareUniversityObjects">
             <mat-option [value]="university" *ngFor="let university of universities">{{university.name}}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -98,7 +98,7 @@
         <button mat-button (click)="stepper.reset()">Reset</button>
       </div>
     </mat-step>
-  </mat-vertical-stepper>
+  </mat-horizontal-stepper>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No</button>

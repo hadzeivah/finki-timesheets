@@ -1,64 +1,79 @@
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-  <!--Project Name -->
-  <ng-container matColumnDef="projectName">
-    <th mat-header-cell *matHeaderCellDef> Project Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}}</td>
-  </ng-container>
-
-  <!-- Project Number Column -->
-  <ng-container matColumnDef="projectNumber">
-    <th mat-header-cell *matHeaderCellDef> Project Number </th>
-    <td mat-cell *matCellDef="let element"> {{element.projectNumber}}</td>
-  </ng-container>
-
-  <!-- Partner Organisation Column -->
-  <ng-container matColumnDef="partnerOrganisation">
-    <th mat-header-cell *matHeaderCellDef> Partner Organisation</th>
-    <td mat-cell *matCellDef="let element"> {{element.partnerOrganisation}}</td>
-  </ng-container>
-
-  <!-- StartDate Column -->
-  <ng-container matColumnDef="startDate">
-    <th mat-header-cell *matHeaderCellDef> Start Date</th>
-    <td mat-cell *matCellDef="let element"> {{element.startDate | date }}</td>
-  </ng-container>
-
-  <!-- EndDate Column -->
-  <ng-container matColumnDef="endDate">
-    <th mat-header-cell *matHeaderCellDef> End Date</th>
-    <td mat-cell *matCellDef="let element"> {{element.endDate | date }}</td>
-  </ng-container>
-
-  <!-- actions -->
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef>
-      <button mat-icon-button color="primary" (click)="addProjectDialog()">
-        <mat-icon>add</mat-icon>
+<mat-drawer-container hasBackdrop="false">
+  <mat-drawer #drawer mode="side" position="end" opened class="drawer-container">
+    <h1>Project Details
+      <button mat-icon-button color="primary" (click)="drawer.close()">
+        <mat-icon>remove</mat-icon>
       </button>
-    </th>
-    <td mat-cell *matCellDef="let element; let i=index;">
+    </h1>
 
-      <button  mat-icon-button color="primary" (click)="addProjectDialog(element)">
-        <mat-icon>edit</mat-icon>
-      </button>
+    <div *ngIf="selectedProject">
+      <p>{{selectedProject.name}}</p>
+      <p>{{selectedProject.university?.name }} | {{selectedProject.university?.dean}} </p>
+      <mat-divider></mat-divider>
 
-      <button mat-icon-button color="primary"  (click)="deleteProject(element)">
-        <mat-icon>delete</mat-icon>
-      </button>
+      <members-list [project]="selectedProject"></members-list>
 
-    </td>
-  </ng-container>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!--Project Name -->
+      <ng-container matColumnDef="projectName">
+        <th mat-header-cell *matHeaderCellDef> Project Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.name}}</td>
+      </ng-container>
+
+      <!-- Project Number Column -->
+      <ng-container matColumnDef="projectNumber">
+        <th mat-header-cell *matHeaderCellDef> Project Number</th>
+        <td mat-cell *matCellDef="let element"> {{element.projectNumber}}</td>
+      </ng-container>
+
+      <!-- Partner Organisation Column -->
+      <ng-container matColumnDef="partnerOrganisation">
+        <th mat-header-cell *matHeaderCellDef> Partner Organisation</th>
+        <td mat-cell *matCellDef="let element"> {{element.partnerOrganisation}}</td>
+      </ng-container>
+
+      <!-- StartDate Column -->
+      <ng-container matColumnDef="startDate">
+        <th mat-header-cell *matHeaderCellDef> Start Date</th>
+        <td mat-cell *matCellDef="let element"> {{element.startDate | date }}</td>
+      </ng-container>
+
+      <!-- EndDate Column -->
+      <ng-container matColumnDef="endDate">
+        <th mat-header-cell *matHeaderCellDef> End Date</th>
+        <td mat-cell *matCellDef="let element"> {{element.endDate | date }}</td>
+      </ng-container>
+
+      <!-- actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          <button mat-icon-button color="primary" (click)="addProjectDialog()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </th>
+        <td mat-cell *matCellDef="let element; let i=index;">
+
+          <button mat-icon-button color="primary" (click)="editProjectDialog(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          <button mat-icon-button color="primary" (click)="deleteProject(element)">
+            <mat-icon>delete</mat-icon>
+          </button>
+
+        </td>
+      </ng-container>
 
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let project; columns: displayedColumns;"
-      [ngClass]="{'selected': project === selectedProject}"
-      (click)="displayMembers(project)"></tr>
-</table>
-
-<div *ngIf="selectedProject">
-
-<members-list [membersOnProject]="selectedProject.members" [project]="selectedProject"></members-list>
-
-</div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let project; columns: displayedColumns;"
+          [ngClass]="{'selected': project === selectedProject}"
+          (click)="onSelectedProject(project)"></tr>
+    </table>
+  </mat-drawer-content>
+</mat-drawer-container>

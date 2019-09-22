@@ -20,7 +20,6 @@ export class AddProjectComponent {
   addPositionsGroup: FormGroup;
   project: Project;
   title: string = "Add projects";
-  isLinear = false;
   seedData: Position[];
   projectPosition: ProjectPositionDto;
 
@@ -43,6 +42,7 @@ export class AddProjectComponent {
 
     if (data) {
       this.title = "Edit projects";
+      this.project = data;
       this.updateFormFields();
     }
   }
@@ -51,10 +51,23 @@ export class AddProjectComponent {
     this.addPositionsGroup = this.fb.group({
       positions: this.fb.array([])
     });
-    this.positionService.findPositions().subscribe(positions => {
-      this.seedData = positions;
-      this.seedPositionFormArray();
-    });
+
+    if (this.project) {
+      this.positionService.findSalaryGroupedByPosition(this.project.id)
+        .subscribe(positionSalary => {
+          this.seedData = Object.keys(positionSalary).map(function (key) {
+            return new Position(key, positionSalary[key]);
+          });
+          this.seedPositionFormArray();
+        });
+
+    } else {
+      this.positionService.findPositions().subscribe(positions => {
+        this.seedData = positions;
+        this.seedPositionFormArray();
+      });
+    }
+
   }
 
   get positionsFormArray() {
@@ -81,7 +94,8 @@ export class AddProjectComponent {
       const formGroup = this.createPositionGroup();
       formGroup.addControl('salary', this.getFormControl());
       let positionTypeObj = {
-        positionType: position.name
+        positionType: position.name,
+        salary: position.salary != null ? position.salary : 0
       };
       formGroup.patchValue(positionTypeObj);
       this.positionsFormArray.push(formGroup);
@@ -103,25 +117,28 @@ export class AddProjectComponent {
 
   save() {
     this.project = <Project>this.addProjectForm.value;
-    this.projectPosition = new ProjectPositionDto(this.project,this.positionsFormArray.value);
+    this.projectPosition = new ProjectPositionDto(this.project, this.positionsFormArray.value);
     this.dialogRef.close(this.projectPosition);
   }
 
   updateFormFields() {
-
     this.addProjectForm.patchValue(
       {
-        name: this.data.name,
-        projectNumber: this.data.projectNumber,
-        partnerOrganisation: this.data.partnerOrganisation,
-        university: this.data.university,
-        startDate: this.data.startDate,
-        endDate: this.data.endDate
+        name: this.project.name,
+        projectNumber: this.project.projectNumber,
+        partnerOrganisation: this.project.partnerOrganisation,
+        university: this.project.university,
+        startDate: this.project.startDate,
+        endDate: this.project.endDate
       })
   }
 
   getFormControl() {
     return this.fb.control(null);
+  }
+
+  compareUniversityObjects(university1: any, university2: any) {
+    return university1 && university2 && university1.id == university2.id;
   }
 }
 

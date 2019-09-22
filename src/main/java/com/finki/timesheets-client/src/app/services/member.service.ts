@@ -33,6 +33,6 @@ export class MemberService {
   }
 
   getMemberTypes(): Observable<PositionType[]> {
-    return this.http.get<PositionType[]>(this.baseUrl + '/positions' )
+    return this.http.get<PositionType[]>(this.baseUrl + '/positions')
   }
 }
