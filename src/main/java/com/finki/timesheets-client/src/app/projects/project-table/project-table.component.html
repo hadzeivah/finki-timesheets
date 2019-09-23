@@ -1,4 +1,4 @@
-<mat-drawer-container hasBackdrop="false">
+<mat-drawer-container hasBackdrop="false" class="drawer">
   <mat-drawer #drawer mode="side" position="end" opened class="drawer-container">
     <h1>Project Details
       <button mat-icon-button color="primary" (click)="drawer.close()">
@@ -8,14 +8,17 @@
 
     <div *ngIf="selectedProject">
       <p>{{selectedProject.name}}</p>
-      <p>{{selectedProject.university?.name }} | {{selectedProject.university?.dean}} </p>
-      <mat-divider></mat-divider>
+      <p>{{selectedProject.university?.name }}</p>
+      <p>{{selectedProject.university?.dean}}</p>
 
       <members-list [project]="selectedProject"></members-list>
 
     </div>
   </mat-drawer>
   <mat-drawer-content>
+    <mat-form-field class="search">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" >
+    </mat-form-field>
 
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
@@ -75,5 +78,6 @@
           [ngClass]="{'selected': project === selectedProject}"
           (click)="onSelectedProject(project)"></tr>
     </table>
+    <mat-paginator [pageSizeOptions]="[5,10, 20]" showFirstLastButtons></mat-paginator>
   </mat-drawer-content>
 </mat-drawer-container>

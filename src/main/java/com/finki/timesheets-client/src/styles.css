@@ -5,10 +5,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 table {
   width: 100%!important;
 }
-mat-form-field.mat-form-field {
-  font-size: 10px;
-  width: 180px;
-}
 
 .flex-container {
   padding: 0;
@@ -42,5 +38,6 @@ mat-form-field.mat-form-field {
 }
 
 .search {
-  padding: 5px 10px;
+  padding: 5px 15px;
+  width: 95%;
 }

@@ -6,6 +6,7 @@ import {AddMemberComponent} from "./add-member/add-member.component";
 import {Project} from "../model/Project";
 import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
 import {MatSidenav} from "@angular/material/sidenav";
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'members-list',
@@ -17,6 +18,7 @@ export class MembersComponent implements OnInit {
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['fullName', 'embg', 'positionType', 'transactionAccount', 'actions'];
   selectedProject: Project;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   @Input()
   set project(value: Project) {
@@ -32,11 +34,15 @@ export class MembersComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("ng on init")
+    this.dataSource.paginator = this.paginator;
   }
 
   isProjectSelectedMode() {
     return isNotNullOrUndefined(this.selectedProject);
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   loadMembers() {

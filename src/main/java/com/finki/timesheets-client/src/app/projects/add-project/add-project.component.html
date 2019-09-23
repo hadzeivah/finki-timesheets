@@ -52,6 +52,11 @@
 
     </mat-step>
     <mat-step [stepControl]="addPositionsGroup">
+
+      <button mat-icon-button color="primary" (click)="addPositionToPositionsFormArray()">
+        <mat-icon>add</mat-icon>
+      </button>
+
       <form [formGroup]="addPositionsGroup">
         <ng-template matStepLabel>Fill out project details</ng-template>
         <div formArrayName="positions">
@@ -78,10 +83,6 @@
 
             </div>
           </div>
-
-          <button mat-icon-button color="primary" (click)="addPositionToPositionsFormArray()">
-            <mat-icon>add</mat-icon>
-          </button>
 
         </div>
         <div>
