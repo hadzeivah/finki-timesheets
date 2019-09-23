@@ -7,6 +7,7 @@ import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angul
 import {ActivatedRoute} from '@angular/router';
 import {MatCalendarCellCssClasses, MatTableDataSource} from "@angular/material";
 import {PositionService} from "../services/position.service";
+import {HolidayService} from "../services/holiday.service";
 
 @Component({
   selector: 'app-timesheet',
@@ -58,6 +59,7 @@ export class TimesheetComponent implements OnInit {
 
   constructor(private timesheetService: TimesheetService,
               private positionsService: PositionService,
+              private holidayService: HolidayService,
               private itemService: ItemService,
               private fb: FormBuilder,
               private route: ActivatedRoute) {
@@ -82,6 +84,12 @@ export class TimesheetComponent implements OnInit {
 
   ngOnInit() {
     this.buildInsertForm();
+    this.holidayService.findHolidays().subscribe(holidays=>
+      {
+        this.datesToHighlight = holidays ;
+
+      }
+    );
     this.route.params.subscribe((params) => {
       this.projectId = +params['projectId'];
       this.memberId = +params['memberId'];
