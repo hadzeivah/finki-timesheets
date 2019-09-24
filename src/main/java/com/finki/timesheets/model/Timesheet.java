@@ -10,10 +10,6 @@ public class Timesheet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
-    private LocalDateTime fromPeriod;
-    @Column
-    private LocalDateTime toPeriod;
 
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id")
@@ -56,19 +52,4 @@ public class Timesheet {
         this.member = member;
     }
 
-    public LocalDateTime getFromPeriod() {
-        return fromPeriod;
-    }
-
-    public void setFromPeriod(LocalDateTime fromPeriod) {
-        this.fromPeriod = fromPeriod;
-    }
-
-    public LocalDateTime getToPeriod() {
-        return toPeriod;
-    }
-
-    public void setToPeriod(LocalDateTime toPeriod) {
-        this.toPeriod = toPeriod;
-    }
 }

@@ -1,55 +1,59 @@
-<mat-form-field class="search">
-  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" >
-</mat-form-field>
+<mat-card class="round-card">
+  <mat-card-content>
+    <mat-form-field class="search">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
 
-  <!--Project Name -->
-  <ng-container matColumnDef="fullName">
-    <th mat-header-cell *matHeaderCellDef> Name and Surname</th>
-    <td mat-cell *matCellDef="let element"> {{element.fullName}}</td>
-  </ng-container>
+      <!--Project Name -->
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef> Name and Surname</th>
+        <td mat-cell *matCellDef="let element"> {{element.fullName}}</td>
+      </ng-container>
 
-  <!-- EMBG -->
-  <ng-container matColumnDef="embg">
-    <th mat-header-cell *matHeaderCellDef> EMBG </th>
-    <td mat-cell *matCellDef="let element"> {{element.embg}}</td>
-  </ng-container>
+      <!-- EMBG -->
+      <ng-container matColumnDef="embg">
+        <th mat-header-cell *matHeaderCellDef> EMBG</th>
+        <td mat-cell *matCellDef="let element"> {{element.embg}}</td>
+      </ng-container>
 
-  <!--Transaction Account -->
-  <ng-container matColumnDef="transactionAccount">
-    <th mat-header-cell *matHeaderCellDef> Transaction Account</th>
-    <td mat-cell *matCellDef="let element"> {{element.transactionAccount}}</td>
-  </ng-container>
+      <!--Transaction Account -->
+      <ng-container matColumnDef="transactionAccount">
+        <th mat-header-cell *matHeaderCellDef> Transaction Account</th>
+        <td mat-cell *matCellDef="let element"> {{element.transactionAccount}}</td>
+      </ng-container>
 
-  <!--PositionType Name -->
-  <ng-container matColumnDef="positionType">
-    <th mat-header-cell *matHeaderCellDef> PositionType </th>
-    <td mat-cell *matCellDef="let element"> {{element.positionType}}</td>
-  </ng-container>
+      <!--PositionType Name -->
+      <ng-container matColumnDef="positionType">
+        <th mat-header-cell *matHeaderCellDef> PositionType</th>
+        <td mat-cell *matCellDef="let element"> {{element.positionType}}</td>
+      </ng-container>
 
-  <!-- actions -->
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef>
-      <button mat-icon-button color="primary" (click)="addMemberDialog()">
-        <mat-icon>add</mat-icon>
-      </button>
-    </th>
-    <td mat-cell *matCellDef="let element; let i=index;">
+      <!-- actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          <button mat-icon-button color="primary" (click)="addMemberDialog()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </th>
+        <td mat-cell *matCellDef="let element; let i=index;">
 
-      <button mat-icon-button color="primary" (click)="addMemberDialog(element)">
-        <mat-icon>edit</mat-icon>
-      </button>
+          <button mat-icon-button color="primary" (click)="addMemberDialog(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
 
-      <button mat-icon-button color="primary" (click)="deleteMember(element)">
-        <mat-icon>delete</mat-icon>
-      </button>
+          <button mat-icon-button color="primary" (click)="deleteMember(element)">
+            <mat-icon>delete</mat-icon>
+          </button>
 
-    </td>
-  </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let member; columns: displayedColumns;"></tr>
-</table>
-<mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let member; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
 
 
+  </mat-card-content>
+</mat-card>

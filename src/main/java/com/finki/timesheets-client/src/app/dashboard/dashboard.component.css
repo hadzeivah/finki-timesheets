@@ -1,2 +1,5 @@
 .sidebar { flex: 1; }
 .content { flex: 20; }
+tr.mat-footer-row {
+  font-weight: bold;
+}

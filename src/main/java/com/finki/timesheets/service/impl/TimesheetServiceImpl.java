@@ -43,8 +43,6 @@ public class TimesheetServiceImpl implements TimesheetService {
     @Override
     public void save(Project project, Member member) {
         Timesheet newTimesheet = new Timesheet(project, member);
-        newTimesheet.setFromPeriod(project.getStartDate());
-        newTimesheet.setToPeriod(project.getEndDate());
         timesheetRepository.save(newTimesheet);
     }
 }

@@ -44,14 +44,4 @@ export class ProjectListComponent implements OnInit {
     this.selectedMember = member;
   }
 
-
-  addMemberDialog() {
-    const dialogRef = this.dialog.open(AddMemberComponent, {
-      width: '250px',
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-    });
-
-  }
 }

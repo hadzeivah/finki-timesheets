@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
 import {AddUserComponent} from './users/add-user/add-user.component';
 import {EditUserComponent} from './users/edit-user/edit-user.component';
-import {ListUserComponent} from './users/list-user/list-user.component';
+import {UserTableComponent} from './users/user-table/user-table.component';
 import {AuthService} from './services/auth.service';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -47,7 +47,7 @@ import {MatStepperModule} from "@angular/material/stepper";
     LoginComponent,
     AddUserComponent,
     EditUserComponent,
-    ListUserComponent,
+    UserTableComponent,
     TimesheetComponent,
     ProjectListComponent,
     DashboardComponent,

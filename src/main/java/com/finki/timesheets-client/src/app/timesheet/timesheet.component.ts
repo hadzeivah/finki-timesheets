@@ -27,16 +27,7 @@ export class TimesheetComponent implements OnInit {
   projectId: number;
   memberId: number;
   positionSalaryMap: Map<string, number>;
-  datesToHighlight = [
-    "2019-01-01T18:30:00.000Z",
-    "2019-01-07T18:30:00.000Z",
-    "2019-05-01T18:30:00.000Z",
-    "2019-05-24T18:30:00.000Z",
-    "2019-07-02T18:30:00.000Z",
-    "2019-09-08T18:30:00.000Z",
-    "2019-10-11T18:30:00.000Z",
-    "2019-23-11T18:30:00.000Z",
-    "2019-12-08T18:30:00.000Z"];
+  datesToHighlight = [];
 
   weekendFilter = (d: Date): boolean => {
     const day = d.getDay();

@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {User} from '../model/user.model';
 import {Observable} from 'rxjs';
 import {ApiResponse} from '../model/api.response';
 import {AppConstants} from '../app.constants';
 import {JwtHelperService} from '@auth0/angular-jwt';
+import {User} from "../model/User";
 
 @Injectable()
 export class AuthService {

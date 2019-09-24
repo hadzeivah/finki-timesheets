@@ -1,9 +1,9 @@
 import { Component, OnInit , Inject} from '@angular/core';
 import {Router} from "@angular/router";
-import {User} from "../../model/user.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {first} from "rxjs/operators";
 import {AuthService} from "../../services/auth.service";
+import {User} from "../../model/User";
 
 @Component({
   selector: 'app-edit-user',
@@ -28,8 +28,6 @@ export class EditUserComponent implements OnInit {
       username: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      age: ['', Validators.required],
-      salary: ['', Validators.required]
     });
     this.apiService.getUserById(+userId)
       .subscribe( data => {

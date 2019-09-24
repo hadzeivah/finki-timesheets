@@ -8,12 +8,7 @@
       <mat-card-subtitle>Project member: {{timesheet?.member.fullName}}</mat-card-subtitle>
       <mat-card-subtitle>Position: {{timesheet?.member.positionType}}</mat-card-subtitle>
       <mat-card-subtitle>
-        Period:
-        <mat-chip-list>
-          <mat-chip color="primary" selected>{{timesheet?.fromPeriod | date }} </mat-chip>
-          -
-          <mat-chip color="primary" selected>{{timesheet?.toPeriod | date}}</mat-chip>
-        </mat-chip-list>
+        Period:{{timesheet?.project.startDate | date }} - {{timesheet?.project.endDate | date}}
       </mat-card-subtitle>
       <form [formGroup]="filterForm">
         <mat-form-field appearance="outline" floatLabel="auto">
@@ -85,7 +80,7 @@
         <!-- ITEMS -->
         <div class="item">
           <form [formGroup]="itemsForm">
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" formArrayName="items">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z0" formArrayName="items">
               <!-- Start Date Column -->
               <ng-container matColumnDef="startDate">
                 <th mat-header-cell *matHeaderCellDef> Start date</th>

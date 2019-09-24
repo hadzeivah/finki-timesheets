@@ -7,20 +7,22 @@
     </h1>
 
     <div *ngIf="selectedProject">
-      <p>{{selectedProject.name}}</p>
-      <p>{{selectedProject.university?.name }}</p>
-      <p>{{selectedProject.university?.dean}}</p>
+      <h5>{{selectedProject.name}}</h5>
+      <h5>{{selectedProject.university?.name }}</h5>
+      <h5>{{selectedProject.university?.dean}}</h5>
 
       <members-list [project]="selectedProject"></members-list>
 
     </div>
   </mat-drawer>
   <mat-drawer-content>
+    <mat-card class="round-card">
+      <mat-card-content>
     <mat-form-field class="search">
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" >
     </mat-form-field>
 
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
 
       <!--Project Name -->
       <ng-container matColumnDef="projectName">
@@ -79,5 +81,7 @@
           (click)="onSelectedProject(project)"></tr>
     </table>
     <mat-paginator [pageSizeOptions]="[5,10, 20]" showFirstLastButtons></mat-paginator>
+      </mat-card-content>
+    </mat-card>
   </mat-drawer-content>
 </mat-drawer-container>

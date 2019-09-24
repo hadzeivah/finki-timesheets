@@ -12,9 +12,9 @@ public interface TemplateService {
 
     ResponseEntity invoiceTemplate(String filename, Project project);
 
-    ResponseEntity solutionContractTemplate(String filename, Long projectId);
+    ResponseEntity solutionContractTemplate(String filename, Project project);
 
-    ResponseEntity requirementContractTemplate(String filename, Long projectId);
+    ResponseEntity requirementContractTemplate(String filename, Project project);
 
     ResponseEntity getResourceFromFileDirectory(String filename);
 

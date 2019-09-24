@@ -35,6 +35,7 @@ public class TemplateServiceImpl implements TemplateService {
     private static final String CLASS_PATH = "/templates/";
     private static final String FILE_DIRECTORY = "D:\\Ivan_Chorbev-Templates\\";
     private TimesheetService timesheetService;
+    private HashMap<String, String> replacementValues = new HashMap<>();
 
 
     public TemplateServiceImpl(TimesheetService timesheetService) {
@@ -46,9 +47,9 @@ public class TemplateServiceImpl implements TemplateService {
 
         String outpath = FILE_DIRECTORY + "documents.zip";
         coverLetterTemplate("coverLetter", project);
-        requirementContractTemplate("requirement", project.getId());
+        requirementContractTemplate("requirement", project);
         invoiceTemplate("invoice", project);
-        solutionContractTemplate("solution", project.getId());
+        solutionContractTemplate("solution", project);
 
         ArrayList<String> filenamesAsDocx = new ArrayList<>();
 
@@ -58,9 +59,9 @@ public class TemplateServiceImpl implements TemplateService {
                 case "invoice":
                     invoiceTemplate(filename, project);
                 case "solution":
-                    solutionContractTemplate(filename, project.getId());
+                    solutionContractTemplate(filename, project);
                 case "requirement":
-                    requirementContractTemplate(filename, project.getId());
+                    requirementContractTemplate(filename, project);
                 case "coverLetter":
                     coverLetterTemplate(filename, project);
             }
@@ -105,11 +106,7 @@ public class TemplateServiceImpl implements TemplateService {
         XWPFDocument doc = openDocument(filepath);
         HashMap<String, String> replacementValues = new HashMap<>();
 
-        String from = StringUtils.formatDateToString_DDMMYYYY(project.getStartDate() != null ? project.getStartDate() : LocalDateTime.now());
-        String to = StringUtils.formatDateToString_DDMMYYYY(project.getEndDate() != null ? project.getEndDate() : LocalDateTime.now());
-
-        replacementValues.put("$$from$$", from);
-        replacementValues.put("$$to$$", to);
+        this.buildPlaceholders(project);
 
         if (doc != null) {
             replaceText(doc, replacementValues, outpath);
@@ -124,10 +121,7 @@ public class TemplateServiceImpl implements TemplateService {
 
         XWPFDocument doc = openDocument(filepath);
 
-        HashMap<String, String> replacementValues = new HashMap<>();
-        replacementValues.put("$$dean$$", project.getUniversity().getDean());
-        replacementValues.put("$$university$$", project.getUniversity().getName());
-        replacementValues.put("$$project$$", project.getName());
+        this.buildPlaceholders(project);
 
         if (doc != null) {
             replaceCell(doc, replacementValues, outpath);
@@ -137,21 +131,21 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public ResponseEntity requirementContractTemplate(String filename, Long projectId) {
+    public ResponseEntity requirementContractTemplate(String filename, Project project) {
         String filepath = CLASS_PATH + "BaranjeTS6 - Copy.docx";
         String outpath = FILE_DIRECTORY + "requirement.docx";
-
-        generateTimesheetTableByProject(projectId, filepath, outpath);
+        this.buildPlaceholders(project);
+        generateTimesheetTableByProject(project.getId(), filepath, outpath);
         return getResourceFromFileDirectory(outpath);
     }
 
     @Override
-    public ResponseEntity solutionContractTemplate(String filename, Long projectId) {
+    public ResponseEntity solutionContractTemplate(String filename, Project project) {
 
         String filepath = CLASS_PATH + "Resenie06 - Copy.docx";
         String outpath = FILE_DIRECTORY + "solution.docx";
-
-        generateTimesheetTableByProject(projectId, filepath, outpath);
+        this.buildPlaceholders(project);
+        generateTimesheetTableByProject(project.getId(), filepath, outpath);
         return getResourceFromFileDirectory(outpath);
     }
 
@@ -159,6 +153,7 @@ public class TemplateServiceImpl implements TemplateService {
         XWPFDocument doc = openDocument(filepath);
         List<Timesheet> timesheets = timesheetService.findTimesheetsByProject(projectId);
         replaceTable(doc, timesheets, outpath);
+        replaceText(doc, replacementValues, outpath);
     }
 
     private void replaceTable(XWPFDocument doc, List<Timesheet> timesheets, String outpath) {
@@ -292,6 +287,21 @@ public class TemplateServiceImpl implements TemplateService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void buildPlaceholders(Project project) {
+
+        String from = StringUtils.formatDateToString_DDMMYYYY(project.getStartDate() != null ? project.getStartDate() : LocalDateTime.now());
+        String to = StringUtils.formatDateToString_DDMMYYYY(project.getEndDate() != null ? project.getEndDate() : LocalDateTime.now());
+        String today = StringUtils.formatDateToString_DDMMYYYY(LocalDateTime.now());
+
+        replacementValues.put("$$from$$", from);
+        replacementValues.put("$$to$$", to);
+        replacementValues.put("$$dean$$", project.getUniversity().getDean());
+        replacementValues.put("$$university$$", project.getUniversity().getName());
+        replacementValues.put("$$project$$", project.getName());
+        replacementValues.put("$$projectNumber$$", project.getProjectNumber());
+        replacementValues.put("$$today$$", project.getName());
     }
 
     private void ZipMultipleFiles(String outpath, ArrayList<String> srcFiles) {

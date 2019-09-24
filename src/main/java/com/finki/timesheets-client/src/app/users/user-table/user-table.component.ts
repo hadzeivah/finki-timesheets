@@ -1,17 +1,17 @@
 import { Component, OnInit , Inject} from '@angular/core';
 import {Router} from '@angular/router';
-import {User} from '../../model/user.model';
 import {AuthService} from '../../services/auth.service';
+import {User} from "../../model/User";
 
 @Component({
   selector: 'app-list-user',
-  templateUrl: './list-user.component.html',
-  styleUrls: ['./list-user.component.css']
+  templateUrl: './user-table.component.html',
+  styleUrls: ['./user-table.component.css']
 })
-export class ListUserComponent implements OnInit {
+export class UserTableComponent implements OnInit {
 
   dataSource: User[];
-  displayedColumns: string[] = ['firstName', 'lastName', 'username', 'age', 'actions'];
+  displayedColumns: string[] = ['firstName', 'lastName', 'username' , 'actions'];
 
   constructor(private router: Router, private apiService: AuthService) { }
 

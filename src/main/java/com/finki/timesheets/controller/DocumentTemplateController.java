@@ -42,9 +42,9 @@ public class DocumentTemplateController {
                 case "invoice":
                     return templateService.invoiceTemplate(filename, project);
                 case "solution":
-                    return templateService.solutionContractTemplate(filename, project.getId());
+                    return templateService.solutionContractTemplate(filename, project);
                 case "requirement":
-                    return templateService.requirementContractTemplate(filename, project.getId());
+                    return templateService.requirementContractTemplate(filename, project);
                 case "coverLetter":
                     return templateService.coverLetterTemplate(filename, project);
                 default:
