@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {AuthService} from "../services/auth.service";
 
 /*
 import { AuthService } from 'auth';
@@ -22,7 +23,13 @@ export class NavComponent {
       icon: 'assignment',
       route: 'documents',
       title: 'Documents',
-    }, {
+    },
+    {
+      icon: 'assignment',
+      route: 'reports',
+      title: 'Reports',
+    },
+    {
       icon: 'dashboard',
       route: 'dashboard',
       title: 'Dashboards',
@@ -46,11 +53,12 @@ export class NavComponent {
     }
   ];
 
-  constructor(/*private authService: AuthService*/) {}
+  constructor(private authService: AuthService) {
+  }
 
 
   public isAuthenticated() {
-    return true;
+    return this.authService.isAuthenticated();
   }
 
 }

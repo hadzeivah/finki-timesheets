@@ -5,8 +5,8 @@ import {MatDialog, MatDialogConfig, MatTableDataSource} from "@angular/material"
 import {AddMemberComponent} from "./add-member/add-member.component";
 import {Project} from "../model/Project";
 import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
-import {MatSidenav} from "@angular/material/sidenav";
 import {MatPaginator} from "@angular/material/paginator";
+import {Timesheet} from "../model/Timesheet";
 
 @Component({
   selector: 'members-list',
@@ -21,10 +21,11 @@ export class MembersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   @Input()
-  set project(value: Project) {
-    this.selectedProject = value;
+  set project(project: Project) {
+    this.selectedProject = project;
     this.displayedColumns = ['fullName', 'positionType', 'actions'];
-    this.dataSource.data = value.members;
+    this.dataSource.data = project.timesheets.map(a => a.member)
+    ;
   }
 
   constructor(private membersService: MemberService,
@@ -53,10 +54,10 @@ export class MembersComponent implements OnInit {
       );
   }
 
-  deleteMember(member: Member) {
-    this.membersService.deleteMember(member.id)
+  deleteMember(timesheet: Timesheet) {
+    this.membersService.deleteMember(timesheet.member.id)
       .subscribe(data => {
-        this.dataSource.data = this.dataSource.data.filter(p => p !== member);
+        this.dataSource.data = this.dataSource.data.filter(p => p !== timesheet);
       });
   }
 

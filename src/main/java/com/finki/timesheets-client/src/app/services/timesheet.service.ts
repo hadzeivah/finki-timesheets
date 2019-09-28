@@ -15,6 +15,10 @@ export class TimesheetService {
   constructor(private http: HttpClient) {
   }
 
+  findAllTimesheets(): Observable<Timesheet[]> {
+    return this.http.get<Timesheet[]>(this.baseUrl)
+  }
+
   findTimesheet(projectId: number, memberId: number): Observable<Timesheet> {
     return this.http.get<Timesheet>(this.baseUrl, {
       params: new HttpParams()

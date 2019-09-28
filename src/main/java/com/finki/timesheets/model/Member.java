@@ -3,7 +3,6 @@ package com.finki.timesheets.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -29,21 +28,10 @@ public class Member {
 
     @JsonIgnore
     @OneToMany(mappedBy = "member")
-    private List<Timesheet> timesheets;
+    private Set<Timesheet> timesheets;
 
-    @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.MERGE})
-    @JoinTable(name = "project_member",
-            joinColumns = {@JoinColumn(name = "member_id")},
-            inverseJoinColumns = {@JoinColumn(name = "project_id")})
-    private Set<Project> projects;
 
     public Member() {
-    }
-
-    public Member(Set<Project> projects) {
-        this.projects = projects;
-        this.projects.forEach(project -> project.getMembers().add(this));
     }
 
     public Long getId() {
@@ -71,21 +59,6 @@ public class Member {
         this.lastName = lastName;
     }
 
-    public List<Timesheet> getTimesheets() {
-        return timesheets;
-    }
-
-    public void setTimesheets(List<Timesheet> timesheets) {
-        this.timesheets = timesheets;
-    }
-
-    public Set<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(Set<Project> projects) {
-        this.projects = projects;
-    }
 
     public String getEmbg() {
         return embg;
@@ -113,5 +86,13 @@ public class Member {
 
     public void setPositionType(PositionType positionType) {
         this.positionType = positionType;
+    }
+
+    public Set<Timesheet> getTimesheets() {
+        return timesheets;
+    }
+
+    public void setTimesheets(Set<Timesheet> timesheets) {
+        this.timesheets = timesheets;
     }
 }

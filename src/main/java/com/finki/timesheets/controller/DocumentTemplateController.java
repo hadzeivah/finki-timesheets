@@ -18,8 +18,8 @@ import java.util.Arrays;
 @RequestMapping("/templates")
 public class DocumentTemplateController {
 
-    private TemplateService templateService;
-    private ProjectService projectService;
+    private final TemplateService templateService;
+    private final ProjectService projectService;
 
     @Autowired
     public DocumentTemplateController(TemplateService templateService, ProjectService projectService) {

@@ -7,6 +7,7 @@ import com.finki.timesheets.model.Timesheet;
 import com.finki.timesheets.repository.TimesheetRepository;
 import com.finki.timesheets.service.ItemService;
 import com.finki.timesheets.service.TimesheetService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,15 @@ public class TimesheetServiceImpl implements TimesheetService {
     public void save(Project project, Member member) {
         Timesheet newTimesheet = new Timesheet(project, member);
         timesheetRepository.save(newTimesheet);
+    }
+
+    @Override
+    public List<Timesheet> findAll() {
+        return timesheetRepository.findAll();
+    }
+
+    @Override
+    public Timesheet findTimesheetByProjectIdAndMemberId(Long projectId, Long memberId) throws NotFoundException {
+        return timesheetRepository.findTimesheetByProjectIdAndMemberId(projectId, memberId).orElseThrow(() -> new NotFoundException("Timesheet not found"));
     }
 }

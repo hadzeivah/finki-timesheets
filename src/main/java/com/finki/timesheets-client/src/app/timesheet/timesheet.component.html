@@ -2,13 +2,13 @@
   <mat-card class="round-card">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Project name: {{timesheet?.project.name}}</mat-card-title>
-      <mat-card-subtitle>Partner Organisation: {{timesheet?.project.partnerOrganisation}}</mat-card-subtitle>
-      <mat-card-subtitle>Project number: {{timesheet?.project.projectNumber}}</mat-card-subtitle>
+      <mat-card-title>Project name: {{project?.name}}</mat-card-title>
+      <mat-card-subtitle>Partner Organisation: {{project?.partnerOrganisation}}</mat-card-subtitle>
+      <mat-card-subtitle>Project number: {{project?.projectNumber}}</mat-card-subtitle>
       <mat-card-subtitle>Project member: {{timesheet?.member.fullName}}</mat-card-subtitle>
-      <mat-card-subtitle>Position: {{timesheet?.member.positionType}}</mat-card-subtitle>
+      <mat-card-subtitle>Position: {{timesheet?.member?.positionType}}</mat-card-subtitle>
       <mat-card-subtitle>
-        Period:{{timesheet?.project.startDate | date }} - {{timesheet?.project.endDate | date}}
+        Period:{{project?.startDate | date }} - {{project?.endDate | date}}
       </mat-card-subtitle>
       <form [formGroup]="filterForm">
         <mat-form-field appearance="outline" floatLabel="auto">

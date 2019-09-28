@@ -1,5 +1,5 @@
-import {Member} from "./Member";
 import {University} from "./University";
+import {Timesheet} from "./Timesheet";
 
 export class Project {
   id: number;
@@ -9,6 +9,6 @@ export class Project {
   startDate: string;
   endDate: string;
   university: University;
-  members: Member[];
+  timesheets: Timesheet[];
 }
 

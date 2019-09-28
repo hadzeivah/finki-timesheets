@@ -8,6 +8,8 @@ import {ActivatedRoute} from '@angular/router';
 import {MatCalendarCellCssClasses, MatTableDataSource} from "@angular/material";
 import {PositionService} from "../services/position.service";
 import {HolidayService} from "../services/holiday.service";
+import {ProjectService} from "../services/project.service";
+import {Project} from "../model/Project";
 
 @Component({
   selector: 'app-timesheet',
@@ -19,6 +21,7 @@ export class TimesheetComponent implements OnInit {
   displayedColumns: string[] = ['startDate', 'endDate', 'hours', 'taskDescription', 'intellectualOutput', 'actions'];
   values: Item[] = [];
   timesheet: Timesheet;
+  project: Project;
   loaded = false;
   dataSource = new MatTableDataSource();
   form: FormGroup;
@@ -52,6 +55,7 @@ export class TimesheetComponent implements OnInit {
               private positionsService: PositionService,
               private holidayService: HolidayService,
               private itemService: ItemService,
+              private projectService: ProjectService,
               private fb: FormBuilder,
               private route: ActivatedRoute) {
 
@@ -85,6 +89,9 @@ export class TimesheetComponent implements OnInit {
       this.projectId = +params['projectId'];
       this.memberId = +params['memberId'];
       this.getTimesheet();
+      this.projectService.findProjectById(this.projectId).subscribe(project => {
+        this.project = project.result;
+      });
       this.positionsService.findSalaryGroupedByPosition(this.projectId)
         .subscribe(positionSalary => {
           this.positionSalaryMap = positionSalary;

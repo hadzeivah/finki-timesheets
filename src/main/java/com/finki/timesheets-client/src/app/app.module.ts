@@ -38,8 +38,9 @@ import {MembersComponent} from './members/members.component';
 import {TranslateLoader, TranslateModule, TranslateService} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NavigationBarComponent} from "./navigation-bar/navigation-bar.component";
-import {JwtHelperService, JWT_OPTIONS} from "@auth0/angular-jwt";
+import {JWT_OPTIONS, JwtHelperService} from "@auth0/angular-jwt";
 import {MatStepperModule} from "@angular/material/stepper";
+import {ReportsComponent} from './reports/reports.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import {MatStepperModule} from "@angular/material/stepper";
     FilterPipe,
     ProjectTableComponent,
     DocumentPageComponent,
-    MembersComponent
+    MembersComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,

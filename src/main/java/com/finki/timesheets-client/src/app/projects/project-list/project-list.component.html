@@ -22,13 +22,13 @@
 
     <h3 mat-subheader>{{selectedProject.name | uppercase }}'s members </h3>
 
-    <mat-list-item *ngFor="let member of selectedProject.members | filter:searchMember"
-                   [class.selected]="member === selectedMember"
-                   (click)="onSelectMember(member)">
+    <mat-list-item *ngFor="let timesheet of selectedProject.timesheets | filter:searchMember"
+                   [class.selected]="timesheet.member === selectedMember"
+                   (click)="onSelectMember(timesheet.member)">
       <mat-icon mat-list-icon>person</mat-icon>
-      <h4 mat-line>{{member.name}}</h4>
+      <h4 mat-line>{{timesheet.member.name}}</h4>
       <a mat-line
-         [routerLink]="['/dashboard/timesheet/project',selectedProject.id,'member', member.id]">{{ member.firstName}} {{ member.lastName}}</a>
+         [routerLink]="['/dashboard/timesheet/project',selectedProject.id,'member', timesheet.member.id]">{{ timesheet.member.firstName}} {{timesheet.member.lastName}}</a>
     </mat-list-item>
   </div>
 </mat-list>

@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AppConstants} from '../app.constants';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ApiResponse} from '../model/api.response';
-import {Project} from "../model/Project";
 import {ProjectPositionDto} from "../model/ProjectPositionDto";
+import {ProjectTotalSalary} from "../model/ProjectTotalSalary";
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,14 @@ export class ProjectService {
 
   findProjects(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(this.baseUrl);
+  }
+
+  findReport(): Observable<ProjectTotalSalary[]> {
+    return this.http.get<ProjectTotalSalary[]>(`${this.baseUrl}/reports`);
+  }
+
+  findProjectById(id: number): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(this.baseUrl + '/' + id);
   }
   addProject(projectDto: ProjectPositionDto): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.baseUrl, projectDto);

@@ -37,7 +37,7 @@ public class MemberController {
     @PostMapping()
     public ApiResponse<Member> saveItem(@RequestBody MemberDto member) {
 
-        Member newMember = new Member(member.getProjects());
+        Member newMember = new Member();
         BeanUtils.copyProperties(member,newMember);
         Member savedMember = memberService.save(newMember);
 
