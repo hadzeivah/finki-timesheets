@@ -19,7 +19,7 @@ public class Project {
     private String projectNumber;
 
     @Column
-    private String partnerOrganisation;
+    private Long estimatedBudget;
 
     @Column
     private LocalDateTime startDate;
@@ -61,14 +61,6 @@ public class Project {
         this.projectNumber = projectNumber;
     }
 
-    public String getPartnerOrganisation() {
-        return partnerOrganisation;
-    }
-
-    public void setPartnerOrganisation(String partnerOrganisation) {
-        this.partnerOrganisation = partnerOrganisation;
-    }
-
     public University getUniversity() {
         return university;
     }
@@ -99,5 +91,13 @@ public class Project {
 
     public void setTimesheets(Set<Timesheet> timesheets) {
         this.timesheets = timesheets;
+    }
+
+    public Long getEstimatedBudget() {
+        return estimatedBudget;
+    }
+
+    public void setEstimatedBudget(Long estimatedBudget) {
+        this.estimatedBudget = estimatedBudget;
     }
 }

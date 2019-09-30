@@ -3,9 +3,8 @@ import {MemberTotalSalary} from "./MemberTotalSalary";
 
 export class ProjectTotalSalary {
   name: string;
-  budget: string;
+  estimatedBudget: string;
   totalSalary: string;
   memberTotalSalaryList: MemberTotalSalary[];
-
 }
 

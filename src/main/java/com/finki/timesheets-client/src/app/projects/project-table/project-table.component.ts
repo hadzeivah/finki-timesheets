@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Project} from "../../model/Project";
 import {ProjectService} from "../../services/project.service";
 import {AddProjectComponent} from "../add-project/add-project.component";
-import {MatDialog, MatDialogConfig, MatTableDataSource} from "@angular/material";
+import {MatDialog, MatTableDataSource} from "@angular/material";
 import {Member} from "../../model/Member";
 import {MatSidenav} from "@angular/material/sidenav";
 import {MatPaginator} from "@angular/material/paginator";
@@ -17,7 +17,7 @@ export class ProjectTableComponent implements OnInit {
   selectedProject: Project;
   members: Member[];
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['projectName', 'projectNumber', 'partnerOrganisation', 'startDate', 'endDate', 'actions'];
+  displayedColumns: string[] = ['projectName', 'projectNumber', 'university', 'startDate', 'endDate', 'actions'];
   @ViewChild('drawer') public drawer: MatSidenav;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 

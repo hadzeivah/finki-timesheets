@@ -40,3 +40,11 @@ table {
 .search {
   padding: 5px 15px;
 }
+
+tr:hover {
+  background: #f5f5f5;
+}
+
+tr:active {
+  background: #efefef;
+}

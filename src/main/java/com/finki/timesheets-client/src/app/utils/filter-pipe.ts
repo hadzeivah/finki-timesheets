@@ -1,14 +1,14 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
   name: 'filter'
 })
 export class FilterPipe implements PipeTransform {
   transform(value: any, searchText: any): any {
-    if(!searchText) {
+    if (!searchText) {
       return value;
     }
-    return value.filter((data) => this.matchValue(data,searchText));
+    return value.filter((data) => this.matchValue(data, searchText));
   }
 
   matchValue(data, value) {

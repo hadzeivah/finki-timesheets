@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Project} from '../../model/Project';
 import {ProjectService} from '../../services/project.service';
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {Member} from "../../model/Member";
-import {AddProjectComponent} from "../add-project/add-project.component";
 import {MatDialog} from "@angular/material";
-import {AddMemberComponent} from "../../members/add-member/add-member.component";
+import {FormControl, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-project-list',
@@ -14,13 +13,15 @@ import {AddMemberComponent} from "../../members/add-member/add-member.component"
 })
 export class ProjectListComponent implements OnInit {
   projects: Project[] = [];
+  members: Member[] = [];
   selectedProject: Project;
   selectedMember: Member;
-  searchProject: string;
-  searchMember: string;
+  projectCtrl = new FormControl('', Validators.required);
+  memberCtrl = new FormControl('', Validators.required);
 
   constructor(private projectService: ProjectService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              public router: Router) {
   }
 
   ngOnInit() {
@@ -38,10 +39,12 @@ export class ProjectListComponent implements OnInit {
 
   onSelectProject(project: Project) {
     this.selectedProject = project;
+    this.members = this.selectedProject.timesheets.map(a => a.member)
   }
 
   onSelectMember(member: Member) {
     this.selectedMember = member;
+    this.router.navigate(['/timesheets/timesheet/project', this.selectedProject.id, 'member', this.selectedMember.id]);
   }
 
 }

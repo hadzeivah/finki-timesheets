@@ -8,6 +8,6 @@
 }
 
 ::ng-deep.selected {
-  background-color: #CFD8DC !important;
+  background-color: #f5f5f5 !important;
   color: white;
 }

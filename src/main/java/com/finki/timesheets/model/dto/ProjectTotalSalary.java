@@ -4,13 +4,13 @@ import java.util.List;
 
 public class ProjectTotalSalary {
     private String name;
-    private Long budget;
+    private Long estimatedBudget;
     private double totalSalary;
     private List<MemberTotalSalary> memberTotalSalaryList;
 
-    public ProjectTotalSalary(String name, Long budget, double totalSalary, List<MemberTotalSalary> memberTotalSalaryList) {
+    public ProjectTotalSalary(String name, Long estimatedBudget, double totalSalary, List<MemberTotalSalary> memberTotalSalaryList) {
         this.name = name;
-        this.budget = budget;
+        this.estimatedBudget = estimatedBudget;
         this.totalSalary = totalSalary;
         this.memberTotalSalaryList = memberTotalSalaryList;
     }
@@ -23,13 +23,6 @@ public class ProjectTotalSalary {
         this.name = name;
     }
 
-    public Long getBudget() {
-        return budget;
-    }
-
-    public void setBudget(Long budget) {
-        this.budget = budget;
-    }
 
     public double getTotalSalary() {
         return totalSalary;
@@ -45,5 +38,13 @@ public class ProjectTotalSalary {
 
     public void setMemberTotalSalaryList(List<MemberTotalSalary> memberTotalSalaryList) {
         this.memberTotalSalaryList = memberTotalSalaryList;
+    }
+
+    public Long getEstimatedBudget() {
+        return estimatedBudget;
+    }
+
+    public void setEstimatedBudget(Long estimatedBudget) {
+        this.estimatedBudget = estimatedBudget;
     }
 }

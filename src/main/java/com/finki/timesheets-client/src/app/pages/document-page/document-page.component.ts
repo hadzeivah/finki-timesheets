@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, Validators} from "@angular/forms";
 import {Project} from "../../model/Project";
 import {ProjectService} from "../../services/project.service";
-import {Member} from "../../model/Member";
 
 @Component({
   selector: 'app-document-page',
@@ -13,7 +12,6 @@ export class DocumentPageComponent implements OnInit {
 
   projectCtrl = new FormControl('', Validators.required);
   projects: Project[];
-  members: Member[];
   selectedProject: Project;
 
   constructor(private projectService: ProjectService) {

@@ -16,7 +16,6 @@ import {CustomMaterialModule} from './material/material.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TimesheetService} from './services/timesheet.service';
 import {ProjectListComponent} from './projects/project-list/project-list.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
 import {NavComponent} from './nav/nav.component';
 import {
   MAT_DATE_LOCALE,
@@ -41,6 +40,7 @@ import {NavigationBarComponent} from "./navigation-bar/navigation-bar.component"
 import {JWT_OPTIONS, JwtHelperService} from "@auth0/angular-jwt";
 import {MatStepperModule} from "@angular/material/stepper";
 import {ReportsComponent} from './reports/reports.component';
+import {ReportsPageComponent} from './pages/reports-page/reports-page.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +51,6 @@ import {ReportsComponent} from './reports/reports.component';
     UserTableComponent,
     TimesheetComponent,
     ProjectListComponent,
-    DashboardComponent,
     NavComponent,
     NavigationBarComponent,
     TemplateComponent,
@@ -62,7 +61,8 @@ import {ReportsComponent} from './reports/reports.component';
     ProjectTableComponent,
     DocumentPageComponent,
     MembersComponent,
-    ReportsComponent
+    ReportsComponent,
+    ReportsPageComponent
   ],
   imports: [
     BrowserModule,

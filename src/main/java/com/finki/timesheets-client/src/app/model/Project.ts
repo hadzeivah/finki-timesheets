@@ -5,7 +5,7 @@ export class Project {
   id: number;
   name: string;
   projectNumber: string;
-  partnerOrganisation: string;
+  estimatedBudget: number;
   startDate: string;
   endDate: string;
   university: University;

@@ -13,7 +13,7 @@
           <mat-option *ngFor="let project of projects | filter: projectCtrl.value " [value]="project.name"
                       (click)="onProjectSelected(project)">
             <span>{{project.name}}</span> |
-            <small>{{project.partnerOrganisation}}</small>
+            <small>{{project.university.name}}</small>
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

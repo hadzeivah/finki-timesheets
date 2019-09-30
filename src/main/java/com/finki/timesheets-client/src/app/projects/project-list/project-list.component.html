@@ -1,34 +1,23 @@
-<mat-list>
-  <mat-form-field class="search">
-    <input matInput placeholder="Search projects" type="text" [(ngModel)]="searchProject">
+<form class="column-container">
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Choose project" aria-label="Project" [matAutocomplete]="auto"
+           [formControl]="projectCtrl">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let project of projects | filter: projectCtrl.value " [value]="project.name"
+                  (click)="onSelectProject(project)">
+        <span>{{project.name}}</span>
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
-  <h3 mat-subheader> Projects </h3>
 
-  <mat-list-item *ngFor="let project of projects | filter:searchProject"
-                 [class.selected]="project === selectedProject"
-                 (click)="onSelectProject(project)">
-    <mat-icon mat-list-icon>folder</mat-icon>
-    <h4 mat-line>{{project.name}}</h4>
-    <p mat-line> {{project.endDate | date}} </p>
-  </mat-list-item>
 
-  <div *ngIf="selectedProject">
-    <mat-form-field class="search">
-      <input matInput placeholder="Search members" type="text" [(ngModel)]="searchMember">
-      <button mat-button *ngIf="searchMember" matSuffix mat-icon-button aria-label="Clear" (click)="searchMember=''">
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
-
-    <h3 mat-subheader>{{selectedProject.name | uppercase }}'s members </h3>
-
-    <mat-list-item *ngFor="let timesheet of selectedProject.timesheets | filter:searchMember"
-                   [class.selected]="timesheet.member === selectedMember"
-                   (click)="onSelectMember(timesheet.member)">
-      <mat-icon mat-list-icon>person</mat-icon>
-      <h4 mat-line>{{timesheet.member.name}}</h4>
-      <a mat-line
-         [routerLink]="['/dashboard/timesheet/project',selectedProject.id,'member', timesheet.member.id]">{{ timesheet.member.firstName}} {{timesheet.member.lastName}}</a>
-    </mat-list-item>
-  </div>
-</mat-list>
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Choose member" aria-label="Member" [matAutocomplete]="autoMember"
+           [formControl]="memberCtrl">
+    <mat-autocomplete #autoMember="matAutocomplete">
+      <mat-option *ngFor="let member of members | filter: memberCtrl.value " [value]="member.fullName"
+                  (click)="onSelectMember(member)">
+        <span>{{member.fullName}}</span></mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>

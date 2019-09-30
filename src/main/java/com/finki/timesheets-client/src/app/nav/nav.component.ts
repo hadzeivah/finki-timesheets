@@ -31,8 +31,8 @@ export class NavComponent {
     },
     {
       icon: 'dashboard',
-      route: 'dashboard',
-      title: 'Dashboards',
+      route: 'timesheets',
+      title: 'Timesheets',
     }
   ];
 

@@ -50,7 +50,7 @@ public class ProjectController {
                 double total = (timesheet.getItems().stream().mapToLong(Item::getHours).sum() / 24.0) * timesheet.getPositionSalary().getSalary();
                 memberTotalSalaries.add(new MemberTotalSalary(timesheet.getMember().getFullName(), total));
             });
-            projectTotalSalaries.add(new ProjectTotalSalary(project.getName(), 60L, memberTotalSalaries.stream().mapToDouble(MemberTotalSalary::getTotalSalary).sum(), memberTotalSalaries));
+            projectTotalSalaries.add(new ProjectTotalSalary(project.getName(), project.getEstimatedBudget(), memberTotalSalaries.stream().mapToDouble(MemberTotalSalary::getTotalSalary).sum(), memberTotalSalaries));
         });
 
         return projectTotalSalaries;

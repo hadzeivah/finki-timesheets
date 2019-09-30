@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {MatTableDataSource} from "@angular/material/table";
 import {ProjectService} from "../services/project.service";
-import {Project} from "../model/Project";
 import {ProjectTotalSalary} from "../model/ProjectTotalSalary";
 
 @Component({
@@ -21,17 +20,26 @@ import {ProjectTotalSalary} from "../model/ProjectTotalSalary";
 
 export class ReportsComponent implements OnInit {
   dataSource = new MatTableDataSource();
-  columnsToDisplay = ['projectName', 'total', 'expected', 'difference'];
-  expandedElement: Project;
+  expandedDataSource = new MatTableDataSource();
+
+  columnsToDisplay = ['chevron', 'projectName', 'total', 'estimatedBudget', 'difference'];
+  expandedColumnsToDisplay = ['person', 'memberName', 'total'];
+  expandedElement: ProjectTotalSalary;
   projectTotalSalaryList: ProjectTotalSalary[];
 
   constructor(private projectService: ProjectService) {
   }
 
   ngOnInit() {
-    this.projectService.findReport().subscribe(report => {
-      this.projectTotalSalaryList = report;
-      this.dataSource.data = report;
+    this.projectService.findReport().subscribe(projectTotalSalaryList => {
+      this.projectTotalSalaryList = projectTotalSalaryList;
+      this.dataSource.data = projectTotalSalaryList;
     });
+  }
+
+  onSelectedRow(element: ProjectTotalSalary) {
+    this.expandedElement = element;
+    this.expandedDataSource.data = element.memberTotalSalaryList;
+
   }
 }

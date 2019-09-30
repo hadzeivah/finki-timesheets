@@ -79,9 +79,8 @@ export class TimesheetComponent implements OnInit {
 
   ngOnInit() {
     this.buildInsertForm();
-    this.holidayService.findHolidays().subscribe(holidays=>
-      {
-        this.datesToHighlight = holidays ;
+    this.holidayService.findHolidays().subscribe(holidays => {
+      this.datesToHighlight = holidays;
 
       }
     );
@@ -92,10 +91,6 @@ export class TimesheetComponent implements OnInit {
       this.projectService.findProjectById(this.projectId).subscribe(project => {
         this.project = project.result;
       });
-      this.positionsService.findSalaryGroupedByPosition(this.projectId)
-        .subscribe(positionSalary => {
-          this.positionSalaryMap = positionSalary;
-        });
     });
   }
 
@@ -252,7 +247,7 @@ export class TimesheetComponent implements OnInit {
 
   public getTotalCost(): number {
     let member = this.timesheet != null ? this.timesheet.member : null;
-    return member != null ? this.positionSalaryMap[member.positionType] * this.getTotalTimeSpent() / 24 : 0;
+    return member != null ? this.timesheet.positionSalary.salary * this.getTotalTimeSpent() / 24 : 0;
   }
 }
 

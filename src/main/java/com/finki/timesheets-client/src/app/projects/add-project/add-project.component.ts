@@ -34,7 +34,7 @@ export class AddProjectComponent {
     this.addProjectForm = this.fb.group({
       name: ['', Validators.required],
       projectNumber: ['', Validators.required],
-      partnerOrganisation: ['', Validators.required],
+      estimatedBudget: ['', Validators.required],
       university: [null, Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required]
@@ -126,7 +126,7 @@ export class AddProjectComponent {
       {
         name: this.project.name,
         projectNumber: this.project.projectNumber,
-        partnerOrganisation: this.project.partnerOrganisation,
+        estimatedBudget: this.project.estimatedBudget,
         university: this.project.university,
         startDate: this.project.startDate,
         endDate: this.project.endDate
