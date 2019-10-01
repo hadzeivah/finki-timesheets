@@ -15,7 +15,6 @@ import {TimesheetComponent} from './timesheet/timesheet.component';
 import {CustomMaterialModule} from './material/material.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TimesheetService} from './services/timesheet.service';
-import {ProjectListComponent} from './projects/project-list/project-list.component';
 import {NavComponent} from './nav/nav.component';
 import {
   MAT_DATE_LOCALE,
@@ -50,7 +49,6 @@ import {ReportsPageComponent} from './pages/reports-page/reports-page.component'
     EditUserComponent,
     UserTableComponent,
     TimesheetComponent,
-    ProjectListComponent,
     NavComponent,
     NavigationBarComponent,
     TemplateComponent,

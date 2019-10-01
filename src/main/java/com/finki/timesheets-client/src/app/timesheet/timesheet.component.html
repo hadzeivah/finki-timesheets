@@ -10,25 +10,6 @@
       <mat-card-subtitle>
         Period:{{project?.startDate | date }} - {{project?.endDate | date}}
       </mat-card-subtitle>
-      <form [formGroup]="filterForm">
-        <mat-form-field appearance="outline" floatLabel="auto">
-          <input matInput
-                 [matDatepicker]="fromDate"
-                 placeholder="From Date"
-                 formControlName="fromDate">
-          <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
-          <mat-datepicker #fromDate></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field appearance="outline" floatLabel="auto">
-          <input matInput
-                 [matDatepicker]="toDate"
-                 placeholder="To Date"
-                 formControlName="toDate">
-          <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
-          <mat-datepicker #toDate></mat-datepicker>
-        </mat-form-field>
-        <button mat-button color="primary" class="primary" (click)="applyFilter()">Submit</button>
-      </form>
 
     </mat-card-header>
 

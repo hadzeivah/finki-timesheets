@@ -16,26 +16,26 @@
   <!--Project Name -->
   <ng-container matColumnDef="projectName">
     <th mat-header-cell *matHeaderCellDef> Project Name</th>
-    <td mat-cell *matCellDef="let element">{{element.name}}</td>
+    <td mat-cell *matCellDef="let project">{{project.name}}</td>
   </ng-container>
 
   <!--Project Name -->
   <ng-container matColumnDef="total">
     <th mat-header-cell *matHeaderCellDef> Total</th>
-    <td mat-cell *matCellDef="let element"> {{element.totalSalary}} </td>
+    <td mat-cell *matCellDef="let project"> {{project.totalSalary}} </td>
   </ng-container>
 
 
   <!--Project Name -->
   <ng-container matColumnDef="estimatedBudget">
     <th mat-header-cell *matHeaderCellDef> Estimated budget</th>
-    <td mat-cell *matCellDef="let element"> {{element.estimatedBudget}}</td>
+    <td mat-cell *matCellDef="let project"> {{project.estimatedBudget}}</td>
   </ng-container>
 
   <!--Project Name -->
   <ng-container matColumnDef="difference">
     <th mat-header-cell *matHeaderCellDef> Difference</th>
-    <td mat-cell *matCellDef="let element"> {{element.estimatedBudget - element.totalSalary}}</td>
+    <td mat-cell *matCellDef="let project"> {{project.estimatedBudget - project.totalSalary}}</td>
   </ng-container>
 
   <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
@@ -54,12 +54,12 @@
           </ng-container>
           <!-- Position Column -->
           <ng-container matColumnDef="memberName">
-            <td mat-cell *matCellDef="let element2"> {{element2.fullName}} </td>
+            <td mat-cell *matCellDef="let project">  {{ project.fullName}} </td>
           </ng-container>
 
           <!-- Name Column -->
           <ng-container matColumnDef="total">
-            <td mat-cell *matCellDef="let element2"> {{element2.totalSalary}} </td>
+            <td mat-cell *matCellDef="let project"> {{project.totalSalary}} </td>
           </ng-container>
           <tr mat-row *matRowDef="let row; columns: expandedColumnsToDisplay;"></tr>
         </table>

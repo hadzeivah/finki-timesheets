@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {TimesheetService} from '../services/timesheet.service';
 import {Timesheet} from '../model/Timesheet';
 import {Item} from '../model/Item';
 import {ItemService} from '../services/item.service';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatCalendarCellCssClasses, MatTableDataSource} from "@angular/material";
 import {PositionService} from "../services/position.service";
 import {HolidayService} from "../services/holiday.service";
 import {ProjectService} from "../services/project.service";
 import {Project} from "../model/Project";
+import {Member} from "../model/Member";
 
 @Component({
   selector: 'app-timesheet',
@@ -19,18 +19,57 @@ import {Project} from "../model/Project";
 export class TimesheetComponent implements OnInit {
 
   displayedColumns: string[] = ['startDate', 'endDate', 'hours', 'taskDescription', 'intellectualOutput', 'actions'];
-  values: Item[] = [];
+  items: Item[] = [];
   timesheet: Timesheet;
-  project: Project;
-  loaded = false;
+  _project: Project;
   dataSource = new MatTableDataSource();
   form: FormGroup;
   itemsForm: FormGroup;
   itemList: FormArray;
-  projectId: number;
-  memberId: number;
-  positionSalaryMap: Map<string, number>;
   datesToHighlight = [];
+  _fromDate: Date;
+  _toDate: Date;
+  _member: Member;
+
+
+  @Input()
+  set member(member: Member) {
+    this._member = member;
+    this.getTimesheet();
+  }
+
+  get member() {
+    return this._member;
+  }
+
+
+  @Input()
+  set project(project: Project) {
+    this._project = project;
+  }
+
+  get project() {
+    return this._project;
+  }
+
+  @Input()
+  set fromDate(date: Date) {
+    this._fromDate = date;
+  }
+
+  get fromDate() {
+    return this._fromDate;
+  }
+
+  @Input()
+  set toDate(date: Date) {
+    this._toDate = date;
+    this.applyFilter();
+  }
+
+  get toDate() {
+    return this._toDate;
+  }
 
   weekendFilter = (d: Date): boolean => {
     const day = d.getDay();
@@ -38,26 +77,13 @@ export class TimesheetComponent implements OnInit {
     return day !== 0 && day !== 6;
   };
 
-  filterForm = new FormGroup({
-    fromDate: new FormControl(),
-    toDate: new FormControl(),
-  });
-
-  get fromDate() {
-    return this.filterForm.get('fromDate').value;
-  }
-
-  get toDate() {
-    return this.filterForm.get('toDate').value;
-  }
 
   constructor(private timesheetService: TimesheetService,
               private positionsService: PositionService,
               private holidayService: HolidayService,
               private itemService: ItemService,
               private projectService: ProjectService,
-              private fb: FormBuilder,
-              private route: ActivatedRoute) {
+              private fb: FormBuilder) {
 
     this.dataSource.filterPredicate = (data: Item, filter) => {
       if (this.fromDate && this.toDate) {
@@ -81,17 +107,8 @@ export class TimesheetComponent implements OnInit {
     this.buildInsertForm();
     this.holidayService.findHolidays().subscribe(holidays => {
       this.datesToHighlight = holidays;
-
       }
     );
-    this.route.params.subscribe((params) => {
-      this.projectId = +params['projectId'];
-      this.memberId = +params['memberId'];
-      this.getTimesheet();
-      this.projectService.findProjectById(this.projectId).subscribe(project => {
-        this.project = project.result;
-      });
-    });
   }
 
   buildInsertForm() {
@@ -130,10 +147,13 @@ export class TimesheetComponent implements OnInit {
 
 
   getTimesheet() {
-    this.timesheetService.findTimesheet(this.projectId, this.memberId)
+
+    this.timesheetService.findTimesheet(this.project.id, this.member.id)
       .subscribe(data => {
         this.timesheet = data;
-        this.getItems(this.timesheet.id);
+        this.dataSource.data = this.timesheet.items;
+        this.items = this.timesheet.items;
+        this.setItemsForm();
       }, err => console.log('HTTP Error', err));
   }
 
@@ -147,33 +167,17 @@ export class TimesheetComponent implements OnInit {
     });
   }
 
-  getItems(id) {
-    this.itemService.findItems(id)
-      .subscribe(data => {
-          if (data !== null) {
-            this.values = data;
-          } else {
-            this.values = null;
-          }
-          this.loaded = true;
-          this.setItemsForm();
-          this.dataSource.data = data;
-        }, err => console.log('HTTP Error', err),
-      );
-
-  }
-
   getTotalTimeSpent() {
-    if (this.values) {
-      return this.values.map(t => t.hours).reduce((acc, value) => acc + value, 0);
+    if (this.items) {
+      return this.items.map(t => t.hours).reduce((acc, value) => acc + value, 0);
     }
   }
 
   deleteItem(i: any, id: any) {
     this.itemService.deleteItem(id).subscribe(() => {
-        const foundIndex = this.values.findIndex(x => x.id === id);
-        this.values.splice(foundIndex, 1);
-        this.dataSource.data = this.values;
+      const foundIndex = this.items.findIndex(x => x.id === id);
+      this.items.splice(foundIndex, 1);
+      this.dataSource.data = this.items;
       }
     );
   }
@@ -185,7 +189,7 @@ export class TimesheetComponent implements OnInit {
     element.editing = false;
     const updatedItem = {
       id: element.id,
-      timesheetId: element.timesheet.id,
+      timesheetId: this.timesheet.id,
       startDate: this.getItemsFormGroup(index).controls['startDate'].value,
       endDate: this.getItemsFormGroup(index).controls['endDate'].value,
       hours: this.getItemsFormGroup(index).controls['hours'].value,
@@ -194,7 +198,9 @@ export class TimesheetComponent implements OnInit {
       editing: false
     };
     this.itemService.updateItem(updatedItem).subscribe(item => {
-      this.getItems(this.timesheet.id);
+      const foundIndex = this.items.findIndex(x => x.id === item.result.id);
+      this.items [foundIndex] = item.result;
+      this.dataSource.data = [...this.items];
     }, err => console.log('HTTP Error', err));
   }
 
@@ -207,8 +213,8 @@ export class TimesheetComponent implements OnInit {
     const newItem: Item = Object.assign({}, this.form.value);
     newItem.timesheetId = this.timesheet.id;
     this.itemService.addItem(newItem).subscribe(item => {
-      this.values.push(item.result);
-      this.dataSource.data = this.values;
+      this.items.push(item.result);
+      this.dataSource.data = this.items;
       const itemCtrl = this.itemsForm.get('items') as FormArray;
       itemCtrl.push(this.setItemsFormArray(newItem));
     }, err => console.log('HTTP Error', err));
@@ -216,8 +222,8 @@ export class TimesheetComponent implements OnInit {
 
   private setItemsForm() {
     const itemCtrl = this.itemsForm.get('items') as FormArray;
-    if (this.values !== null) {
-      this.values.forEach((item) => {
+    if (this.items !== null) {
+      this.items.forEach((item) => {
         itemCtrl.push(this.setItemsFormArray(item));
       });
     }

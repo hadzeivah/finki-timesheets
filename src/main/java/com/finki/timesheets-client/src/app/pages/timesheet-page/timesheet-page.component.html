@@ -1,6 +1,52 @@
 <div class="flex-container">
-  <app-project-list class="sidebar"></app-project-list>
+  <div class="sidebar">
+
+    <form class="column-container">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Choose project" aria-label="Project" [matAutocomplete]="auto"
+               [formControl]="projectCtrl">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let project of projects | filter: projectCtrl.value " [value]="project.name"
+                      (click)="onSelectProject(project)">
+            <span>{{project.name}}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Choose member" aria-label="Member" [matAutocomplete]="autoMember"
+               [formControl]="memberCtrl">
+        <mat-autocomplete #autoMember="matAutocomplete">
+          <mat-option *ngFor="let member of members | filter: memberCtrl.value " [value]="member.fullName"
+                      (click)="onSelectMember(member)">
+            <span>{{member.fullName}}</span></mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+
+    <form [formGroup]="filterForm">
+      <mat-form-field appearance="outline" floatLabel="auto">
+        <input matInput
+               [matDatepicker]="fromDate"
+               placeholder="From Date"
+               formControlName="fromDate">
+        <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+        <mat-datepicker #fromDate></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline" floatLabel="auto">
+        <input matInput
+               [matDatepicker]="toDate"
+               placeholder="To Date"
+               formControlName="toDate">
+        <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+        <mat-datepicker #toDate></mat-datepicker>
+      </mat-form-field>
+    </form>
+
+  </div>
   <div class="content">
-    <router-outlet></router-outlet>
+    <app-timesheet [member]="selectedMember" [project]="selectedProject" [fromDate]="getFromDate"
+                   [toDate]="getToDate"></app-timesheet>
   </div>
 </div>

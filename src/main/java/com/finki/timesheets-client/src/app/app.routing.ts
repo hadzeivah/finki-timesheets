@@ -9,7 +9,6 @@ import {ProjectTableComponent} from "./projects/project-table/project-table.comp
 import {MembersComponent} from "./members/members.component";
 import {AuthGuardService as AuthGuard} from "./services/guards/auth-guard.service";
 import {ReportsPageComponent} from "./pages/reports-page/reports-page.component";
-import {TimesheetComponent} from "./timesheet/timesheet.component";
 
 const routes: Routes = [
   {
@@ -54,13 +53,7 @@ const routes: Routes = [
   {
     path: 'timesheets',
     component: TimesheetPageComponent,
-    canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'timesheet/project/:projectId/member/:memberId',
-        component: TimesheetComponent
-      }
-    ]
+    canActivate: [AuthGuard]
   },
   {
     path: '',
