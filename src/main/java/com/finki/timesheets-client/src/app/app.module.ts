@@ -40,6 +40,8 @@ import {JWT_OPTIONS, JwtHelperService} from "@auth0/angular-jwt";
 import {MatStepperModule} from "@angular/material/stepper";
 import {ReportsComponent} from './reports/reports.component';
 import {ReportsPageComponent} from './pages/reports-page/reports-page.component';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatSortModule} from "@angular/material/sort";
 
 @NgModule({
   declarations: [
@@ -83,7 +85,9 @@ import {ReportsPageComponent} from './pages/reports-page/reports-page.component'
         deps: [HttpClient]
       }
     }),
-    MatStepperModule
+    MatStepperModule,
+    MatProgressBarModule,
+    MatSortModule
   ],
   providers: [ErrorHandler, AuthService, TimesheetService, TranslateService, JwtHelperService,
     {provide: JWT_OPTIONS, useValue: JWT_OPTIONS},

@@ -16,16 +16,17 @@
                  class="form-control"
                  id="projectNumber">
         </mat-form-field>
+
         <mat-form-field>
-          <mat-label>Estimated Budget:</mat-label>
-          <input matInput formControlName="" placeholder="Estimated Budget"
-                 name=estimatedBudget
+          <mat-label>Estimated budget:</mat-label>
+          <input matInput formControlName="estimatedBudget" placeholder="Estimated budget" name=estimatedBudget
                  class="form-control"
                  id="estimatedBudget">
         </mat-form-field>
 
         <mat-form-field>
-          <mat-select placeholder="Add university" formControlName="university" [compareWith]="compareUniversityObjects">
+          <mat-select placeholder="Add university" formControlName="university"
+                      [compareWith]="compareUniversityObjects">
             <mat-option [value]="university" *ngFor="let university of universities">{{university.name}}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -61,7 +62,7 @@
         <ng-template matStepLabel>Fill out project details</ng-template>
         <div formArrayName="positions">
           <div *ngFor="let position of positionsFormArray.controls; let i = index;">
-            <div [formGroupName]="i" class="container">
+            <div [formGroupName]="i" class="space-container">
 
               <mat-form-field>
                 <mat-label>Position Type Name:</mat-label>

@@ -3,10 +3,6 @@
   direction: ltr;
 }
 
-.space-container {
-  display: flex;
-  justify-content: space-around;
-}
 
 .item {
   flex-grow: 2
@@ -29,4 +25,8 @@ table {
 mat-form-field.mat-form-field {
   font-size: 10px;
   width: 180px;
+}
+
+tr.mat-footer-row {
+  font-weight: bold;
 }

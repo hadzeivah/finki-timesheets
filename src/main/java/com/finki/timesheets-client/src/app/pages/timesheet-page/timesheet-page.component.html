@@ -1,8 +1,8 @@
 <div class="flex-container">
-  <div class="sidebar">
+  <div class="sidebar filter-container">
 
     <form class="column-container">
-      <mat-form-field class="example-full-width">
+      <mat-form-field>
         <input matInput placeholder="Choose project" aria-label="Project" [matAutocomplete]="auto"
                [formControl]="projectCtrl">
         <mat-autocomplete #auto="matAutocomplete">
@@ -11,10 +11,14 @@
             <span>{{project.name}}</span>
           </mat-option>
         </mat-autocomplete>
+        <button mat-button *ngIf="projectCtrl.value" matSuffix mat-icon-button aria-label="Clear"
+                (click)='projectCtrl.setValue("")'>
+          <mat-icon>close</mat-icon>
+        </button>
       </mat-form-field>
 
 
-      <mat-form-field class="example-full-width">
+      <mat-form-field>
         <input matInput placeholder="Choose member" aria-label="Member" [matAutocomplete]="autoMember"
                [formControl]="memberCtrl">
         <mat-autocomplete #autoMember="matAutocomplete">
@@ -22,11 +26,15 @@
                       (click)="onSelectMember(member)">
             <span>{{member.fullName}}</span></mat-option>
         </mat-autocomplete>
+        <button mat-button *ngIf="memberCtrl.value" matSuffix mat-icon-button aria-label="Clear"
+                (click)='memberCtrl.setValue("")'>
+          <mat-icon>close</mat-icon>
+        </button>
       </mat-form-field>
     </form>
 
     <form [formGroup]="filterForm">
-      <mat-form-field appearance="outline" floatLabel="auto">
+      <mat-form-field floatLabel="auto">
         <input matInput
                [matDatepicker]="fromDate"
                placeholder="From Date"
@@ -34,7 +42,7 @@
         <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
         <mat-datepicker #fromDate></mat-datepicker>
       </mat-form-field>
-      <mat-form-field appearance="outline" floatLabel="auto">
+      <mat-form-field floatLabel="auto">
         <input matInput
                [matDatepicker]="toDate"
                placeholder="To Date"

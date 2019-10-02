@@ -1,7 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+}
 table {
   width: 100%!important;
 }
@@ -32,19 +37,47 @@ table {
   flex-direction: column;
 }
 
-.round-card {
-  border-radius: 25px !important;
-  margin: 15px;
-}
-
-.search {
-  padding: 5px 15px;
-}
-
 tr:hover {
   background: #f5f5f5;
 }
 
 tr:active {
   background: #efefef;
+}
+
+.no-records {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+}
+
+.selected {
+  background-color: #f5f5f5 !important;
+  color: white;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container > * {
+  width: 100%;
+}
+
+.filter-container {
+  padding: 5px 15px;
+  margin-top: 50px;
+}
+
+.round-card {
+  border-radius: 15px !important;
+  margin: 15px;
+}
+
+.space-container {
+  display: flex;
+  justify-content: space-around;
 }

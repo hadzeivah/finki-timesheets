@@ -57,5 +57,4 @@ export class TimesheetPageComponent implements OnInit {
   onSelectMember(member: Member) {
     this.selectedMember = member;
   }
-
 }

@@ -4,8 +4,9 @@ import {ProjectService} from "../../services/project.service";
 import {AddProjectComponent} from "../add-project/add-project.component";
 import {MatDialog, MatTableDataSource} from "@angular/material";
 import {Member} from "../../model/Member";
-import {MatSidenav} from "@angular/material/sidenav";
 import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
+
 
 @Component({
   selector: 'app-project-table',
@@ -18,8 +19,9 @@ export class ProjectTableComponent implements OnInit {
   members: Member[];
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['projectName', 'projectNumber', 'university', 'startDate', 'endDate', 'actions'];
-  @ViewChild('drawer') public drawer: MatSidenav;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private projectService: ProjectService,
               public dialog: MatDialog) {
@@ -28,7 +30,7 @@ export class ProjectTableComponent implements OnInit {
   ngOnInit() {
     this.loadProjects();
     this.dataSource.paginator = this.paginator;
-
+    this.dataSource.sort = this.sort;
   }
 
   loadProjects() {
@@ -87,7 +89,6 @@ export class ProjectTableComponent implements OnInit {
 
   onSelectedProject(project: Project) {
     this.selectedProject = project;
-    return this.drawer.open();
   }
 
   applyFilter(filterValue: string) {

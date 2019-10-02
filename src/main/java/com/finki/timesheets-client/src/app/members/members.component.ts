@@ -7,6 +7,7 @@ import {Project} from "../model/Project";
 import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
 import {MatPaginator} from "@angular/material/paginator";
 import {Timesheet} from "../model/Timesheet";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'members-list',
@@ -19,6 +20,7 @@ export class MembersComponent implements OnInit {
   displayedColumns: string[] = ['fullName', 'embg', 'positionType', 'transactionAccount', 'actions'];
   selectedProject: Project;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   @Input()
   set project(project: Project) {
@@ -36,6 +38,7 @@ export class MembersComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   isProjectSelectedMode() {

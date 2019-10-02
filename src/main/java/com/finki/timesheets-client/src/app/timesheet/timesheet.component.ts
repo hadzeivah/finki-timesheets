@@ -10,6 +10,8 @@ import {HolidayService} from "../services/holiday.service";
 import {ProjectService} from "../services/project.service";
 import {Project} from "../model/Project";
 import {Member} from "../model/Member";
+import {map} from "rxjs/operators";
+import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
 
 @Component({
   selector: 'app-timesheet',
@@ -30,12 +32,15 @@ export class TimesheetComponent implements OnInit {
   _fromDate: Date;
   _toDate: Date;
   _member: Member;
+  noData = this.dataSource.connect().pipe(map(data => data.length === 0));
 
 
   @Input()
   set member(member: Member) {
     this._member = member;
-    this.getTimesheet();
+    if (isNotNullOrUndefined(member)) {
+      this.getTimesheet();
+    }
   }
 
   get member() {

@@ -54,7 +54,7 @@
             <input matInput placeholder="Intellectual output" formControlName="intellectualOutput">
           </mat-form-field>
 
-          <button [disabled]="!form.valid" mat-button color="primary">Submit</button>
+          <button [disabled]="!form.valid" mat-button color="primary">Insert</button>
         </div>
       </form>
       <div class="container">
@@ -180,13 +180,19 @@
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              <tr mat-footer-row *matFooterRowDef="displayedColumns sticky: true"></tr>
+              <tr mat-footer-row *matFooterRowDef="displayedColumns sticky: true"
+                  [hidden]="dataSource.data.length == 0"></tr>
 
             </table>
+            <div class="no-records" *ngIf="noData | async">
+              No records found
+            </div>
           </form>
+
         </div>
 
       </div>
     </mat-card-content>
   </mat-card>
 </ng-container>
+

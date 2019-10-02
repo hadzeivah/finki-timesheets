@@ -10,10 +10,11 @@ import {ProjectTotalSalary} from "../model/ProjectTotalSalary";
   styleUrls: ['./reports.component.css'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+      state('collapsed, void', style({height: '0px', minHeight: '0', display: 'none'})),
       state('expanded', style({height: '*'})),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
+      transition('expanded <=> void', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+    ])
   ],
 })
 
@@ -40,6 +41,5 @@ export class ReportsComponent implements OnInit {
   onSelectedRow(element: ProjectTotalSalary) {
     this.expandedElement = element;
     this.expandedDataSource.data = element.memberTotalSalaryList;
-
   }
 }
