@@ -1,10 +1,14 @@
 package com.finki.timesheets.service.impl;
 
+import com.finki.timesheets.model.Constants;
+import com.finki.timesheets.model.Item;
 import com.finki.timesheets.model.Project;
 import com.finki.timesheets.model.Timesheet;
+import com.finki.timesheets.service.ReportService;
 import com.finki.timesheets.service.TemplateService;
 import com.finki.timesheets.service.TimesheetService;
 import com.finki.timesheets.service.utils.StringUtils;
+import org.apache.poi.ooxml.POIXMLException;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 import org.springframework.core.io.ClassPathResource;
@@ -22,9 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -35,11 +37,13 @@ public class TemplateServiceImpl implements TemplateService {
     private static final String CLASS_PATH = "/templates/";
     private static final String FILE_DIRECTORY = "D:\\Ivan_Chorbev-Templates\\";
     private TimesheetService timesheetService;
+    private ReportService reportService;
     private HashMap<String, String> replacementValues = new HashMap<>();
 
 
-    public TemplateServiceImpl(TimesheetService timesheetService) {
+    public TemplateServiceImpl(TimesheetService timesheetService, ReportService reportService) {
         this.timesheetService = timesheetService;
+        this.reportService = reportService;
     }
 
     @Override
@@ -205,7 +209,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     private void fillTimesheetTable(XWPFDocument doc, XWPFTable table, List<Timesheet> timesheets, String outpath) {
-        int currRow = 1;
+        int currRow = 0;
         XWPFTableRow header = table.getRow(0);
         header.getCell(0).setText("Бр.");
         header.addNewTableCell().setText("Име и презиме");
@@ -213,30 +217,32 @@ public class TemplateServiceImpl implements TemplateService {
         header.addNewTableCell().setText("Вид на активност");
         header.addNewTableCell().setText("Бр. час.");
         header.addNewTableCell().setText("€ \n" + "час\n");
-
+        header.addNewTableCell().setText("€");
+        header.addNewTableCell().setText("MKD");
 
         for (Timesheet t : timesheets) {
             XWPFTableRow curRow = table.createRow();
             currRow++;
+            Optional<Item> item = t.getItems().stream().findFirst();
+            Long totalHoursSpent = timesheetService.calculateTotalHoursSpentByTimesheet(t);
+            double totalEuros = totalHoursSpent / 24.0 * t.getPositionSalary().getSalary();
+            double totalMKD = totalEuros * Constants.EUR;
+
             curRow.getCell(0).setText(String.valueOf(currRow));
             curRow.getCell(1).setText(t.getMember().getFullName());
             curRow.getCell(2).setText(t.getMember().getEmbg() + " " + t.getMember().getTransactionAccount());
-            curRow.getCell(3).setText("");
-            curRow.getCell(4).setText(timesheetService.calculateTotalHoursSpentByTimesheet(t).toString());
-            curRow.getCell(5).setText("");
+            curRow.getCell(3).setText(item.isPresent() ? item.get().getTaskDescription() : "");
+            curRow.getCell(4).setText(totalHoursSpent.toString());
+            curRow.getCell(5).setText(String.valueOf(t.getPositionSalary().getSalary()));
+            curRow.getCell(6).setText(String.valueOf(totalEuros));
+            curRow.getCell(7).setText(String.valueOf(totalMKD));
         }
         saveDocument(doc, outpath);
     }
 
     private void replaceText(XWPFDocument doc, HashMap<String, String> replacementValues, String outpath) {
         for (XWPFParagraph p : doc.getParagraphs()) {
-            List<XWPFRun> runs = p.getRuns();
-            if (runs != null) {
-                for (XWPFRun r : runs) {
-                    replace(replacementValues, r);
-
-                }
-            }
+            replaceParagraph(p, replacementValues);
             saveDocument(doc, outpath);
         }
     }
@@ -246,9 +252,7 @@ public class TemplateServiceImpl implements TemplateService {
             for (XWPFTableRow row : tbl.getRows()) {
                 for (XWPFTableCell cell : row.getTableCells()) {
                     for (XWPFParagraph p : cell.getParagraphs()) {
-                        for (XWPFRun r : p.getRuns()) {
-                            replace(replacementValues, r);
-                        }
+                        replaceParagraph(p, replacementValues);
                     }
                 }
             }
@@ -256,17 +260,34 @@ public class TemplateServiceImpl implements TemplateService {
         }
     }
 
-    private void replace(HashMap<String, String> replacementValues, XWPFRun r) {
-        String text = r.getText(0);
-        if (text != null) {
-            String replace = replacementValues.get(text.trim());
-            if (replace != null) {
-                text = text.replace(text, replace);
-                r.setText(text, 0);
+    private void replaceParagraph(XWPFParagraph paragraph, Map<String, String> fieldsForReport) throws POIXMLException {
+        String find, text, runsText;
+        List<XWPFRun> runs;
+        XWPFRun run, nextRun;
+        for (String key : fieldsForReport.keySet()) {
+            text = paragraph.getText();
+            if (!text.contains("${"))
+                return;
+            find = "${" + key + "}";
+            if (!text.contains(find))
+                continue;
+            runs = paragraph.getRuns();
+            for (int i = 0; i < runs.size(); i++) {
+                run = runs.get(i);
+                runsText = run.getText(0);
+                if (runsText != null && (runsText.contains("${") || (runsText.contains("$") && runs.get(i + 1).getText(0).substring(0, 1).equals("{")))) {
+                    while (!runsText.contains("}")) {
+                        nextRun = runs.get(i + 1);
+                        runsText = runsText + nextRun.getText(0);
+                        paragraph.removeRun(i + 1);
+                    }
+                    run.setText(runsText.contains(find) ?
+                            runsText.replace(find, fieldsForReport.get(key)) :
+                            runsText, 0);
+                }
             }
         }
     }
-
 
     private XWPFDocument openDocument(String file) {
         Resource resource = new ClassPathResource(file);
@@ -294,14 +315,15 @@ public class TemplateServiceImpl implements TemplateService {
         String from = StringUtils.formatDateToString_DDMMYYYY(project.getStartDate() != null ? project.getStartDate() : LocalDateTime.now());
         String to = StringUtils.formatDateToString_DDMMYYYY(project.getEndDate() != null ? project.getEndDate() : LocalDateTime.now());
         String today = StringUtils.formatDateToString_DDMMYYYY(LocalDateTime.now());
-
-        replacementValues.put("$$from$$", from);
-        replacementValues.put("$$to$$", to);
-        replacementValues.put("$$dean$$", project.getUniversity().getDean());
-        replacementValues.put("$$university$$", project.getUniversity().getName());
-        replacementValues.put("$$project$$", project.getName());
-        replacementValues.put("$$projectNumber$$", project.getProjectNumber());
-        replacementValues.put("$$today$$", project.getName());
+        double total = this.reportService.calculateTotalSalaryForProject(project) * Constants.EUR;
+        replacementValues.put("from", from);
+        replacementValues.put("to", to);
+        replacementValues.put("dean", project.getUniversity().getDean());
+        replacementValues.put("university", project.getUniversity().getName());
+        replacementValues.put("project", project.getName());
+        replacementValues.put("number", project.getProjectNumber());
+        replacementValues.put("today", today);
+        replacementValues.put("total", String.valueOf(total));
     }
 
     private void ZipMultipleFiles(String outpath, ArrayList<String> srcFiles) {

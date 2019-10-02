@@ -2,22 +2,18 @@ package com.finki.timesheets.controller;
 
 
 import com.finki.timesheets.model.ApiResponse;
-import com.finki.timesheets.model.Item;
 import com.finki.timesheets.model.Project;
-import com.finki.timesheets.model.Timesheet;
-import com.finki.timesheets.model.dto.MemberTotalSalary;
 import com.finki.timesheets.model.dto.ProjectPositionDto;
 import com.finki.timesheets.model.dto.ProjectTotalSalary;
 import com.finki.timesheets.service.PositionService;
 import com.finki.timesheets.service.ProjectService;
+import com.finki.timesheets.service.ReportService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -26,11 +22,13 @@ public class ProjectController {
 
     private final ProjectService projectService;
     private final PositionService positionService;
+    private ReportService reportService;
 
     @Autowired
-    public ProjectController(ProjectService projectService, PositionService positionService) {
+    public ProjectController(ProjectService projectService, PositionService positionService, ReportService reportService) {
         this.projectService = projectService;
         this.positionService = positionService;
+        this.reportService = reportService;
     }
 
     @GetMapping
@@ -41,19 +39,7 @@ public class ProjectController {
     @GetMapping("/reports")
     public List<ProjectTotalSalary> getDetailedReport() {
         List<Project> projects = projectService.findAll();
-        List<ProjectTotalSalary> projectTotalSalaries = new ArrayList<>();
-
-        projects.forEach(project -> {
-            Set<Timesheet> timesheets = project.getTimesheets();
-            List<MemberTotalSalary> memberTotalSalaries = new ArrayList<>();
-            timesheets.forEach(timesheet -> {
-                double total = (timesheet.getItems().stream().mapToLong(Item::getHours).sum() / 24.0) * timesheet.getPositionSalary().getSalary();
-                memberTotalSalaries.add(new MemberTotalSalary(timesheet.getMember().getFullName(), total));
-            });
-            projectTotalSalaries.add(new ProjectTotalSalary(project.getName(), project.getEstimatedBudget(), memberTotalSalaries.stream().mapToDouble(MemberTotalSalary::getTotalSalary).sum(), memberTotalSalaries));
-        });
-
-        return projectTotalSalaries;
+        return this.reportService.calculateTotalSalaryByProject(projects);
     }
 
     @GetMapping("/{id}")
