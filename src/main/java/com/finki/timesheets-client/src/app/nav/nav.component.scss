@@ -1,10 +1,4 @@
 
-$sidenav-width: 320px; // 240px;
-
-.mat-sidenav {
-  width: $sidenav-width;
-}
-
 .toolbar-title {
   margin: 0 16px 0 16px;
 }
@@ -14,17 +8,8 @@ $sidenav-width: 320px; // 240px;
   font-weight: 900;
 }
 
-.app-nav-list-icon {
-  margin: 0 12px 0 12px;
-}
-
-
 .sidenav-container {
   height: 100%;
-}
-
-.sidenav {
-  width: 200px;
 }
 
 .sidenav .mat-toolbar {
@@ -41,3 +26,14 @@ $sidenav-width: 320px; // 240px;
 .mat-sidenav-container {
   height: 100%;
 }
+
+$crm-toolbar-title-padding: 16px !default;
+
+.toolbar-title {
+  margin: 0 $crm-toolbar-title-padding 0 $crm-toolbar-title-padding;
+}
+
+.example-icon {
+  padding: 0 14px;
+}
+

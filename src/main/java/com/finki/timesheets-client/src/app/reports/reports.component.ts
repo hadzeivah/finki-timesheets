@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {MatTableDataSource} from "@angular/material/table";
-import {ProjectService} from "../services/project.service";
 import {ProjectTotalSalary} from "../model/ProjectTotalSalary";
+import {ReportService} from "../services/report.service";
+import {DownloadService} from "../services/download.service";
 
 @Component({
   selector: 'app-reports',
@@ -24,15 +25,16 @@ export class ReportsComponent implements OnInit {
   expandedDataSource = new MatTableDataSource();
 
   columnsToDisplay = ['chevron', 'projectName', 'total', 'estimatedBudget', 'difference'];
-  expandedColumnsToDisplay = ['person', 'memberName', 'total'];
+  expandedColumnsToDisplay = ['person', 'memberName', 'total', 'salary', 'position'];
   expandedElement: ProjectTotalSalary;
   projectTotalSalaryList: ProjectTotalSalary[];
 
-  constructor(private projectService: ProjectService) {
+  constructor(private reportService: ReportService,
+              private downloadService: DownloadService) {
   }
 
   ngOnInit() {
-    this.projectService.findReport().subscribe(projectTotalSalaryList => {
+    this.reportService.findReport().subscribe(projectTotalSalaryList => {
       this.projectTotalSalaryList = projectTotalSalaryList;
       this.dataSource.data = projectTotalSalaryList;
     });
@@ -41,5 +43,18 @@ export class ReportsComponent implements OnInit {
   onSelectedRow(element: ProjectTotalSalary) {
     this.expandedElement = element;
     this.expandedDataSource.data = element.memberTotalSalaryList;
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  exportToExcel() {
+    this.reportService.exportReportToExcel().subscribe(
+      response => {
+        const filename = this.downloadService.getFileNameFromResponseContentDisposition(response);
+        this.downloadService.saveFile(response.body, filename)
+      }
+    );
   }
 }

@@ -3,7 +3,8 @@ import {Project} from "../../model/Project";
 import {Member} from "../../model/Member";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ProjectService} from "../../services/project.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {MemberService} from "../../services/member.service";
 
 @Component({
   selector: 'app-timesheet-page',
@@ -21,15 +22,20 @@ export class TimesheetPageComponent implements OnInit {
     fromDate: new FormControl(),
     toDate: new FormControl(),
   });
+  memberId: number;
+  projectId: number;
 
 
   constructor(private projectService: ProjectService,
-              public router: Router) {
+              private memberService: MemberService,
+              public router: Router,
+              private route: ActivatedRoute) {
 
   }
 
   ngOnInit() {
     this.getProjects();
+
   }
 
   get getFromDate() {

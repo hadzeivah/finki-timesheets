@@ -1,3 +1,14 @@
+<div fxLayout="row">
+  <mat-form-field class="search">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+
+  <span class="spacer"></span>
+  <button mat-icon-button matTooltip="Export to excel" (click)="exportToExcel()">
+    <mat-icon>save_alt</mat-icon>
+  </button>
+</div>
+
 <table mat-table
        [dataSource]="dataSource" multiTemplateDataRows
        class="mat-elevation-z0">
@@ -22,20 +33,20 @@
   <!--Project Name -->
   <ng-container matColumnDef="total">
     <th mat-header-cell *matHeaderCellDef> Total</th>
-    <td mat-cell *matCellDef="let project"> {{project.totalSalary}} </td>
+    <td mat-cell *matCellDef="let project"> {{project.totalSalary | currency: 'EUR'}} </td>
   </ng-container>
 
 
   <!--Project Name -->
   <ng-container matColumnDef="estimatedBudget">
     <th mat-header-cell *matHeaderCellDef> Estimated budget</th>
-    <td mat-cell *matCellDef="let project"> {{project.estimatedBudget}}</td>
+    <td mat-cell *matCellDef="let project"> {{project.estimatedBudget | currency: 'EUR'}} </td>
   </ng-container>
 
   <!--Project Name -->
   <ng-container matColumnDef="difference">
     <th mat-header-cell *matHeaderCellDef> Difference</th>
-    <td mat-cell *matCellDef="let project"> {{project.estimatedBudget - project.totalSalary}}</td>
+    <td mat-cell *matCellDef="let project"> {{project.estimatedBudget - project.totalSalary | currency: 'EUR'}}  </td>
   </ng-container>
 
   <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
@@ -43,7 +54,7 @@
     <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
       <div class="example-element-detail"
            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-        <table mat-table [dataSource]="expandedDataSource" class="expended-table">
+        <table mat-table [dataSource]="expandedDataSource">
           <ng-container matColumnDef="person">
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element">
@@ -52,16 +63,31 @@
               </mat-icon>
             </td>
           </ng-container>
-          <!-- Position Column -->
+          <!-- Member's name  Column -->
           <ng-container matColumnDef="memberName">
-            <td mat-cell *matCellDef="let project">  {{ project.fullName}} </td>
+            <th mat-header-cell *matHeaderCellDef> Member Name</th>
+            <td mat-cell *matCellDef="let member">  {{ member.fullName}} </td>
           </ng-container>
 
-          <!-- Name Column -->
+          <!-- Total Column -->
           <ng-container matColumnDef="total">
-            <td mat-cell *matCellDef="let project"> {{project.totalSalary}} </td>
+            <th mat-header-cell *matHeaderCellDef> Total</th>
+            <td mat-cell *matCellDef="let member"> {{member.totalSalary | currency: 'EUR'}} </td>
           </ng-container>
-          <tr mat-row *matRowDef="let row; columns: expandedColumnsToDisplay;"></tr>
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> Position</th>
+            <td mat-cell *matCellDef="let member"> {{member.position}} </td>
+          </ng-container>
+
+          <!-- Salary Column -->
+          <ng-container matColumnDef="salary">
+            <th mat-header-cell *matHeaderCellDef> Salary</th>
+            <td mat-cell *matCellDef="let member"> {{member.salary  | currency: 'EUR'}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="expandedColumnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let row; columns: expandedColumnsToDisplay; "></tr>
         </table>
       </div>
     </td>

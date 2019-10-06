@@ -34,6 +34,11 @@ public class MemberController {
         return new ApiResponse<>(HttpStatus.OK.value(), "Members list fetched successfully.", memberService.findAll());
     }
 
+    @GetMapping("/{id}")
+    public Member findMemberById(@PathVariable Long id) {
+        return this.memberService.findById(id);
+    }
+
     @PostMapping()
     public ApiResponse<Member> saveItem(@RequestBody MemberDto member) {
 

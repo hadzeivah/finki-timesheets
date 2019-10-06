@@ -2,10 +2,6 @@ table {
   width: 100%;
 }
 
-.expended-table {
-  width: 50% !important;
-}
-
 tr.example-detail-row {
   height: 0;
 }

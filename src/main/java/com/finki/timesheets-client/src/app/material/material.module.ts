@@ -4,7 +4,6 @@ import {
   MatAutocompleteModule,
   MatButtonModule,
   MatCardModule,
-  MatChipsModule,
   MatDatepickerModule,
   MatDialogModule,
   MatIconModule,
@@ -17,15 +16,19 @@ import {
   MatSelectModule,
   MatSortModule,
   MatTableModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTooltipModule
 } from '@angular/material';
+import {MatSidenavModule} from "@angular/material/sidenav";
 
 @NgModule({
   imports: [CommonModule, MatToolbarModule, MatButtonModule, MatCardModule, MatInputModule, MatDialogModule,
-    MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule],
+    MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule,
+    MatListModule, MatIconModule, MatMenuModule, MatSelectModule, MatAutocompleteModule, MatTooltipModule, MatSidenavModule],
   exports: [CommonModule, MatToolbarModule, MatButtonModule, MatCardModule, MatInputModule, MatDialogModule,
     MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule,
-    MatListModule, MatIconModule, MatMenuModule, MatSelectModule, MatChipsModule, MatAutocompleteModule]
+    MatListModule, MatIconModule, MatMenuModule, MatSelectModule, MatAutocompleteModule, MatTooltipModule,
+    MatSidenavModule]
 })
 export class CustomMaterialModule {
 }

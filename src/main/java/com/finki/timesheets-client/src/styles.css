@@ -1,14 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
+
+html, body {
+  height: 100%;
+}
 
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 12px;
 }
+
 table {
-  width: 100%!important;
+  width: 100% !important;
 }
 
 .flex-container {
@@ -32,7 +36,8 @@ table {
   -webkit-align-items: stretch;
   align-items: stretch;
 }
-.column-container{
+
+.column-container {
   display: flex;
   flex-direction: column;
 }
@@ -80,4 +85,12 @@ tr:active {
 .space-container {
   display: flex;
   justify-content: space-around;
+}
+
+.end {
+  align-self: flex-end;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }

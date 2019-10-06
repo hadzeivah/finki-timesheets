@@ -14,7 +14,7 @@ export class DownloadService {
   constructor(private http: HttpClient) {
   }
 
-  downloadClasspathFile(filenames: string[], projectId: number): Observable<HttpResponse<Blob>> {
+  downloadSelectedWordDocument(filenames: string[], projectId: number): Observable<HttpResponse<Blob>> {
 
     let headers = new HttpHeaders();
     let params = new HttpParams();
@@ -22,13 +22,19 @@ export class DownloadService {
     headers = headers.append('Accept', "application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8");
     params = params.append('filenames', filenames.join(','));
 
-    return this.http.get(this.baseUrl + "/project/" + projectId , {
+    return this.downloadFile(headers, params, this.baseUrl + "/project/" + projectId);
+  }
+
+  downloadFile(headers: HttpHeaders, params: HttpParams, downloadUrl: string): Observable<HttpResponse<Blob>> {
+
+    return this.http.get(downloadUrl, {
       headers: headers,
       params: params,
       observe: 'response',
       responseType: 'blob'
     })
   }
+
 
   getFileNameFromResponseContentDisposition(res: HttpResponse<Blob>) {
     const contentDisposition = res.headers.get('content-disposition') || '';

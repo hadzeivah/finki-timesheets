@@ -16,15 +16,8 @@ import {CustomMaterialModule} from './material/material.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TimesheetService} from './services/timesheet.service';
 import {NavComponent} from './nav/nav.component';
-import {
-  MAT_DATE_LOCALE,
-  MatButtonModule,
-  MatIconModule,
-  MatListModule,
-  MatSidenavModule,
-  MatToolbarModule
-} from '@angular/material';
-import {TemplateComponent} from './template/template.component';
+import {MAT_DATE_LOCALE} from '@angular/material';
+import {DocumentComponent} from './documents/document.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {TimesheetPageComponent} from './pages/timesheet-page/timesheet-page.component';
 import {AddProjectComponent} from "./projects/add-project/add-project.component";
@@ -35,13 +28,14 @@ import {DocumentPageComponent} from './pages/document-page/document-page.compone
 import {MembersComponent} from './members/members.component';
 import {TranslateLoader, TranslateModule, TranslateService} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
-import {NavigationBarComponent} from "./navigation-bar/navigation-bar.component";
 import {JWT_OPTIONS, JwtHelperService} from "@auth0/angular-jwt";
 import {MatStepperModule} from "@angular/material/stepper";
 import {ReportsComponent} from './reports/reports.component';
 import {ReportsPageComponent} from './pages/reports-page/reports-page.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatSortModule} from "@angular/material/sort";
+import {FlexLayoutModule} from "@angular/flex-layout";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -52,8 +46,7 @@ import {MatSortModule} from "@angular/material/sort";
     UserTableComponent,
     TimesheetComponent,
     NavComponent,
-    NavigationBarComponent,
-    TemplateComponent,
+    DocumentComponent,
     TimesheetPageComponent,
     AddProjectComponent,
     AddMemberComponent,
@@ -68,16 +61,13 @@ import {MatSortModule} from "@angular/material/sort";
     BrowserModule,
     routing,
     FormsModule,
+    FlexLayoutModule,
     ReactiveFormsModule,
     HttpClientModule,
     CustomMaterialModule,
     BrowserAnimationsModule,
     LayoutModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
+
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -87,7 +77,8 @@ import {MatSortModule} from "@angular/material/sort";
     }),
     MatStepperModule,
     MatProgressBarModule,
-    MatSortModule
+    MatSortModule,
+    MatTooltipModule
   ],
   providers: [ErrorHandler, AuthService, TimesheetService, TranslateService, JwtHelperService,
     {provide: JWT_OPTIONS, useValue: JWT_OPTIONS},

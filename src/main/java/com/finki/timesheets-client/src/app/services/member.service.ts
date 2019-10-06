@@ -35,4 +35,9 @@ export class MemberService {
   getMemberTypes(): Observable<PositionType[]> {
     return this.http.get<PositionType[]>(this.baseUrl + '/positions')
   }
+
+  findMemberById(id: number): Observable<Member> {
+    return this.http.get<Member>(this.baseUrl + '/' + id);
+  }
+
 }

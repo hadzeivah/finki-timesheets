@@ -1,16 +1,20 @@
 package com.finki.timesheets.model.dto;
 
+import com.finki.timesheets.model.Project;
+
 import java.util.List;
 
 public class ProjectTotalSalary {
+    private Long id;
     private String name;
     private Long estimatedBudget;
     private double totalSalary;
     private List<MemberTotalSalary> memberTotalSalaryList;
 
-    public ProjectTotalSalary(String name, Long estimatedBudget, double totalSalary, List<MemberTotalSalary> memberTotalSalaryList) {
-        this.name = name;
-        this.estimatedBudget = estimatedBudget;
+    public ProjectTotalSalary(Project project, double totalSalary, List<MemberTotalSalary> memberTotalSalaryList) {
+        this.id = project.getId();
+        this.name = project.getName();
+        this.estimatedBudget = project.getEstimatedBudget();
         this.totalSalary = totalSalary;
         this.memberTotalSalaryList = memberTotalSalaryList;
     }
@@ -46,5 +50,13 @@ public class ProjectTotalSalary {
 
     public void setEstimatedBudget(Long estimatedBudget) {
         this.estimatedBudget = estimatedBudget;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -21,6 +21,7 @@ export class AuthService {
 
   static logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
   }
 
   getUsers(): Observable<ApiResponse> {
@@ -46,5 +47,9 @@ export class AuthService {
   public isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     return !this.jwtHelper.isTokenExpired(token);
+  }
+
+  public getLoggedUser(): string {
+    return localStorage.getItem("username");
   }
 }

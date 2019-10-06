@@ -5,10 +5,10 @@ import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-template',
-  templateUrl: './template.component.html',
-  styleUrls: ['./template.component.css']
+  templateUrl: './document.component.html',
+  styleUrls: ['./document.component.css']
 })
-export class TemplateComponent implements OnInit {
+export class DocumentComponent implements OnInit {
 
   @Input() selectedProjectId: number;
 
@@ -41,12 +41,12 @@ export class TemplateComponent implements OnInit {
     this.onChanges();
   }
 
-  downloadClasspathFile() {
+  downloadDocument() {
     const selectedPreferences = this.templatesForm.value.templateTypes
       .map((checked, index) => checked ? this.templateTypes[index].type : null)
       .filter(value => value !== null);
 
-    this.downloadService.downloadClasspathFile(selectedPreferences, this.selectedProjectId)
+    this.downloadService.downloadSelectedWordDocument(selectedPreferences, this.selectedProjectId)
       .subscribe(response => {
         const filename = this.downloadService.getFileNameFromResponseContentDisposition(response);
         this.downloadService.saveFile(response.body, filename)

@@ -1,42 +1,65 @@
-<mat-sidenav-container>
+<mat-toolbar color="primary" class="crm-navigation-bar">
 
-  <mat-sidenav #sidenav mode="over">
+  <mat-toolbar-row>
+    <button mat-icon-button (click)="isExpanded = !isExpanded">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="toolbar-title"> {{ 'FINKI_TIMESHEETS'}}</span>
+    <span class="spacer"></span>
 
-    <mat-toolbar>
-      <mat-toolbar-row>
-        <h2 class="toolbar-title"> {{ 'FINKI_TIMESHEETS' | translate}} </h2>
-      </mat-toolbar-row>
-    </mat-toolbar>
+    <div *ngIf="isAuthenticated()">
+      <button mat-icon-button>
+        <mat-icon class="example-icon">settings</mat-icon>
+      </button>
+
+      <button mat-icon-button>
+        <mat-icon class="example-icon">help_outline</mat-icon>
+      </button>
+
+      <button mat-icon-button [matMenuTriggerFor]="auth">
+        <mat-icon class="example-icon">person_outline</mat-icon>
+      </button>
+      <span> {{getLoggedUser()}}</span>
+      <mat-menu #auth="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon class="example-icon">exit_to_app</mat-icon>
+          <span>Sign out</span>
+        </button>
+      </mat-menu>
+
+    </div>
+  </mat-toolbar-row>
+
+</mat-toolbar>
+
+
+<mat-sidenav-container autosize>
+
+  <mat-sidenav #sidenav mode="side" opened="true">
 
     <mat-nav-list>
-      <h2 matSubheader> {{ 'MY_WORKSPACE' | translate }} </h2>
-
       <a mat-list-item routerLink="/" style="height: 0;"></a>
 
       <a *ngFor="let item of myWorkRoutes"
          mat-list-item
-         (click)="sidenav.close()"
          routerLinkActive
          #routerLinkActiveInstance="routerLinkActive"
          [class.list-item-active]="routerLinkActiveInstance.isActive"
          [routerLink]="[item.route]">
-        <mat-icon matListIcon class="app-nav-list-icon"> {{ item.icon }} </mat-icon>
-        {{item.title}}
+        <mat-icon matListIcon> {{ item.icon }} </mat-icon>
+        <span *ngIf="!isExpanded"> &nbsp; {{item.title}} </span>
       </a>
 
       <mat-divider></mat-divider>
 
-      <h2 matSubheader> {{ 'MANAGEMENT' | translate  }} </h2>
-
       <a *ngFor="let item of managementRoutes"
          mat-list-item
-         (click)="sidenav.close()"
          routerLinkActive
          #routerLinkActiveInstance="routerLinkActive"
          [class.list-item-active]="routerLinkActiveInstance.isActive"
          [routerLink]="[item.route]">
-        <mat-icon matListIcon class="app-nav-list-icon"> {{ item.icon }} </mat-icon>
-        {{item.title}}
+        <mat-icon matListIcon> {{ item.icon }} </mat-icon>
+        <span *ngIf="!isExpanded"> &nbsp; {{item.title}} </span>
       </a>
 
     </mat-nav-list>
@@ -44,9 +67,6 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-
-    <app-navigation-bar *ngIf="isAuthenticated()" (toggleSidenav)="sidenav.toggle()"></app-navigation-bar>
-
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 

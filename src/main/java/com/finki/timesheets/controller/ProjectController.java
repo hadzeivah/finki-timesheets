@@ -4,10 +4,8 @@ package com.finki.timesheets.controller;
 import com.finki.timesheets.model.ApiResponse;
 import com.finki.timesheets.model.Project;
 import com.finki.timesheets.model.dto.ProjectPositionDto;
-import com.finki.timesheets.model.dto.ProjectTotalSalary;
 import com.finki.timesheets.service.PositionService;
 import com.finki.timesheets.service.ProjectService;
-import com.finki.timesheets.service.ReportService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,24 +20,16 @@ public class ProjectController {
 
     private final ProjectService projectService;
     private final PositionService positionService;
-    private ReportService reportService;
 
     @Autowired
-    public ProjectController(ProjectService projectService, PositionService positionService, ReportService reportService) {
+    public ProjectController(ProjectService projectService, PositionService positionService) {
         this.projectService = projectService;
         this.positionService = positionService;
-        this.reportService = reportService;
     }
 
     @GetMapping
     public ApiResponse<List<Project>> listProjects() {
         return new ApiResponse<>(HttpStatus.OK.value(), "Project list fetched successfully.", projectService.findAll());
-    }
-
-    @GetMapping("/reports")
-    public List<ProjectTotalSalary> getDetailedReport() {
-        List<Project> projects = projectService.findAll();
-        return this.reportService.calculateTotalSalaryByProject(projects);
     }
 
     @GetMapping("/{id}")
