@@ -1,14 +1,17 @@
 package com.finki.timesheets.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.finki.timesheets.model.dto.PositionSalaryKey;
+import com.finki.timesheets.model.dto.ProjectPositionKey;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class PositionSalary {
+public class ProjectPosition implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @EmbeddedId
-    private PositionSalaryKey id;
+    private ProjectPositionKey id;
 
     @JsonIgnore
     @ManyToOne
@@ -24,21 +27,21 @@ public class PositionSalary {
 
     private int salary;
 
-    public PositionSalary() {
+    public ProjectPosition() {
     }
 
-    public PositionSalary(PositionSalaryKey id, Project project, Position position, int salary) {
+    public ProjectPosition(ProjectPositionKey id, Project project, Position position, int salary) {
         this.id = id;
         this.project = project;
         this.position = position;
         this.salary = salary;
     }
 
-    public PositionSalaryKey getId() {
+    public ProjectPositionKey getId() {
         return id;
     }
 
-    public void setId(PositionSalaryKey id) {
+    public void setId(ProjectPositionKey id) {
         this.id = id;
     }
 

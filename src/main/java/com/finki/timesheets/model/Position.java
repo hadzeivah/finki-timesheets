@@ -18,7 +18,7 @@ public class Position {
     private String description;
 
     @OneToMany(mappedBy = "project")
-    private Set<PositionSalary> salaries;
+    private Set<ProjectPosition> salaries;
 
     public Position() {
     }
@@ -51,11 +51,11 @@ public class Position {
         this.description = description;
     }
 
-    public Set<PositionSalary> getSalaries() {
+    public Set<ProjectPosition> getSalaries() {
         return salaries;
     }
 
-    public void setSalaries(Set<PositionSalary> salaries) {
+    public void setSalaries(Set<ProjectPosition> salaries) {
         this.salaries = salaries;
     }
 }

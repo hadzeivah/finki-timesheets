@@ -23,9 +23,6 @@ public class Member {
     @Column
     private String transactionAccount;
 
-    @Enumerated(EnumType.STRING)
-    private PositionType positionType;
-
     @JsonIgnore
     @OneToMany(mappedBy = "member")
     private Set<Timesheet> timesheets;
@@ -78,14 +75,6 @@ public class Member {
 
     public String getFullName() {
         return firstName + " " + lastName;
-    }
-
-    public PositionType getPositionType() {
-        return positionType;
-    }
-
-    public void setPositionType(PositionType positionType) {
-        this.positionType = positionType;
     }
 
     public Set<Timesheet> getTimesheets() {

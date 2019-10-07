@@ -21,7 +21,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private TimesheetService timesheetService;
+    private final TimesheetService timesheetService;
 
     @Autowired
     public MemberController(MemberService memberService, TimesheetService timesheetService) {
@@ -40,13 +40,12 @@ public class MemberController {
     }
 
     @PostMapping()
-    public ApiResponse<Member> saveItem(@RequestBody MemberDto member) {
+    public ApiResponse<Member> saveMember(@RequestBody MemberDto member) {
 
         Member newMember = new Member();
         BeanUtils.copyProperties(member,newMember);
         Member savedMember = memberService.save(newMember);
 
-        member.getProjects().forEach(project -> timesheetService.save(project, savedMember));
         return new ApiResponse<>(HttpStatus.OK.value(), "Member saved successfully.", savedMember);
     }
 

@@ -2,6 +2,7 @@ package com.finki.timesheets.service;
 
 import com.finki.timesheets.model.Member;
 import com.finki.timesheets.model.Project;
+import com.finki.timesheets.model.ProjectPosition;
 import com.finki.timesheets.model.Timesheet;
 import javassist.NotFoundException;
 
@@ -13,7 +14,7 @@ public interface TimesheetService {
 
     Long calculateTotalHoursSpentByTimesheet(Timesheet timesheet);
 
-    void save(Project project , Member member);
+    void save(Project project, Member member, ProjectPosition positionSalary);
 
     List<Timesheet> findAll();
 

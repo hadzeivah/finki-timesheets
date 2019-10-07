@@ -1,7 +1,8 @@
 package com.finki.timesheets.controller;
 
 import com.finki.timesheets.model.Position;
-import com.finki.timesheets.model.PositionSalary;
+import com.finki.timesheets.model.ProjectPosition;
+import com.finki.timesheets.service.PositionSalaryService;
 import com.finki.timesheets.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,12 @@ import java.util.Map;
 public class PositionController {
 
     private final PositionService positionService;
+    private PositionSalaryService positionSalaryService;
 
     @Autowired
-    public PositionController(PositionService positionService) {
+    public PositionController(PositionService positionService, PositionSalaryService positionSalaryService) {
         this.positionService = positionService;
+        this.positionSalaryService = positionSalaryService;
     }
 
     @GetMapping("/salaries/map/project/{id}")
@@ -27,8 +30,8 @@ public class PositionController {
     }
 
     @GetMapping("/salaries/project/{id}")
-    public List<PositionSalary> getProjectPositionsSalaries(@PathVariable Long id) {
-        return this.positionService.findAllByProjectId(id);
+    public List<ProjectPosition> getProjectPositionsSalaries(@PathVariable Long id) {
+        return this.positionSalaryService.findAllByProjectId(id);
     }
 
     @GetMapping()

@@ -46,7 +46,8 @@
          #routerLinkActiveInstance="routerLinkActive"
          [class.list-item-active]="routerLinkActiveInstance.isActive"
          [routerLink]="[item.route]">
-        <mat-icon matListIcon> {{ item.icon }} </mat-icon>
+
+        <mat-icon matListIcon> {{ item.icon }}</mat-icon>
         <span *ngIf="!isExpanded"> &nbsp; {{item.title}} </span>
       </a>
 
@@ -59,7 +60,7 @@
          [class.list-item-active]="routerLinkActiveInstance.isActive"
          [routerLink]="[item.route]">
         <mat-icon matListIcon> {{ item.icon }} </mat-icon>
-        <span *ngIf="!isExpanded"> &nbsp; {{item.title}} </span>
+        <span *ngIf="!isExpanded"> &nbsp;&nbsp; {{item.title}} </span>
       </a>
 
     </mat-nav-list>

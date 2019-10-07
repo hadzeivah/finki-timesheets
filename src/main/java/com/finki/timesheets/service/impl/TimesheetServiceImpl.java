@@ -1,9 +1,6 @@
 package com.finki.timesheets.service.impl;
 
-import com.finki.timesheets.model.Item;
-import com.finki.timesheets.model.Member;
-import com.finki.timesheets.model.Project;
-import com.finki.timesheets.model.Timesheet;
+import com.finki.timesheets.model.*;
 import com.finki.timesheets.repository.TimesheetRepository;
 import com.finki.timesheets.service.ItemService;
 import com.finki.timesheets.service.TimesheetService;
@@ -42,8 +39,9 @@ public class TimesheetServiceImpl implements TimesheetService {
     }
 
     @Override
-    public void save(Project project, Member member) {
+    public void save(Project project, Member member, ProjectPosition positionSalary) {
         Timesheet newTimesheet = new Timesheet(project, member);
+        newTimesheet.setPositionSalary(positionSalary);
         timesheetRepository.save(newTimesheet);
     }
 

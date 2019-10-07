@@ -45,6 +45,9 @@
             </th>
             <td mat-cell *matCellDef="let element; let i=index;">
 
+              <button mat-icon-button color="primary" (click)="addMemberToProjectDialog(element)">
+                <mat-icon>person_add</mat-icon>
+              </button>
               <button mat-icon-button color="primary" (click)="editProjectDialog(element)">
                 <mat-icon>edit</mat-icon>
               </button>

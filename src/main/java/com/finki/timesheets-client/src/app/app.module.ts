@@ -36,6 +36,7 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatSortModule} from "@angular/material/sort";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {AssignMemberComponent} from './projects/assign-member/assign-member.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     DocumentPageComponent,
     MembersComponent,
     ReportsComponent,
-    ReportsPageComponent
+    ReportsPageComponent,
+    AssignMemberComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +87,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},],
   bootstrap: [AppComponent],
-  entryComponents: [AddProjectComponent, AddMemberComponent]
+  entryComponents: [AddProjectComponent, AddMemberComponent, AssignMemberComponent]
 })
 export class AppModule {
 }

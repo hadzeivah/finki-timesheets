@@ -27,19 +27,6 @@
              id="transactionAccount">
     </mat-form-field>
 
-
-    <mat-form-field>
-      <mat-select placeholder="Add Position Type" formControlName="positionType">
-        <mat-option [value]="positionType" *ngFor="let positionType of positions">{{positionType}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field *ngIf="data['showProjectsFiled']">
-      <mat-select placeholder="Add project" formControlName="projects" multiple>
-        <mat-option [value]="project" *ngFor="let project of projects">{{project.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
   </form>
 </div>
 <div mat-dialog-actions>

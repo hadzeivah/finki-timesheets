@@ -4,7 +4,6 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MemberService} from "../../services/member.service";
 import {PositionType} from "../../model/PositionType";
 import {Project} from "../../model/Project";
-import {ProjectService} from "../../services/project.service";
 import {Member} from "../../model/Member";
 
 @Component({
@@ -23,8 +22,7 @@ export class AddMemberComponent implements OnInit {
     public dialogRef: MatDialogRef<AddMemberComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
-    private memberService: MemberService,
-    private projectService: ProjectService) {
+    private memberService: MemberService) {
 
     this.buildForm();
 
@@ -34,12 +32,7 @@ export class AddMemberComponent implements OnInit {
     }
     this.memberService.getMemberTypes()
       .subscribe(positions =>
-      this.positions = positions);
-
-    this.projectService.findProjects()
-      .subscribe(projects =>
-      this.projects = projects.result
-    )
+        this.positions = positions);
   }
 
   private buildForm() {
@@ -47,9 +40,7 @@ export class AddMemberComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       embg: ['', Validators.required],
-      transactionAccount: ['', Validators.required],
-      positionType: ['', Validators.required],
-      projects: [[]]
+      transactionAccount: ['', Validators.required]
     });
   }
 
@@ -72,8 +63,6 @@ export class AddMemberComponent implements OnInit {
         lastName: this.editedMember.lastName,
         embg: this.editedMember.embg,
         transactionAccount: this.editedMember.transactionAccount,
-        positionType: this.editedMember.positionType,
-        projects: this.editedMember.projects
       })
   }
 }

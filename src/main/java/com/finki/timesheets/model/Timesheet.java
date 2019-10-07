@@ -27,15 +27,14 @@ public class Timesheet {
 
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "position_id", insertable = false, updatable = false),
-            @JoinColumn(name = "project_id", insertable = false, updatable = false)
+            @JoinColumn(name = "position_id", referencedColumnName = "position_id")
     })
-    private PositionSalary positionSalary;
+    private ProjectPosition positionSalary;
 
     public Timesheet() {
     }
 
-    public Timesheet(Project project , Member member) {
+    public Timesheet(Project project, Member member) {
         this.project = project;
         this.member = member;
     }
@@ -65,11 +64,11 @@ public class Timesheet {
         this.member = member;
     }
 
-    public PositionSalary getPositionSalary() {
+    public ProjectPosition getPositionSalary() {
         return positionSalary;
     }
 
-    public void setPositionSalary(PositionSalary positionSalary) {
+    public void setPositionSalary(ProjectPosition positionSalary) {
         this.positionSalary = positionSalary;
     }
 

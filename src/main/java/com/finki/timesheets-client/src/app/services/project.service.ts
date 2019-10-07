@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ApiResponse} from '../model/api.response';
 import {ProjectPositionDto} from "../model/ProjectPositionDto";
+import {ProjectMemberDto} from "../model/ProjectMemberDto";
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,10 @@ export class ProjectService {
 
   findProjectById(id: number): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(this.baseUrl + '/' + id);
+  }
+
+  assignMemberToProject(projectMemberDto: ProjectMemberDto): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.baseUrl + "/assignMember", projectMemberDto);
   }
 
   addProject(projectDto: ProjectPositionDto): Observable<ApiResponse> {

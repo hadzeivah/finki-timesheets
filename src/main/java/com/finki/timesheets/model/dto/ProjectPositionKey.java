@@ -1,10 +1,13 @@
 package com.finki.timesheets.model.dto;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class PositionSalaryKey implements Serializable {
+
+@Embeddable
+public class ProjectPositionKey implements Serializable {
 
     @Column(name = "position_id")
     private Long positionId;
@@ -12,10 +15,10 @@ public class PositionSalaryKey implements Serializable {
     @Column(name = "project_id")
     private Long projectId;
 
-    public PositionSalaryKey() {
+    public ProjectPositionKey() {
     }
 
-    public PositionSalaryKey(Long positionId, Long projectId) {
+    public ProjectPositionKey(Long positionId, Long projectId) {
         this.positionId = positionId;
         this.projectId = projectId;
     }
@@ -40,7 +43,7 @@ public class PositionSalaryKey implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PositionSalaryKey that = (PositionSalaryKey) o;
+        ProjectPositionKey that = (ProjectPositionKey) o;
         return Objects.equals(positionId, that.positionId) &&
                 Objects.equals(projectId, that.projectId);
     }
