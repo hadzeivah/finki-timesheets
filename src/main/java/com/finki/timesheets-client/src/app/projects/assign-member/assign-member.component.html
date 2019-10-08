@@ -4,7 +4,7 @@
 
     <mat-form-field>
       <mat-select placeholder="Add member" formControlName="member">
-        <mat-option [value]="member" *ngFor="let member of members">{{member.fullName}}</mat-option>
+        <mat-option [value]="member" *ngFor="let member of notAssignedMembers">{{member.fullName}}</mat-option>
       </mat-select>
     </mat-form-field>
 

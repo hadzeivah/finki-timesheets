@@ -9,6 +9,7 @@ import {MatSort} from "@angular/material/sort";
 import {AssignMemberComponent} from "../assign-member/assign-member.component";
 import {ProjectMemberDto} from "../../model/ProjectMemberDto";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MemberService} from "../../services/member.service";
 
 
 @Component({
@@ -27,12 +28,14 @@ export class ProjectTableComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private projectService: ProjectService,
+              private memberService: MemberService,
               public dialog: MatDialog,
               private _snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
     this.loadProjects();
+    this.loadMembers();
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -43,6 +46,12 @@ export class ProjectTableComponent implements OnInit {
           this.dataSource.data = data.result;
         }, err => console.log('HTTP Error', err),
       );
+  }
+
+  loadMembers() {
+    this.memberService.findMembers()
+      .subscribe(members =>
+        this.members = members.result);
   }
 
   addProjectDialog() {
@@ -103,7 +112,11 @@ export class ProjectTableComponent implements OnInit {
 
     const dialogRef = this.dialog.open(AssignMemberComponent, {
       autoFocus: true,
-      width: '600'
+      width: '600',
+      data: {
+        project: project,
+        members: this.members
+      }
     });
 
     dialogRef.afterClosed().subscribe(memberPosition => {
@@ -111,7 +124,7 @@ export class ProjectTableComponent implements OnInit {
         this.projectService.assignMemberToProject(new ProjectMemberDto(project, memberPosition.member, memberPosition.positionType))
           .subscribe(result => {
             this._snackBar.open('Member successfully assigned', 'Undo', {
-              duration: 3000
+              duration: 2000
             });
           });
       }

@@ -21,39 +21,37 @@ export class NavComponent {
   isExpanded = true;
   @Output() toggleSidenav = new EventEmitter<void>();
 
-  myWorkRoutes: ROUTE[] = [
+  routes: ROUTE[] = [
     {
-      icon: 'assignment',
+      icon: 'file_copy',
       route: 'documents',
       title: 'Documents',
     },
     {
-      icon: 'assignment',
+      icon: 'insert_chart',
       route: 'reports',
       title: 'Reports',
     },
     {
-      icon: 'dashboard',
+      icon: 'table_chart',
       route: 'timesheets',
       title: 'Timesheets',
-    }
-  ];
-
-  managementRoutes: ROUTE[] = [
+    },
     {
-      icon: 'contacts',
+      icon: 'folder',
       route: 'projects',
       title: 'Projects',
-    }, {
+    },
+    {
+      icon: 'folder_shared',
+      route: 'members',
+      title: 'Members',
+    },
+    {
       icon: 'people',
       route: 'list-user',
       title: 'Users',
     },
-    {
-      icon: 'people',
-      route: 'members',
-      title: 'Members',
-    }
   ];
 
   constructor(private authService: AuthService, private router: Router) {

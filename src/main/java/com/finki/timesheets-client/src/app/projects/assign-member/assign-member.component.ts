@@ -4,6 +4,8 @@ import {PositionType} from "../../model/PositionType";
 import {Member} from "../../model/Member";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {MemberService} from "../../services/member.service";
+import {Project} from "../../model/Project";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-assign-member',
@@ -14,22 +16,28 @@ export class AssignMemberComponent implements OnInit {
   assignMemberForm: FormGroup;
   positions: PositionType[];
   members: Member[];
+  selectedProject: Project;
+  assignedMembers: Member[];
+  notAssignedMembers: Member[];
 
   constructor(
     public dialogRef: MatDialogRef<AssignMemberComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: Project,
     private fb: FormBuilder,
     private memberService: MemberService) {
 
     this.buildForm();
-
+    this.selectedProject = this.data["project"];
     this.memberService.getMemberTypes()
       .subscribe(positions =>
         this.positions = positions);
 
-    this.memberService.findMembers()
-      .subscribe(members =>
-        this.members = members.result);
+
+    if (this.selectedProject) {
+      this.members = this.data["members"];
+      this.assignedMembers = this.selectedProject.timesheets.map(a => a.member);
+      this.notAssignedMembers = _.differenceBy(this.members, this.assignedMembers, 'id');
+    }
 
   }
 

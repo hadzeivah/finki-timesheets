@@ -4,25 +4,25 @@
     <button mat-icon-button (click)="isExpanded = !isExpanded">
       <mat-icon>menu</mat-icon>
     </button>
-    <span class="toolbar-title"> {{ 'FINKI_TIMESHEETS'}}</span>
+    <span class="toolbar-title"> {{ 'TIMESHEETS'}}</span>
     <span class="spacer"></span>
 
     <div *ngIf="isAuthenticated()">
       <button mat-icon-button>
-        <mat-icon class="example-icon">settings</mat-icon>
+        <mat-icon class="icon">settings</mat-icon>
       </button>
 
       <button mat-icon-button>
-        <mat-icon class="example-icon">help_outline</mat-icon>
+        <mat-icon class="icon">help_outline</mat-icon>
       </button>
 
       <button mat-icon-button [matMenuTriggerFor]="auth">
-        <mat-icon class="example-icon">person_outline</mat-icon>
+        <mat-icon class="icon">person_outline</mat-icon>
       </button>
       <span> {{getLoggedUser()}}</span>
       <mat-menu #auth="matMenu">
         <button mat-menu-item (click)="logout()">
-          <mat-icon class="example-icon">exit_to_app</mat-icon>
+          <mat-icon class="icon">exit_to_app</mat-icon>
           <span>Sign out</span>
         </button>
       </mat-menu>
@@ -40,27 +40,16 @@
     <mat-nav-list>
       <a mat-list-item routerLink="/" style="height: 0;"></a>
 
-      <a *ngFor="let item of myWorkRoutes"
+      <a *ngFor="let item of routes"
          mat-list-item
          routerLinkActive
          #routerLinkActiveInstance="routerLinkActive"
          [class.list-item-active]="routerLinkActiveInstance.isActive"
          [routerLink]="[item.route]">
 
-        <mat-icon matListIcon> {{ item.icon }}</mat-icon>
-        <span *ngIf="!isExpanded"> &nbsp; {{item.title}} </span>
-      </a>
-
-      <mat-divider></mat-divider>
-
-      <a *ngFor="let item of managementRoutes"
-         mat-list-item
-         routerLinkActive
-         #routerLinkActiveInstance="routerLinkActive"
-         [class.list-item-active]="routerLinkActiveInstance.isActive"
-         [routerLink]="[item.route]">
         <mat-icon matListIcon> {{ item.icon }} </mat-icon>
-        <span *ngIf="!isExpanded"> &nbsp;&nbsp; {{item.title}} </span>
+        <span class="icon-label">{{item.title}} </span>
+        <mat-divider></mat-divider>
       </a>
 
     </mat-nav-list>

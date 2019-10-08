@@ -40,4 +40,7 @@ export class MemberService {
     return this.http.get<Member>(this.baseUrl + '/' + id);
   }
 
+  findMembersByProject(id: number): Observable<Member[]> {
+    return this.http.get<Member[]>(`${this.baseUrl}/project/${id}`);
+  }
 }

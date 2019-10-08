@@ -1,4 +1,10 @@
+:host ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content {
+  flex-direction: column;
+}
 
+.icon-label {
+  font-size: 10px;
+}
 .toolbar-title {
   margin: 0 16px 0 16px;
 }
@@ -33,7 +39,10 @@ $crm-toolbar-title-padding: 16px !default;
   margin: 0 $crm-toolbar-title-padding 0 $crm-toolbar-title-padding;
 }
 
-.example-icon {
+.icon {
   padding: 0 14px;
 }
 
+.matListIcon {
+  font-size: 40px !important;
+}
