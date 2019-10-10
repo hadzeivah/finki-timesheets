@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from "@angular/common/http";
-import {AppConstants} from "../app.constants";
 import {Observable} from "rxjs";
 import * as fileSaver from 'file-saver';
 
@@ -8,8 +7,6 @@ import * as fileSaver from 'file-saver';
   providedIn: 'root'
 })
 export class DownloadService {
-
-  baseUrl = AppConstants.baseURL + 'templates';
 
   constructor(private http: HttpClient) {
   }
@@ -22,7 +19,7 @@ export class DownloadService {
     headers = headers.append('Accept', "application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8");
     params = params.append('filenames', filenames.join(','));
 
-    return this.downloadFile(headers, params, this.baseUrl + "/project/" + projectId);
+    return this.downloadFile(headers, params, `/api/templates/project/${projectId}`);
   }
 
   downloadFile(headers: HttpHeaders, params: HttpParams, downloadUrl: string): Observable<HttpResponse<Blob>> {

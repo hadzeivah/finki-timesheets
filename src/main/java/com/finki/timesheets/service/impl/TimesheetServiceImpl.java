@@ -54,4 +54,18 @@ public class TimesheetServiceImpl implements TimesheetService {
     public Timesheet findTimesheetByProjectIdAndMemberId(Long projectId, Long memberId) throws NotFoundException {
         return timesheetRepository.findTimesheetByProjectIdAndMemberId(projectId, memberId).orElseThrow(() -> new NotFoundException("Timesheet not found"));
     }
+
+    @Override
+    public ApiResponse delete(Long memberId, Long projectId) throws NotFoundException {
+
+        Timesheet timesheet = timesheetRepository.findTimesheetByProjectIdAndMemberId(projectId, memberId).orElseThrow(() -> new NotFoundException("Timesheet not found"));
+
+        if (timesheet.getItems().isEmpty()) {
+            timesheetRepository.delete(timesheet);
+        } else
+            timesheet.setDeleted(true);
+
+
+        return null;
+    }
 }

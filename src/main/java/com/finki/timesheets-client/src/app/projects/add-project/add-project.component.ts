@@ -6,7 +6,7 @@ import {University} from "../../model/University";
 import {UniversityService} from "../../services/university.service";
 import {PositionService} from "../../services/position.service";
 import {Position} from "../../model/Position";
-import {ProjectPositionDto} from "../../model/ProjectPositionDto";
+import {ProjectPositionsDto} from "../../model/ProjectPositionsDto";
 
 @Component({
   selector: 'app-add-project',
@@ -21,7 +21,7 @@ export class AddProjectComponent {
   project: Project;
   title: string = "Add projects";
   seedData: Position[];
-  projectPosition: ProjectPositionDto;
+  projectPosition: ProjectPositionsDto;
 
   constructor(
     public dialogRef: MatDialogRef<AddProjectComponent>,
@@ -117,7 +117,7 @@ export class AddProjectComponent {
 
   save() {
     this.project = <Project>this.addProjectForm.value;
-    this.projectPosition = new ProjectPositionDto(this.project, this.positionsFormArray.value);
+    this.projectPosition = new ProjectPositionsDto(this.project, this.positionsFormArray.value);
     this.dialogRef.close(this.projectPosition);
   }
 

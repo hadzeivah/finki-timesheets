@@ -4,16 +4,19 @@ package com.finki.timesheets.controller;
 import com.finki.timesheets.model.ApiResponse;
 import com.finki.timesheets.model.Member;
 import com.finki.timesheets.model.PositionType;
-import com.finki.timesheets.model.dto.MemberDto;
+import com.finki.timesheets.model.Timesheet;
+import com.finki.timesheets.model.dto.MemberProjectsDto;
+import com.finki.timesheets.model.dto.ProjectPosition;
 import com.finki.timesheets.service.MemberService;
 import com.finki.timesheets.service.TimesheetService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -40,11 +43,9 @@ public class MemberController {
     }
 
     @PostMapping()
-    public ApiResponse<Member> saveMember(@RequestBody MemberDto member) {
+    public ApiResponse<Member> saveMember(@RequestBody Member member) {
 
-        Member newMember = new Member();
-        BeanUtils.copyProperties(member,newMember);
-        Member savedMember = memberService.save(newMember);
+        Member savedMember = memberService.save(member);
 
         return new ApiResponse<>(HttpStatus.OK.value(), "Member saved successfully.", savedMember);
     }
@@ -60,8 +61,30 @@ public class MemberController {
         return new ApiResponse<>(HttpStatus.OK.value(), "Member fetched successfully.", null);
     }
 
-    @GetMapping("positions")
+    @GetMapping("/positions")
     public List<PositionType> memberTypes() {
         return Arrays.asList(PositionType.values());
     }
+
+    @GetMapping("/details")
+    public List<MemberProjectsDto> getMembersDetails() {
+        List<Member> members = this.memberService.findAll();
+        List<MemberProjectsDto> memberProjects = new ArrayList<>();
+
+        members.forEach(member -> {
+            Set<Timesheet> timesheets = member.getTimesheets();
+            List<ProjectPosition> projectPositions = new ArrayList<>();
+            timesheets.forEach(timesheet ->
+            {
+                projectPositions.add(new ProjectPosition(timesheet.getProject().getId(), timesheet.getProject().getName(), timesheet.getPositionSalary().getPosition().getName()));
+
+            });
+            MemberProjectsDto memberProjectsDto = new MemberProjectsDto(member, projectPositions);
+            memberProjects.add(memberProjectsDto);
+
+        });
+
+        return memberProjects;
+    }
+
 }

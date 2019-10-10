@@ -1,6 +1,3 @@
-import {Project} from "./Project";
-import {PositionType} from "./PositionType";
-
 export class Member {
 
     id: number;
@@ -9,8 +6,5 @@ export class Member {
     fullName: String = this.firstName + " "  + this.lastName;
     embg: String;
     transactionAccount: String;
-    positionType: PositionType;
-    projects: Project[];
-
 }
 

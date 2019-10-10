@@ -1,6 +1,7 @@
 package com.finki.timesheets.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -30,6 +31,11 @@ public class Timesheet {
             @JoinColumn(name = "position_id", referencedColumnName = "position_id")
     })
     private ProjectPosition positionSalary;
+
+
+    @Column
+    @ColumnDefault("false")
+    private Boolean isDeleted;
 
     public Timesheet() {
     }
@@ -78,5 +84,13 @@ public class Timesheet {
 
     public void setItems(Set<Item> items) {
         this.items = items;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

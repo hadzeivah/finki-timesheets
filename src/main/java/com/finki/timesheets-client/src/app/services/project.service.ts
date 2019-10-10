@@ -1,41 +1,39 @@
 import {Injectable} from '@angular/core';
-import {AppConstants} from '../app.constants';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ApiResponse} from '../model/api.response';
-import {ProjectPositionDto} from "../model/ProjectPositionDto";
+import {ProjectPositionsDto} from "../model/ProjectPositionsDto";
 import {ProjectMemberDto} from "../model/ProjectMemberDto";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
-  baseUrl = AppConstants.baseURL + 'projects';
 
   constructor(private http: HttpClient) {
   }
 
   findProjects(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.baseUrl);
+    return this.http.get<ApiResponse>(`/api/projects`);
   }
 
   findProjectById(id: number): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.baseUrl + '/' + id);
+    return this.http.get<ApiResponse>(`/api/projects/${id}`);
   }
 
   assignMemberToProject(projectMemberDto: ProjectMemberDto): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.baseUrl + "/assignMember", projectMemberDto);
+    return this.http.post<ApiResponse>(`/api/projects/assignMember`, projectMemberDto);
   }
 
-  addProject(projectDto: ProjectPositionDto): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.baseUrl, projectDto);
+  addProject(projectDto: ProjectPositionsDto): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`/api/projects`, projectDto);
   }
 
   deleteProject(id: number): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(this.baseUrl + '/' + id);
+    return this.http.delete<ApiResponse>(`/api/projects/${id}`);
   }
 
-  updateProject(projectDto: ProjectPositionDto): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(this.baseUrl + '/' + projectDto.project.id, projectDto);
+  updateProject(projectDto: ProjectPositionsDto): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`/api/projects/${projectDto.project.id}`, projectDto);
   }
 }

@@ -1,9 +1,6 @@
 package com.finki.timesheets.service;
 
-import com.finki.timesheets.model.Member;
-import com.finki.timesheets.model.Project;
-import com.finki.timesheets.model.ProjectPosition;
-import com.finki.timesheets.model.Timesheet;
+import com.finki.timesheets.model.*;
 import javassist.NotFoundException;
 
 import java.util.List;
@@ -19,4 +16,6 @@ public interface TimesheetService {
     List<Timesheet> findAll();
 
     Timesheet findTimesheetByProjectIdAndMemberId(Long projectId, Long memberId) throws NotFoundException;
+
+    ApiResponse delete(Long memberId, Long projectId) throws NotFoundException;
 }

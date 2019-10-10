@@ -6,7 +6,7 @@ import com.finki.timesheets.model.Position;
 import com.finki.timesheets.model.Project;
 import com.finki.timesheets.model.ProjectPosition;
 import com.finki.timesheets.model.dto.ProjectMemberDto;
-import com.finki.timesheets.model.dto.ProjectPositionDto;
+import com.finki.timesheets.model.dto.ProjectPositionsDto;
 import com.finki.timesheets.service.PositionSalaryService;
 import com.finki.timesheets.service.PositionService;
 import com.finki.timesheets.service.ProjectService;
@@ -48,7 +48,7 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ApiResponse<Project> saveProject(@RequestBody ProjectPositionDto projectPosition) throws NotFoundException {
+    public ApiResponse<Project> saveProject(@RequestBody ProjectPositionsDto projectPosition) throws NotFoundException {
         Project project = projectService.save(projectPosition.getProject());
         this.positionSalaryService.saveOrUpdateAll(project, projectPosition.getPositions());
         return new ApiResponse<>(HttpStatus.OK.value(), "Project saved successfully.", project);
@@ -65,7 +65,7 @@ public class ProjectController {
 
 
     @PutMapping("/{id}")
-    public ApiResponse<Project> update(@RequestBody ProjectPositionDto projectPosition) throws NotFoundException {
+    public ApiResponse<Project> update(@RequestBody ProjectPositionsDto projectPosition) throws NotFoundException {
 
         Project project = projectService.update(projectPosition.getProject());
         this.positionSalaryService.saveOrUpdateAll(project, projectPosition.getPositions());
@@ -75,6 +75,6 @@ public class ProjectController {
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id) {
         projectService.delete(id);
-        return new ApiResponse<>(HttpStatus.OK.value(), "Project fetched successfully.", null);
+        return new ApiResponse<>(HttpStatus.OK.value(), "Project deleted successfully.", null);
     }
 }

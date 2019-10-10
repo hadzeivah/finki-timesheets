@@ -26,7 +26,7 @@ export class AddMemberComponent implements OnInit {
 
     this.buildForm();
 
-    if (data['editedMember']) {
+    if (data && data['editedMember']) {
       this.editedMember = data['editedMember'];
       this.updateFormFields();
     }

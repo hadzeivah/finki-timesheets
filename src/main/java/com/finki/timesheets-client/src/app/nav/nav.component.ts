@@ -2,10 +2,6 @@ import {Component, EventEmitter, Output} from '@angular/core';
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
 
-/*
-import { AuthService } from 'auth';
-*/
-
 interface ROUTE {
   icon?: string;
   route?: string;
@@ -46,12 +42,7 @@ export class NavComponent {
       icon: 'folder_shared',
       route: 'members',
       title: 'Members',
-    },
-    {
-      icon: 'people',
-      route: 'list-user',
-      title: 'Users',
-    },
+    }
   ];
 
   constructor(private authService: AuthService, private router: Router) {

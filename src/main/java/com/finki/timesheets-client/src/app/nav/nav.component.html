@@ -1,20 +1,13 @@
-<mat-toolbar color="primary" class="crm-navigation-bar">
+<mat-toolbar color="accent" class="crm-navigation-bar">
 
   <mat-toolbar-row>
-    <button mat-icon-button (click)="isExpanded = !isExpanded">
-      <mat-icon>menu</mat-icon>
+    <button mat-icon-button>
+      <img src="../../assets/logo-v3-round.png" class="logo">
     </button>
-    <span class="toolbar-title"> {{ 'TIMESHEETS'}}</span>
+    <span class="toolbar-title"> {{'TIMESHEETS'}}</span>
     <span class="spacer"></span>
 
     <div *ngIf="isAuthenticated()">
-      <button mat-icon-button>
-        <mat-icon class="icon">settings</mat-icon>
-      </button>
-
-      <button mat-icon-button>
-        <mat-icon class="icon">help_outline</mat-icon>
-      </button>
 
       <button mat-icon-button [matMenuTriggerFor]="auth">
         <mat-icon class="icon">person_outline</mat-icon>
@@ -35,10 +28,9 @@
 
 <mat-sidenav-container autosize>
 
-  <mat-sidenav #sidenav mode="side" opened="true">
+  <mat-sidenav #sidenav mode="side" opened="true" *ngIf="isAuthenticated()">
 
     <mat-nav-list>
-      <a mat-list-item routerLink="/" style="height: 0;"></a>
 
       <a *ngFor="let item of routes"
          mat-list-item
@@ -47,7 +39,7 @@
          [class.list-item-active]="routerLinkActiveInstance.isActive"
          [routerLink]="[item.route]">
 
-        <mat-icon matListIcon> {{ item.icon }} </mat-icon>
+        <mat-icon matListIcon color="accent"> {{ item.icon }} </mat-icon>
         <span class="icon-label">{{item.title}} </span>
         <mat-divider></mat-divider>
       </a>

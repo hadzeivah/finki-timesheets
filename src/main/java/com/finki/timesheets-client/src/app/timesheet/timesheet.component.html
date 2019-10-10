@@ -5,11 +5,10 @@
       <mat-card-title>Project name: {{project?.name}}</mat-card-title>
       <mat-card-subtitle>Partner Organisation: {{project?.estimatedBudget}}</mat-card-subtitle>
       <mat-card-subtitle>Project number: {{project?.projectNumber}}</mat-card-subtitle>
+      <mat-card-subtitle>Period:{{project?.startDate | date }} - {{project?.endDate | date}}</mat-card-subtitle>
       <mat-card-subtitle>Project member: {{timesheet?.member.fullName}}</mat-card-subtitle>
-      <mat-card-subtitle>Position: {{timesheet?.member?.positionType}}</mat-card-subtitle>
-      <mat-card-subtitle>
-        Period:{{project?.startDate | date }} - {{project?.endDate | date}}
-      </mat-card-subtitle>
+      <mat-card-subtitle>Position: {{timesheet?.positionSalary.position}}</mat-card-subtitle>
+
 
     </mat-card-header>
 
@@ -25,7 +24,7 @@
                    placeholder="Choose a date"
                    formControlName="startDate">
             <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #startDatePicker></mat-datepicker>
+            <mat-datepicker #startDatePicker [dateClass]="dateClass()"></mat-datepicker>
           </mat-form-field>
           <!-- End Date Form Field-->
           <mat-form-field appearance="outline" floatLabel="auto">
@@ -34,7 +33,7 @@
                    placeholder="Choose a date"
                    formControlName="endDate">
             <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #endDatePicker></mat-datepicker>
+            <mat-datepicker #endDatePicker [dateClass]="dateClass()"></mat-datepicker>
           </mat-form-field>
 
           <!-- Hours Form Field-->
@@ -71,7 +70,7 @@
                     <input matInput
                            [matDatepicker]="picker"
                            [matDatepickerFilter]="weekendFilter"
-                           placeholder="Choose a date"
+                           placeholder="Choose start date"
                            formControlName="startDate">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker
@@ -90,10 +89,10 @@
                                   floatLabel="{{ element.editing ? 'float' : 'never'}}">
                     <input matInput [matDatepicker]="picker"
                            [matDatepickerFilter]="weekendFilter"
-                           placeholder="Choose a date"
+                           placeholder="Choose end date"
                            formControlName="endDate">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-datepicker #picker [dateClass]="dateClass()"></mat-datepicker>
                   </mat-form-field>
                   <span *ngIf="!element.editing"> {{element.endDate | date }}</span>
                 </td>

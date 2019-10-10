@@ -1,12 +1,12 @@
 package com.finki.timesheets.model.dto;
 
-public class PositionDto {
+public class PositionSalaryDto {
 
     private Long id;
     private String positionType;
     private int salary;
 
-    public PositionDto(String name, int salary) {
+    public PositionSalaryDto(String name, int salary) {
         this.positionType = name;
         this.salary = salary;
     }

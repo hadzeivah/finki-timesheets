@@ -5,7 +5,7 @@ import com.finki.timesheets.model.Position;
 import com.finki.timesheets.model.Project;
 import com.finki.timesheets.model.ProjectPosition;
 import com.finki.timesheets.model.dto.Helper;
-import com.finki.timesheets.model.dto.PositionDto;
+import com.finki.timesheets.model.dto.PositionSalaryDto;
 import com.finki.timesheets.repository.PositionRepository;
 import com.finki.timesheets.repository.PositionSalaryRepository;
 import com.finki.timesheets.service.PositionSalaryService;
@@ -43,17 +43,17 @@ public class PositionSalaryServiceImpl implements PositionSalaryService {
 
     @Override
     @Transactional
-    public List<ProjectPosition> saveOrUpdateAll(Project project, List<PositionDto> positions) {
+    public List<ProjectPosition> saveOrUpdateAll(Project project, List<PositionSalaryDto> positions) {
 
         Map<String, Position> positionMap = this.positionRepository.findAll().stream().collect(Collectors.toMap(Position::getName, Function.identity()));
 
         List<ProjectPosition> positionSalaries = new ArrayList<>();
-        positions.forEach(positionDto -> {
-            Position position = positionMap.get(positionDto.getPositionType());
+        positions.forEach(positionSalaryDto -> {
+            Position position = positionMap.get(positionSalaryDto.getPositionType());
             if (position == null) {
-                position = this.positionRepository.save(new Position(positionDto.getPositionType(), positionDto.getPositionType()));
+                position = this.positionRepository.save(new Position(positionSalaryDto.getPositionType(), positionSalaryDto.getPositionType()));
             }
-            ProjectPosition positionSalary = Helper.positionFromDTO(positionDto, position, project);
+            ProjectPosition positionSalary = Helper.positionFromDTO(positionSalaryDto, position, project);
             positionSalaries.add(positionSalary);
         });
 

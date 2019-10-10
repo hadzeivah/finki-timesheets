@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Timesheet} from '../model/Timesheet';
-import {AppConstants} from '../app.constants';
+import {ApiResponse} from "../model/api.response";
 
 
 @Injectable({
@@ -10,21 +10,24 @@ import {AppConstants} from '../app.constants';
 })
 export class TimesheetService {
 
-  baseUrl = AppConstants.baseURL + 'timesheets';
-
   constructor(private http: HttpClient) {
   }
 
   findAllTimesheets(): Observable<Timesheet[]> {
-    return this.http.get<Timesheet[]>(this.baseUrl)
+    return this.http.get<Timesheet[]>('/api/timesheets')
   }
 
   findTimesheet(projectId: number, memberId: number): Observable<Timesheet> {
-    return this.http.get<Timesheet>(this.baseUrl, {
+    return this.http.get<Timesheet>('/api/timesheets', {
       params: new HttpParams()
         .set('projectId', projectId.toString())
         .set('memberId', memberId.toString())
     });
-}}
+  }
+
+  deleteTimesheet(memberId: number, projectId: number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`/api/timesheets/member/${memberId}/project/${projectId}`)
+  }
+}
 
 

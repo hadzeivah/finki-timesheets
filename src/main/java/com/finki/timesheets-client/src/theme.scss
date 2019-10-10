@@ -1,0 +1,47 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+
+$mat-finki: (
+  50: #e5f2fa,
+  100: #bfdff2,
+  200: #95c9ea,
+  300: #6ab3e1,
+  400: #4aa3da,
+  500: #2a93d4,
+  600: #258bcf,
+  700: #1f80c9,
+  800: #1976c3,
+  900: #0f64b9,
+  A100: #e7f2ff,
+  A200: #b4d7ff,
+  A400: #81bbff,
+  A700: #68adff,
+  A800: #303181,
+  A900: #000000,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $light-primary-text,
+    A400: $light-primary-text,
+    A700: $light-primary-text,
+  )
+);
+
+
+$my-app-primary: mat-palette($mat-finki, A800);
+$my-app-accent: mat-palette($mat-finki, A800);
+$my-app-warn: mat-palette($mat-red);
+
+$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
+@include angular-material-theme($my-app-theme);

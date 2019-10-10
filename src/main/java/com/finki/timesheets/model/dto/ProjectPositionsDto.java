@@ -1,15 +1,19 @@
-package com.finki.timesheets.model.dto;;
+package com.finki.timesheets.model.dto;
+
 import com.finki.timesheets.model.Project;
 
 import java.util.List;
 
+;
 
-public class ProjectPositionDto {
+
+public class ProjectPositionsDto {
     private Project project;
-    private List<PositionDto> positions;
+    private List<PositionSalaryDto> positions;
 
-    public ProjectPositionDto() {
+    public ProjectPositionsDto() {
     }
+
 
 
     public Project getProject() {
@@ -21,11 +25,11 @@ public class ProjectPositionDto {
     }
 
 
-    public List<PositionDto> getPositions() {
+    public List<PositionSalaryDto> getPositions() {
         return positions;
     }
 
-    public void setPositions(List<PositionDto> positions) {
+    public void setPositions(List<PositionSalaryDto> positions) {
         this.positions = positions;
     }
 }

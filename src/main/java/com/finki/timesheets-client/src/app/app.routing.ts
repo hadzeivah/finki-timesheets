@@ -1,8 +1,5 @@
 import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './login/login.component';
-import {AddUserComponent} from './users/add-user/add-user.component';
-import {UserTableComponent} from './users/user-table/user-table.component';
-import {EditUserComponent} from './users/edit-user/edit-user.component';
 import {TimesheetPageComponent} from "./pages/timesheet-page/timesheet-page.component";
 import {DocumentPageComponent} from "./pages/document-page/document-page.component";
 import {ProjectTableComponent} from "./projects/project-table/project-table.component";
@@ -14,21 +11,6 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
-  },
-  {
-    path: 'add-user',
-    component: AddUserComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'list-user',
-    component: UserTableComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'edit-user',
-    component: EditUserComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: 'documents',

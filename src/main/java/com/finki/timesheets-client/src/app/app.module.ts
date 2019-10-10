@@ -3,9 +3,6 @@ import {ErrorHandler, NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
-import {AddUserComponent} from './users/add-user/add-user.component';
-import {EditUserComponent} from './users/edit-user/edit-user.component';
-import {UserTableComponent} from './users/user-table/user-table.component';
 import {AuthService} from './services/auth.service';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -37,14 +34,12 @@ import {MatSortModule} from "@angular/material/sort";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {AssignMemberComponent} from './projects/assign-member/assign-member.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    AddUserComponent,
-    EditUserComponent,
-    UserTableComponent,
     TimesheetComponent,
     NavComponent,
     DocumentComponent,
@@ -80,7 +75,8 @@ import {AssignMemberComponent} from './projects/assign-member/assign-member.comp
     MatStepperModule,
     MatProgressBarModule,
     MatSortModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatCheckboxModule
   ],
   providers: [ErrorHandler, AuthService, TimesheetService, TranslateService, JwtHelperService,
     {provide: JWT_OPTIONS, useValue: JWT_OPTIONS},

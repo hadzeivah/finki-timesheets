@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {AppConstants} from "../app.constants";
 import {Observable} from "rxjs";
 import {ApiResponse} from "../model/api.response";
 import {Item} from "../model/Item";
@@ -11,20 +10,18 @@ import {University} from "../model/University";
 })
 export class UniversityService {
 
-  baseUrl = AppConstants.baseURL + 'universities';
-
   constructor(private http: HttpClient) { }
 
   findUniversities(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.baseUrl);
+    return this.http.get<ApiResponse>(`/api/universities`);
   }
   addUniversity(university: Item): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.baseUrl, university);
+    return this.http.post<ApiResponse>(`/api/universities`, university);
   }
   deleteUniversity(id: number): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(this.baseUrl + '/' + id);
+    return this.http.delete<ApiResponse>(`/api/universities/${id}`);
   }
   updateUniversity(university: University): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(this.baseUrl +  '/' + university.id, university);
+    return this.http.put<ApiResponse>(`/api/universities/${university.id}`, university);
   }
 }

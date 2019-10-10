@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ApiResponse} from '../model/api.response';
-import {AppConstants} from '../app.constants';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {User} from "../model/User";
 
@@ -12,10 +11,8 @@ export class AuthService {
   constructor(private http: HttpClient, public jwtHelper: JwtHelperService) {
   }
 
-  baseUrl = AppConstants.baseURL + 'users/';
-
   login(loginPayload): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(AppConstants.baseURL + 'token/generate-token', loginPayload);
+    return this.http.post<ApiResponse>('/api/token/generate-token', loginPayload);
 
   }
 
@@ -25,23 +22,23 @@ export class AuthService {
   }
 
   getUsers(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.baseUrl);
+    return this.http.get<ApiResponse>('/api/users');
   }
 
   getUserById(id: number): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.baseUrl + id);
+    return this.http.get<ApiResponse>(`/api/users/${id}`);
   }
 
   createUser(user: User): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.baseUrl, user);
+    return this.http.post<ApiResponse>('/api/users', user);
   }
 
   updateUser(user: User): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(this.baseUrl + user.id, user);
+    return this.http.put<ApiResponse>(`/api/users/${user.id}`, user);
   }
 
   deleteUser(id: number): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(this.baseUrl + id);
+    return this.http.delete<ApiResponse>(`/api/users/${id}`);
   }
 
   public isAuthenticated(): boolean {
