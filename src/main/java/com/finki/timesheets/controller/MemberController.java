@@ -33,7 +33,7 @@ public class MemberController {
     }
 
     @GetMapping
-    public ApiResponse<List<Member>> listMembers() {
+    public ApiResponse<List<Member>> getMembers() {
         return new ApiResponse<>(HttpStatus.OK.value(), "Members list fetched successfully.", memberService.findAll());
     }
 
@@ -57,7 +57,10 @@ public class MemberController {
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id) {
-        memberService.delete(id);
+
+        Member member = this.memberService.findById(id);
+        member.setDeleted(true);
+        memberService.update(member);
         return new ApiResponse<>(HttpStatus.OK.value(), "Member fetched successfully.", null);
     }
 

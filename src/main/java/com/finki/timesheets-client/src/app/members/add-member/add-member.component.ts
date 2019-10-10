@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MemberService} from "../../services/member.service";
 import {PositionType} from "../../model/PositionType";
 import {Project} from "../../model/Project";
 import {Member} from "../../model/Member";
@@ -21,18 +20,15 @@ export class AddMemberComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddMemberComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder,
-    private memberService: MemberService) {
+    private fb: FormBuilder) {
 
     this.buildForm();
+    console.log(data);
 
     if (data && data['editedMember']) {
-      this.editedMember = data['editedMember'];
+      this.editedMember = data['editedMember'].member;
       this.updateFormFields();
     }
-    this.memberService.getMemberTypes()
-      .subscribe(positions =>
-        this.positions = positions);
   }
 
   private buildForm() {

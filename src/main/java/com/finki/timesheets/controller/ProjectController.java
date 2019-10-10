@@ -38,7 +38,7 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ApiResponse<List<Project>> listProjects() {
+    public ApiResponse<List<Project>> getProjects() {
         return new ApiResponse<>(HttpStatus.OK.value(), "Project list fetched successfully.", projectService.findAll());
     }
 
@@ -73,8 +73,10 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> delete(@PathVariable Long id) {
-        projectService.delete(id);
+    public ApiResponse<Void> delete(@PathVariable Long id) throws NotFoundException {
+        Project project = this.projectService.findById(id);
+        project.setDeleted(true);
+        this.projectService.update(project);
         return new ApiResponse<>(HttpStatus.OK.value(), "Project deleted successfully.", null);
     }
 }

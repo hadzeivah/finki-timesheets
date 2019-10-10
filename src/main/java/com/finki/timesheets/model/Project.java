@@ -1,6 +1,8 @@
 package com.finki.timesheets.model;
 
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -33,6 +35,9 @@ public class Project {
     @OneToMany(mappedBy = "project")
     private Set<Timesheet> timesheets;
 
+    @Column
+    @ColumnDefault("false")
+    private Boolean isDeleted;
 
     public Project() {
     }
@@ -99,5 +104,13 @@ public class Project {
 
     public void setEstimatedBudget(Long estimatedBudget) {
         this.estimatedBudget = estimatedBudget;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

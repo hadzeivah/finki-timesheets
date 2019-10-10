@@ -19,7 +19,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<Member> findAll() {
-        return memberRepository.findAll();
+        return memberRepository.findAllByIsDeletedFalse();
     }
 
     @Override

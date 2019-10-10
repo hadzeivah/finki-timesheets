@@ -23,6 +23,7 @@ export class ProjectTableComponent implements OnInit {
   members: Member[];
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['projectName', 'projectNumber', 'university', 'startDate', 'endDate', 'actions'];
+  isLoading: Boolean = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -44,6 +45,8 @@ export class ProjectTableComponent implements OnInit {
     this.projectService.findProjects()
       .subscribe(data => {
           this.dataSource.data = data.result;
+        this.projects = data.result;
+        this.isLoading = false;
         }, err => console.log('HTTP Error', err),
       );
   }
@@ -65,7 +68,7 @@ export class ProjectTableComponent implements OnInit {
       if (projectPosition) {
 
         this.projectService.addProject(projectPosition).subscribe(() => {
-            this.loadProjects();
+          this.dataSource.data.push(projectPosition);
           }
         );
       }
@@ -84,7 +87,11 @@ export class ProjectTableComponent implements OnInit {
       if (projectPosition) {
         projectPosition.project.id = editedProject.id;
         this.projectService.updateProject(projectPosition).subscribe(() => {
-            this.loadProjects();
+
+          const foundIndex = this.projects.findIndex(x => x.id === editedProject.id);
+          this.projects.splice(foundIndex, 1);
+          this.dataSource.data = this.projects;
+
           }
         )
       }

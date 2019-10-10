@@ -1,5 +1,4 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Member} from "../model/Member";
 import {MemberService} from "../services/member.service";
 import {MatDialog, MatDialogConfig, MatTableDataSource} from "@angular/material";
 import {AddMemberComponent} from "./add-member/add-member.component";
@@ -17,6 +16,7 @@ export class MembersComponent implements OnInit {
 
   dataSource = new MatTableDataSource<MemberProjectsDto>();
   displayedColumns: string[] = ['fullName', 'embg', 'transactionAccount', 'positionType', 'projects', 'actions'];
+  isLoading: Boolean = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -29,6 +29,8 @@ export class MembersComponent implements OnInit {
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+    // this function is needed because MemberProjectsDto contains Objects
     this.dataSource.filterPredicate = (data: any, filter) => {
       const dataStr = JSON.stringify(data).toLowerCase();
       return dataStr.indexOf(filter) != -1;
@@ -42,6 +44,7 @@ export class MembersComponent implements OnInit {
   loadMembers() {
     this.membersService.findMembersDetails().subscribe(data => {
       this.dataSource.data = data;
+      this.isLoading = false;
     });
   }
 
@@ -69,7 +72,7 @@ export class MembersComponent implements OnInit {
     });
   }
 
-  editMemberDialog(editedMember: Member) {
+  editMemberDialog(editedMember: MemberProjectsDto) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.width = '500px';
@@ -81,7 +84,7 @@ export class MembersComponent implements OnInit {
     const dialogRef = this.dialog.open(AddMemberComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(member => {
-      member.id = editedMember.id;
+      member.id = editedMember.member.id;
       this.membersService.updateMember(member)
         .subscribe(() => {
           this.loadMembers();

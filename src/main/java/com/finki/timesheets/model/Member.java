@@ -1,6 +1,7 @@
 package com.finki.timesheets.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -26,6 +27,10 @@ public class Member {
     @JsonIgnore
     @OneToMany(mappedBy = "member")
     private Set<Timesheet> timesheets;
+
+    @Column
+    @ColumnDefault("false")
+    private Boolean isDeleted;
 
 
     public Member() {
@@ -83,5 +88,13 @@ public class Member {
 
     public void setTimesheets(Set<Timesheet> timesheets) {
         this.timesheets = timesheets;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }
