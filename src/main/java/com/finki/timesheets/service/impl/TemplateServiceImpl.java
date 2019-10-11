@@ -12,19 +12,10 @@ import org.apache.poi.ooxml.POIXMLException;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -39,6 +30,7 @@ public class TemplateServiceImpl implements TemplateService {
     private TimesheetService timesheetService;
     private ReportService reportService;
     private HashMap<String, String> replacementValues = new HashMap<>();
+    private String today = StringUtils.formatDateToString_DDMMYYYY(LocalDateTime.now());
 
 
     public TemplateServiceImpl(TimesheetService timesheetService, ReportService reportService) {
@@ -47,120 +39,79 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public ResponseEntity downloadAllTemplates(ArrayList<String> filenames, Project project) {
-
-        String outpath = FILE_DIRECTORY + "documents.zip";
-        coverLetterTemplate("coverLetter", project);
-        requirementContractTemplate("requirement", project);
-        invoiceTemplate("invoice", project);
-        solutionContractTemplate("solution", project);
+    public ByteArrayInputStream downloadAllTemplates(ArrayList<String> filenames, Project project) {
 
         ArrayList<String> filenamesAsDocx = new ArrayList<>();
-
+        Map<String, ByteArrayInputStream> documents = new HashMap<>();
 
         filenames.forEach(filename -> {
             switch (filename) {
                 case "invoice":
-                    invoiceTemplate(filename, project);
+                    documents.put(filename + ".docx", invoiceTemplate(filename, project));
                 case "solution":
-                    solutionContractTemplate(filename, project);
+                    documents.put(filename + ".docx", solutionContractTemplate(filename, project));
                 case "requirement":
-                    requirementContractTemplate(filename, project);
+                    documents.put(filename + ".docx", requirementContractTemplate(filename, project));
                 case "coverLetter":
-                    coverLetterTemplate(filename, project);
+                    documents.put(filename + ".docx", coverLetterTemplate(filename, project));
             }
             filenamesAsDocx.add(filename + ".docx");
         });
 
-        ZipMultipleFiles(outpath, filenamesAsDocx);
-        return getResourceFromFileDirectory(outpath);
+
+        return ZipMultipleFiles(filenamesAsDocx, documents);
     }
 
-    @Override
-    public ResponseEntity getResourceFromFileDirectory(String filename) {
-        Resource resource = new FileSystemResource(filename);
-        String downloadFileName = resource.getFilename();
-
-        if (resource.exists()) {
-            try {
-                InputStream fis = new FileInputStream(resource.getFile());
-                InputStreamResource inputStreamResource = new InputStreamResource(fis);
-
-                return ResponseEntity.ok()
-                        .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg"))
-                        .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Access-Control-Expose-Headers", "Content-Disposition")
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + downloadFileName)
-                        .body(inputStreamResource);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
 
     @Override
-    public ResponseEntity coverLetterTemplate(String filename, Project project) {
+    public ByteArrayInputStream coverLetterTemplate(String filename, Project project) {
         String filepath = CLASS_PATH + "Propratno06 - Copy.docx";
-        String outpath = FILE_DIRECTORY + "coverLetter.docx";
-
         XWPFDocument doc = openDocument(filepath);
-        HashMap<String, String> replacementValues = new HashMap<>();
-
         this.buildPlaceholders(project);
+        replaceText(doc, replacementValues);
 
-        if (doc != null) {
-            replaceText(doc, replacementValues, outpath);
-        }
-        return getResourceFromFileDirectory(outpath);
+        return saveDocument(doc);
     }
 
     @Override
-    public ResponseEntity invoiceTemplate(String filename, Project project) {
+    public ByteArrayInputStream invoiceTemplate(String filename, Project project) {
         String filepath = CLASS_PATH + "Faktura06 - Copy.docx";
-        String outpath = FILE_DIRECTORY + "invoice.docx";
 
         XWPFDocument doc = openDocument(filepath);
 
         this.buildPlaceholders(project);
 
-        if (doc != null) {
-            replaceCell(doc, replacementValues, outpath);
-            replaceText(doc, replacementValues, outpath);
-        }
-        return getResourceFromFileDirectory(outpath);
+        replaceCell(doc, replacementValues);
+        replaceText(doc, replacementValues);
+
+        return saveDocument(doc);
     }
 
     @Override
-    public ResponseEntity requirementContractTemplate(String filename, Project project) {
+    public ByteArrayInputStream requirementContractTemplate(String filename, Project project) {
         String filepath = CLASS_PATH + "BaranjeTS6 - Copy.docx";
-        String outpath = FILE_DIRECTORY + "requirement.docx";
+
         this.buildPlaceholders(project);
-        generateTimesheetTableByProject(project.getId(), filepath, outpath);
-        return getResourceFromFileDirectory(outpath);
+        return generateTimesheetTableByProject(project.getId(), filepath);
     }
 
     @Override
-    public ResponseEntity solutionContractTemplate(String filename, Project project) {
-
+    public ByteArrayInputStream solutionContractTemplate(String filename, Project project) {
         String filepath = CLASS_PATH + "Resenie06 - Copy.docx";
-        String outpath = FILE_DIRECTORY + "solution.docx";
         this.buildPlaceholders(project);
-        generateTimesheetTableByProject(project.getId(), filepath, outpath);
-        return getResourceFromFileDirectory(outpath);
+        return generateTimesheetTableByProject(project.getId(), filepath);
     }
 
-    private void generateTimesheetTableByProject(Long projectId, String filepath, String outpath) {
+    private ByteArrayInputStream generateTimesheetTableByProject(Long projectId, String filepath) {
         XWPFDocument doc = openDocument(filepath);
         List<Timesheet> timesheets = timesheetService.findTimesheetsByProject(projectId);
-        replaceTable(doc, timesheets, outpath);
-        replaceText(doc, replacementValues, outpath);
+        replaceTable(doc, timesheets);
+        replaceCell(doc, replacementValues);
+        replaceText(doc, replacementValues);
+        return saveDocument(doc);
     }
 
-    private void replaceTable(XWPFDocument doc, List<Timesheet> timesheets, String outpath) {
+    private XWPFDocument replaceTable(XWPFDocument doc, List<Timesheet> timesheets) {
         XWPFTable table = null;
         int count = 0;
         for (XWPFParagraph paragraph : doc.getParagraphs()) {
@@ -204,11 +155,12 @@ public class TemplateServiceImpl implements TemplateService {
         }
 
         if (table != null) {
-            fillTimesheetTable(doc, table, timesheets, outpath);
+            fillTimesheetTable(doc, table, timesheets);
         }
+        return doc;
     }
 
-    private void fillTimesheetTable(XWPFDocument doc, XWPFTable table, List<Timesheet> timesheets, String outpath) {
+    private XWPFDocument fillTimesheetTable(XWPFDocument doc, XWPFTable table, List<Timesheet> timesheets) {
         int currRow = 0;
         XWPFTableRow header = table.getRow(0);
         header.getCell(0).setText("Бр.");
@@ -237,17 +189,16 @@ public class TemplateServiceImpl implements TemplateService {
             curRow.getCell(6).setText(String.valueOf(totalEuros));
             curRow.getCell(7).setText(String.valueOf(totalMKD));
         }
-        saveDocument(doc, outpath);
+        return doc;
     }
 
-    private void replaceText(XWPFDocument doc, HashMap<String, String> replacementValues, String outpath) {
+    private void replaceText(XWPFDocument doc, HashMap<String, String> replacementValues) {
         for (XWPFParagraph p : doc.getParagraphs()) {
             replaceParagraph(p, replacementValues);
-            saveDocument(doc, outpath);
         }
     }
 
-    private void replaceCell(XWPFDocument doc, HashMap<String, String> replacementValues, String outpath) {
+    private void replaceCell(XWPFDocument doc, HashMap<String, String> replacementValues) {
         for (XWPFTable tbl : doc.getTables()) {
             for (XWPFTableRow row : tbl.getRows()) {
                 for (XWPFTableCell cell : row.getTableCells()) {
@@ -256,7 +207,6 @@ public class TemplateServiceImpl implements TemplateService {
                     }
                 }
             }
-            saveDocument(doc, outpath);
         }
     }
 
@@ -302,19 +252,20 @@ public class TemplateServiceImpl implements TemplateService {
         return document;
     }
 
-    private void saveDocument(XWPFDocument doc, String file) {
-        try (FileOutputStream out = new FileOutputStream(file)) {
+    private ByteArrayInputStream saveDocument(XWPFDocument doc) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
             doc.write(out);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return new ByteArrayInputStream(out.toByteArray());
     }
 
     private void buildPlaceholders(Project project) {
 
         String from = StringUtils.formatDateToString_DDMMYYYY(project.getStartDate() != null ? project.getStartDate() : LocalDateTime.now());
         String to = StringUtils.formatDateToString_DDMMYYYY(project.getEndDate() != null ? project.getEndDate() : LocalDateTime.now());
-        String today = StringUtils.formatDateToString_DDMMYYYY(LocalDateTime.now());
         double total = this.reportService.calculateTotalSalaryForProject(project) * Constants.EUR;
         replacementValues.put("from", from);
         replacementValues.put("to", to);
@@ -326,28 +277,26 @@ public class TemplateServiceImpl implements TemplateService {
         replacementValues.put("total", String.valueOf(total));
     }
 
-    private void ZipMultipleFiles(String outpath, ArrayList<String> srcFiles) {
+    private ByteArrayInputStream ZipMultipleFiles(ArrayList<String> srcFiles, Map<String, ByteArrayInputStream> documents) {
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ZipOutputStream zipOut = new ZipOutputStream(bos);
+
         try {
-            FileOutputStream fos = new FileOutputStream(outpath);
-            ZipOutputStream zipOut = new ZipOutputStream(fos);
             for (String srcFile : srcFiles) {
-                Resource fileToZip = new FileSystemResource(FILE_DIRECTORY + srcFile);
-                FileInputStream fis = new FileInputStream(fileToZip.getFile());
-                String filename = fileToZip.getFilename() != null ? fileToZip.getFilename() : "";
-                ZipEntry zipEntry = new ZipEntry(filename);
+                ZipEntry zipEntry = new ZipEntry(srcFile);
                 zipOut.putNextEntry(zipEntry);
                 byte[] bytes = new byte[1024];
                 int length;
-                while ((length = fis.read(bytes)) >= 0) {
+                while ((length = documents.get(srcFile).read(bytes)) >= 0) {
                     zipOut.write(bytes, 0, length);
                 }
-                fis.close();
             }
             zipOut.close();
-            fos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return new ByteArrayInputStream(bos.toByteArray());
     }
 }

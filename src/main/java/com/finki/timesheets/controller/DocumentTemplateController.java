@@ -4,12 +4,18 @@ package com.finki.timesheets.controller;
 import com.finki.timesheets.model.Project;
 import com.finki.timesheets.service.ProjectService;
 import com.finki.timesheets.service.TemplateService;
+import com.finki.timesheets.service.utils.StringUtils;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -33,24 +39,40 @@ public class DocumentTemplateController {
 
         ArrayList<String> filenamesList = new ArrayList<>(Arrays.asList(filenames.split(",")));
         Project project = this.projectService.findById(projectId);
+        ByteArrayInputStream document = null;
+        String documentName = "";
+        String today = StringUtils.formatDateToString_DDMMYYYY(LocalDateTime.now());
 
         if (filenamesList.size() > 1) {
-            return templateService.downloadAllTemplates(filenamesList, project);
+            documentName = String.format("%s_%s_%s.zip", "documents", project.getName(), today);
+            document = templateService.downloadAllTemplates(filenamesList, project);
         } else {
             String filename = filenamesList.get(0);
             switch (filename) {
                 case "invoice":
-                    return templateService.invoiceTemplate(filename, project);
+                    documentName = String.format("%s_%s_%s.docx", filename, project, today);
+                    document = templateService.invoiceTemplate(filename, project);
                 case "solution":
-                    return templateService.solutionContractTemplate(filename, project);
+                    documentName = String.format("%s_%s_%s.docx", filename, project, today);
+                    document = templateService.solutionContractTemplate(filename, project);
                 case "requirement":
-                    return templateService.requirementContractTemplate(filename, project);
+                    documentName = String.format("%s_%s_%s.docx", filename, project, today);
+                    document = templateService.requirementContractTemplate(filename, project);
                 case "coverLetter":
-                    return templateService.coverLetterTemplate(filename, project);
-                default:
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    documentName = String.format("%s_%s_%s.docx", filename, project, today);
+                    document = templateService.coverLetterTemplate(filename, project);
             }
 
         }
+
+        if (document == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg"))
+                .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Access-Control-Expose-Headers", "Content-Disposition")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + documentName)
+                .body(new InputStreamResource(document));
+
     }
 }

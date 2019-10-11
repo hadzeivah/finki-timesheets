@@ -1,6 +1,7 @@
 {
-  "FINKI_TIMESHEETS": "FINKI's TIMESHEET",
-  "MY_WORKSPACE": "MY_WORKSPACE",
-  "MANAGEMENT": "MANAGEMENT",
-  "MY_PROJECTS": "My projects"
+  "PROJECTS": "Projects",
+  "TIMESHEETS": "Timesheets",
+  "REPORTS": "Reports",
+  "DOCUMENTS": "Documents",
+  "Members": "Members"
 }
