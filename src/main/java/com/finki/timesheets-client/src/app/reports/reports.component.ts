@@ -23,7 +23,7 @@ import {DownloadService} from "../services/download.service";
 export class ReportsComponent implements OnInit {
   dataSource = new MatTableDataSource();
   expandedDataSource = new MatTableDataSource();
-
+  isLoading: Boolean = true;
   columnsToDisplay = ['chevron', 'projectName', 'total', 'estimatedBudget', 'difference'];
   expandedColumnsToDisplay = ['person', 'memberName', 'total', 'salary', 'position'];
   expandedElement: ProjectTotalSalary;
@@ -37,6 +37,7 @@ export class ReportsComponent implements OnInit {
     this.reportService.findReport().subscribe(projectTotalSalaryList => {
       this.projectTotalSalaryList = projectTotalSalaryList;
       this.dataSource.data = projectTotalSalaryList;
+      this.isLoading = false;
     });
   }
 
