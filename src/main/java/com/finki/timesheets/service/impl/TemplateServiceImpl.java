@@ -72,6 +72,7 @@ public class TemplateServiceImpl implements TemplateService {
         XWPFDocument doc = openDocument(filepath);
         this.buildPlaceholders(project);
         replaceText(doc, replacementValues);
+        replaceCell(doc, replacementValues);
 
         return saveDocument(doc);
     }
