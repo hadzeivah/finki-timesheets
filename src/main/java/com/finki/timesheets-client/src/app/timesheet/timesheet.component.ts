@@ -178,6 +178,10 @@ export class TimesheetComponent implements OnInit {
     }
   }
 
+  getTotalTimeSpentInDays() {
+    return Math.round((this.getTotalTimeSpent() / 24) * 10) / 10;
+  }
+
   deleteItem(i: any, id: any) {
     this.itemService.deleteItem(id).subscribe(() => {
       const foundIndex = this.items.findIndex(x => x.id === id);

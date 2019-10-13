@@ -80,7 +80,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         newUser.setFirstName(user.getFirstName());
         newUser.setLastName(user.getLastName());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        newUser.setAge(user.getAge());
         return userDao.save(newUser);
     }
 }

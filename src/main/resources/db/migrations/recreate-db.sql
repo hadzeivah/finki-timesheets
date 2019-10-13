@@ -4,16 +4,17 @@ create table if not exists members
     embg                varchar(255),
     first_name          varchar(255),
     last_name           varchar(255),
-    position_type       varchar(255),
-    transaction_account varchar(255)
+    transaction_account varchar(255),
+    is_deleted          boolean default false,
+    created_at          timestamp,
+    updated_at          timestamp
 );
 
 create table if not exists positions
 (
-    id          bigserial PRIMARY KEY,
+    id          bigint PRIMARY KEY,
     description varchar(255),
-    name        varchar(255),
-    salary      integer
+    name        varchar(255)
 );
 
 create table if not exists university
@@ -22,36 +23,56 @@ create table if not exists university
     dean varchar(255),
     name varchar(255)
 );
+INSERT INTO university (id, dean, name)
+VALUES (1, 'Вон Проф. д-р Иван Чорбев', 'Факултет за информатички науки и компјутерско инженерство - ФИНКИ');
 
-create table if not exists projects
+create table projects
 (
-    id                   bigserial PRIMARY KEY,
-    end_date             timestamp,
-    name                 varchar(255),
-    partner_organisation varchar(255),
-    project_number       varchar(255),
-    start_date           timestamp,
-    university_id        bigint,
-    FOREIGN KEY (university_id) REFERENCES university (id)
-);
-
-create table if not exists project_member
-(
-    id         bigserial,
-    member_id  bigint references members,
-    project_id bigint references projects,
-    constraint project_member_pkey
-        primary key (member_id, project_id)
+    id               bigserial not null
+        constraint projects_pkey
+            primary key,
+    end_date         timestamp,
+    name             varchar(255),
+    project_number   varchar(255),
+    start_date       timestamp,
+    university_id    bigint
+        constraint projects_university_id_fkey
+            references university,
+    estimated_budget bigint,
+    is_deleted       boolean default false,
+    created_at       timestamp,
+    updated_at       timestamp
 );
 
 create table if not exists timesheets
 (
-    id          bigserial PRIMARY KEY ,
+    id          bigserial PRIMARY KEY,
     from_period timestamp,
     to_period   timestamp,
     member_id   bigint references members,
     project_id  bigint references projects
 );
+
+
+create table timesheets
+(
+    id          bigserial not null
+        constraint timesheets_pkey
+            primary key,
+    member_id   bigint
+        constraint fk_members
+            references members,
+    position_id bigint
+        constraint fk_project_position
+            references project_position (position_id),
+    project_id  bigint
+        constraint fk_projects
+            references projects,
+    is_deleted  boolean default false,
+    created_at  timestamp,
+    updated_at  timestamp
+);
+
 
 create table if not exists items
 (
@@ -77,32 +98,89 @@ create table if not exists users
 );
 
 -- user inserts
-INSERT INTO users ( first_name, last_name, username, password, age)
-VALUES ('Alex', 'Knr', 'alex123', '$2a$04$4vwa/ugGbBVDvbWaKUVZBuJbjyQyj6tqntjSmG8q.hi97.xSdhj/2',33);
-INSERT INTO users ( first_name, last_name, username, password, age)
-VALUES ('Tom', 'Asr', 'tom234', '$2a$04$QED4arFwM1AtQWkR3JkQx.hXxeAk/G45NiRd3Q4ElgZdzGYCYKZOW', 23);
-INSERT INTO users (first_name, last_name, username, password, age)
-VALUES ('Adam', 'Psr', 'adam', '$2a$04$WeT1SvJaGjmvQj34QG8VgO9qdXecKOYKEDZtCPeeIBSTxxEhazNla', 45);
+INSERT INTO users (first_name, last_name, username, password)
+VALUES ('Hristina', 'Hadjieva', 'Hristina Hadjieva', '$2a$04$4vwa/ugGbBVDvbWaKUVZBuJbjyQyj6tqntjSmG8q.hi97.xSdhj/2');
 
--- university inserts
-INSERT INTO university (id, dean, name) VALUES (1, 'Иван Чорбев', 'Факултет за информатички науки и компјутерско инженерство - ФИНКИ');
 
--- positions inserts
-INSERT INTO positions (id, description, name, salary) VALUES (1, 'MANAGER', 'MANAGER', 70);
-INSERT INTO positions (id, description, name, salary) VALUES (2, 'TEACHER', 'TEACHER', 70);
-INSERT INTO positions (id, description, name, salary) VALUES (3, 'TRAINER', 'TRAINER', 70);
-INSERT INTO positions (id, description, name, salary) VALUES (4, 'RESEARCHER', 'RESEARCHER', 70);
-INSERT INTO positions (id, description, name, salary) VALUES (5, 'TECHNICIAN', 'TECHNICIAN', 70);
-INSERT INTO positions (id, description, name, salary) VALUES (6, 'ADMINISTRATIVE', 'ADMINISTRATIVE', 70);
+INSERT INTO positions (description, name)
+VALUES ('MANAGER', 'MANAGER');
+INSERT INTO positions (description, name)
+VALUES ('TEACHER', 'TEACHER');
+INSERT INTO positions (description, name)
+VALUES ('TRAINER', 'TRAINER');
+INSERT INTO positions (description, name)
+VALUES ('RESEARCHER', 'RESEARCHER');
+INSERT INTO positions (description, name)
+VALUES ('TECHNICIAN', 'TECHNICIAN');
+INSERT INTO positions (description, name)
+VALUES ('ADMINISTRATIVE', 'ADMINISTRATIVE');
 
 create table project_position
 (
-    id bigserial not null,
-    position_id bigint not null,
-    project_id  bigint not null,
-    salary bigint,
+    id          bigserial not null,
+    position_id bigint    not null,
+    project_id  bigint    not null,
+    salary      bigint,
     FOREIGN KEY (position_id) REFERENCES positions (id),
     FOREIGN KEY (project_id) REFERENCES projects (id),
     constraint project_position_pkey
         primary key (position_id, project_id)
 );
+
+
+create table project_position
+(
+    position_id bigint  not null
+        constraint uk_constraint
+            unique
+        constraint fk_positions
+            references positions,
+    project_id  bigint  not null
+        constraint fk_projects
+            references projects,
+    salary      integer not null,
+    constraint project_position_pkey
+        primary key (position_id, project_id)
+);
+
+create table holidays
+(
+    id   bigserial not null,
+    date timestamp,
+    name text
+);
+
+
+
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-01-01T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-01-07T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-01-06T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-01-19T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-04-26T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-04-29T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-05-01T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-05-24T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-06-04T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-06-14T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-07-02T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-07-28T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-09-08T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-10-11T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-11-23T18:30:00.000Z', null);
+INSERT INTO holidays (id, date, name)
+VALUES (DEFAULT, '2019-12-08T18:30:00.000Z', null);

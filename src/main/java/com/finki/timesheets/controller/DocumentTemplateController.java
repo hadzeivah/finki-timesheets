@@ -52,14 +52,17 @@ public class DocumentTemplateController {
                 case "invoice":
                     documentName = String.format("%s_%s_%s.docx", filename, project, today);
                     document = templateService.invoiceTemplate(filename, project);
+                    break;
                 case "solution":
-                    documentName = String.format("%s_%s_%s.docx", filename, project, today);
+                    documentName = String.format("%s_%s_%s.docx", filename, project.getName(), today);
                     document = templateService.solutionContractTemplate(filename, project);
+                    break;
                 case "requirement":
-                    documentName = String.format("%s_%s_%s.docx", filename, project, today);
+                    documentName = String.format("%s_%s_%s.docx", filename, project.getName(), today);
                     document = templateService.requirementContractTemplate(filename, project);
+                    break;
                 case "coverLetter":
-                    documentName = String.format("%s_%s_%s.docx", filename, project, today);
+                    documentName = String.format("%s_%s_%s.docx", filename, project.getName(), today);
                     document = templateService.coverLetterTemplate(filename, project);
             }
 

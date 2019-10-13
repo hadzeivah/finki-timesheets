@@ -4,6 +4,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {ProjectTotalSalary} from "../model/ProjectTotalSalary";
 import {ReportService} from "../services/report.service";
 import {DownloadService} from "../services/download.service";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-reports',
@@ -28,6 +29,7 @@ export class ReportsComponent implements OnInit {
   expandedColumnsToDisplay = ['person', 'memberName', 'total', 'salary', 'position'];
   expandedElement: ProjectTotalSalary;
   projectTotalSalaryList: ProjectTotalSalary[];
+  noData = this.dataSource.connect().pipe(map(data => data.length === 0));
 
   constructor(private reportService: ReportService,
               private downloadService: DownloadService) {

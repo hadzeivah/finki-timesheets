@@ -52,7 +52,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public ByteArrayInputStream exportReportToExcel(List<Project> projects) {
 
-        String[] columns = {"Проект", "Учесник", "Вкупно", "Цена", "Позиција", "Буџет", "Разлика"};
+        String[] columns = {"Project", "Member", "Total", "Salary", "Position", "Budget", "Difference"};
 
         List<ProjectTotalSalary> projectTotalSalaries = this.calculateTotalSalaryByProject(projects);
 

@@ -98,4 +98,7 @@
   </tr>
   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
 </table>
+<div class="no-records" *ngIf="noData | async">
+  No records found
+</div>
 <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>

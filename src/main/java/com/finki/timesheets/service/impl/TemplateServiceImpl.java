@@ -48,10 +48,13 @@ public class TemplateServiceImpl implements TemplateService {
             switch (filename) {
                 case "invoice":
                     documents.put(filename + ".docx", invoiceTemplate(filename, project));
+                    break;
                 case "solution":
                     documents.put(filename + ".docx", solutionContractTemplate(filename, project));
+                    break;
                 case "requirement":
                     documents.put(filename + ".docx", requirementContractTemplate(filename, project));
+                    break;
                 case "coverLetter":
                     documents.put(filename + ".docx", coverLetterTemplate(filename, project));
             }
@@ -165,7 +168,7 @@ public class TemplateServiceImpl implements TemplateService {
         XWPFTableRow header = table.getRow(0);
         header.getCell(0).setText("Бр.");
         header.addNewTableCell().setText("Име и презиме");
-        header.addNewTableCell().setText("Матичен број\n" + "Трансакциска сметка\n");
+        header.addNewTableCell().setText("Матичен број \n Трансакциска сметка");
         header.addNewTableCell().setText("Вид на активност");
         header.addNewTableCell().setText("Бр. час.");
         header.addNewTableCell().setText("€ \n" + "час\n");
@@ -178,7 +181,9 @@ public class TemplateServiceImpl implements TemplateService {
             Optional<Item> item = t.getItems().stream().findFirst();
             Long totalHoursSpent = timesheetService.calculateTotalHoursSpentByTimesheet(t);
             double totalEuros = totalHoursSpent / 24.0 * t.getPositionSalary().getSalary();
+            totalEuros = Math.round(totalEuros * 10) / 10.0;
             double totalMKD = totalEuros * Constants.EUR;
+            totalMKD = Math.round(totalMKD * 10) / 10.0;
 
             curRow.getCell(0).setText(String.valueOf(currRow));
             curRow.getCell(1).setText(t.getMember().getFullName());
@@ -256,6 +261,7 @@ public class TemplateServiceImpl implements TemplateService {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             doc.write(out);
+            doc.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

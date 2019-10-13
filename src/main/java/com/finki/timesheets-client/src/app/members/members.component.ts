@@ -6,6 +6,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MemberProjectsDto} from "../model/MemberProjectsDto";
 import {TimesheetService} from "../services/timesheet.service";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'members-list',
@@ -17,6 +18,7 @@ export class MembersComponent implements OnInit {
   dataSource = new MatTableDataSource<MemberProjectsDto>();
   displayedColumns: string[] = ['fullName', 'embg', 'transactionAccount', 'positionType', 'projects', 'actions'];
   isLoading: Boolean = true;
+  noData = this.dataSource.connect().pipe(map(data => data.length === 0));
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 

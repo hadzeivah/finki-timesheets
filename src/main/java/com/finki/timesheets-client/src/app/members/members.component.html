@@ -69,7 +69,9 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let member; columns: displayedColumns;"></tr>
     </table>
-
+    <div class="no-records" *ngIf="noData | async">
+      No records found
+    </div>
     <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
     <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
 

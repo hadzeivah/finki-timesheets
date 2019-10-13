@@ -10,6 +10,7 @@ import {AssignMemberComponent} from "../assign-member/assign-member.component";
 import {ProjectMemberDto} from "../../model/ProjectMemberDto";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MemberService} from "../../services/member.service";
+import {map} from "rxjs/operators";
 
 
 @Component({
@@ -24,6 +25,7 @@ export class ProjectTableComponent implements OnInit {
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['projectName', 'projectNumber', 'university', 'startDate', 'endDate', 'actions'];
   isLoading: Boolean = true;
+  noData = this.dataSource.connect().pipe(map(data => data.length === 0));
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -68,7 +70,7 @@ export class ProjectTableComponent implements OnInit {
       if (projectPosition) {
 
         this.projectService.addProject(projectPosition).subscribe(() => {
-          this.dataSource.data.push(projectPosition);
+          this.loadProjects();
           }
         );
       }

@@ -19,15 +19,16 @@ export class NavComponent {
 
   routes: ROUTE[] = [
     {
-      icon: 'folder',
-      route: 'projects',
-      title: 'Projects',
-    },
-    {
       icon: 'folder_shared',
       route: 'members',
       title: 'Members',
     },
+    {
+      icon: 'folder',
+      route: 'projects',
+      title: 'Projects',
+    },
+
     {
       icon: 'table_chart',
       route: 'timesheets',
