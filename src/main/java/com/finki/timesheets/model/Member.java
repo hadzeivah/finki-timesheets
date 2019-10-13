@@ -1,14 +1,13 @@
 package com.finki.timesheets.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "members")
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,7 +17,7 @@ public class Member {
     @Column
     private String lastName;
 
-    @Column
+    @Column(unique = true)
     private String embg;
 
     @Column
@@ -29,8 +28,7 @@ public class Member {
     private Set<Timesheet> timesheets;
 
     @Column
-    @ColumnDefault("false")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
 
     public Member() {

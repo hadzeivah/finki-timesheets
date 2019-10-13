@@ -1,14 +1,13 @@
 package com.finki.timesheets.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "timesheets")
-public class Timesheet {
+public class Timesheet extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +33,7 @@ public class Timesheet {
 
 
     @Column
-    @ColumnDefault("false")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     public Timesheet() {
     }

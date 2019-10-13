@@ -24,7 +24,7 @@ export class ReportsComponent implements OnInit {
   dataSource = new MatTableDataSource();
   expandedDataSource = new MatTableDataSource();
   isLoading: Boolean = true;
-  columnsToDisplay = ['chevron', 'projectName', 'total', 'estimatedBudget', 'difference'];
+  columnsToDisplay = ['chevron', 'projectName', 'total', 'budget', 'difference'];
   expandedColumnsToDisplay = ['person', 'memberName', 'total', 'salary', 'position'];
   expandedElement: ProjectTotalSalary;
   projectTotalSalaryList: ProjectTotalSalary[];

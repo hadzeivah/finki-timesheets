@@ -19,21 +19,6 @@ export class NavComponent {
 
   routes: ROUTE[] = [
     {
-      icon: 'file_copy',
-      route: 'documents',
-      title: 'Documents',
-    },
-    {
-      icon: 'insert_chart',
-      route: 'reports',
-      title: 'Reports',
-    },
-    {
-      icon: 'table_chart',
-      route: 'timesheets',
-      title: 'Timesheets',
-    },
-    {
       icon: 'folder',
       route: 'projects',
       title: 'Projects',
@@ -42,6 +27,21 @@ export class NavComponent {
       icon: 'folder_shared',
       route: 'members',
       title: 'Members',
+    },
+    {
+      icon: 'table_chart',
+      route: 'timesheets',
+      title: 'Timesheets',
+    },
+    {
+      icon: 'file_copy',
+      route: 'documents',
+      title: 'Documents',
+    },
+    {
+      icon: 'insert_chart',
+      route: 'reports',
+      title: 'Reports',
     }
   ];
 

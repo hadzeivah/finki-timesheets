@@ -18,7 +18,7 @@ table {
 }
 
 ::ng-deep.special-date {
-  background-color: dodgerblue;
+  background-color: #4286f4;
   border-radius: 50%;
 }
 

@@ -1,15 +1,13 @@
 package com.finki.timesheets.model;
 
 
-import org.hibernate.annotations.ColumnDefault;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "projects")
-public class Project {
+public class Project extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,8 +34,7 @@ public class Project {
     private Set<Timesheet> timesheets;
 
     @Column
-    @ColumnDefault("false")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     public Project() {
     }

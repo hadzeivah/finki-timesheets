@@ -23,7 +23,6 @@ export class AddMemberComponent implements OnInit {
     private fb: FormBuilder) {
 
     this.buildForm();
-    console.log(data);
 
     if (data && data['editedMember']) {
       this.editedMember = data['editedMember'].member;

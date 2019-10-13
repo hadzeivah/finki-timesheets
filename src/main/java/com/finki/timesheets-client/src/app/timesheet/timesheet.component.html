@@ -52,8 +52,9 @@
             <mat-label>Intellectual output</mat-label>
             <input matInput placeholder="Intellectual output" formControlName="intellectualOutput">
           </mat-form-field>
-
-          <button [disabled]="!form.valid" mat-button color="primary">Insert</button>
+          <button mat-icon-button [disabled]="!form.valid" mat-button color="primary">
+            <mat-icon>add</mat-icon>
+          </button>
         </div>
       </form>
       <div class="container">
@@ -154,9 +155,6 @@
               <!-- actions -->
               <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>
-                  <button mat-icon-button color="primary" (click)="addNew()">
-                    <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
-                  </button>
                 </th>
                 <td mat-cell *matCellDef="let element; let i=index;">
 

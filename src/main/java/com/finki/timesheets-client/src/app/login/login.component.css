@@ -4,15 +4,20 @@
   width: 400px;
 }
 
-.login-container {
-  display: flex;
-  justify-content: center;
+.mat-card-title {
   align-items: center;
-
+  justify-content: center;
 }
 
+.login-image {
+  background-image: url(../../assets/finki_login_logo.png);
+  background-size: cover;
+}
 body {
-  background: #373B44; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #4286f4, #3418f9); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #4286f4, #3418f9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: rgba(48, 49, 129, 1); /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, rgba(66, 134, 244, 1), rgba(48, 49, 129, 1)); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, rgba(66, 134, 244, 1), rgba(48, 49, 129, 1)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

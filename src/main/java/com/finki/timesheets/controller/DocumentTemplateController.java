@@ -44,7 +44,7 @@ public class DocumentTemplateController {
         String today = StringUtils.formatDateToString_DDMMYYYY(LocalDateTime.now());
 
         if (filenamesList.size() > 1) {
-            documentName = String.format("%s_%s_%s.zip", "documents", project.getName(), today);
+            documentName = String.format("%s_%s_%s.zip", "Documents", project.getName(), today);
             document = templateService.downloadAllTemplates(filenamesList, project);
         } else {
             String filename = filenamesList.get(0);

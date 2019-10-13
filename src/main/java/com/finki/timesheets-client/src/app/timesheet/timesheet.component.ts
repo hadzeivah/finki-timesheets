@@ -187,9 +187,6 @@ export class TimesheetComponent implements OnInit {
     );
   }
 
-  addNew() {
-  }
-
   confirmEditCreate(element, index): void {
     element.editing = false;
     const updatedItem = {
