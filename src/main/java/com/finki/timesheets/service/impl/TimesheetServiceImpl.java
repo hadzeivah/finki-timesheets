@@ -6,6 +6,7 @@ import com.finki.timesheets.service.ItemService;
 import com.finki.timesheets.service.TimesheetService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,10 +63,9 @@ public class TimesheetServiceImpl implements TimesheetService {
 
         if (timesheet.getItems().isEmpty()) {
             timesheetRepository.delete(timesheet);
+            return new ApiResponse<>(HttpStatus.OK.value(), "Timesheet successfully deleted", null);
         } else
-            timesheet.setDeleted(true);
+            return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "Action is not successful. Remove items for hard delete", null);
 
-
-        return null;
     }
 }

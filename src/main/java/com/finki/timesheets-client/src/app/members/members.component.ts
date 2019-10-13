@@ -7,6 +7,8 @@ import {MatSort} from "@angular/material/sort";
 import {MemberProjectsDto} from "../model/MemberProjectsDto";
 import {TimesheetService} from "../services/timesheet.service";
 import {map} from "rxjs/operators";
+import {MatSnackBar} from "@angular/material/snack-bar";
+
 
 @Component({
   selector: 'members-list',
@@ -24,7 +26,8 @@ export class MembersComponent implements OnInit {
 
   constructor(private membersService: MemberService,
               private timesheetService: TimesheetService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private _snackBar: MatSnackBar) {
     this.loadMembers();
   }
 
@@ -96,8 +99,16 @@ export class MembersComponent implements OnInit {
 
   deleteTimesheet(memberId: number, projectId: number, member: MemberProjectsDto) {
     this.timesheetService.deleteTimesheet(memberId, projectId).subscribe(result => {
-      member.projectPosition = member.projectPosition.filter(p => p.projectId !== projectId);
-      member.projectPosition = [].concat(member.projectPosition);
+      console.log(result);
+      if (result.status == 200) {
+        member.projectPosition = member.projectPosition.filter(p => p.projectId !== projectId);
+        member.projectPosition = [].concat(member.projectPosition);
+      } else {
+        this._snackBar.open(result.message, 'Undo', {
+          duration: 2000
+        });
+      }
+
 
     });
   }

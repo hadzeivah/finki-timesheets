@@ -5,7 +5,6 @@ import com.finki.timesheets.model.Timesheet;
 import com.finki.timesheets.service.TimesheetService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,8 +33,8 @@ public class TimesheetController {
 
     @DeleteMapping("/member/{memberId}/project/{projectId}")
     public ApiResponse deleteTimesheet(@PathVariable Long memberId, @PathVariable Long projectId) throws NotFoundException {
-        this.timesheetService.delete(memberId, projectId);
-        return new ApiResponse<>(HttpStatus.OK.value(), "Timesheet deleted successfully", null);
+
+        return this.timesheetService.delete(memberId, projectId);
 
     }
 }
