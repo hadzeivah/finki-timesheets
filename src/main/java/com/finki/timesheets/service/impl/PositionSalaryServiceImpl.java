@@ -38,7 +38,7 @@ public class PositionSalaryServiceImpl implements PositionSalaryService {
 
     @Override
     public ProjectPosition findByProjectAndPosition(Project project, Position position) {
-        return this.positionSalaryRepository.findByProjectAndAndPosition(project, position);
+        return this.positionSalaryRepository.findByProjectAndPosition(project, position);
     }
 
     @Override

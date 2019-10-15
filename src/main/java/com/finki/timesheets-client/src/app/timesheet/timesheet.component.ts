@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {TimesheetService} from '../services/timesheet.service';
 import {Timesheet} from '../model/Timesheet';
 import {Item} from '../model/Item';
+import {Position} from '../model/Position';
 import {ItemService} from '../services/item.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatCalendarCellCssClasses, MatTableDataSource} from "@angular/material";
@@ -33,6 +34,7 @@ export class TimesheetComponent implements OnInit {
   _toDate: Date;
   _member: Member;
   noData = this.dataSource.connect().pipe(map(data => data.length === 0));
+  memberPosition: Position;
 
 
   @Input()
@@ -114,6 +116,9 @@ export class TimesheetComponent implements OnInit {
       this.datesToHighlight = holidays;
       }
     );
+    this.positionsService.findPositionById(this.timesheet.projectPosition.id).subscribe(position =>
+      this.memberPosition = position
+    )
   }
 
   buildInsertForm() {
@@ -179,7 +184,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   getTotalTimeSpentInDays() {
-    return Math.round((this.getTotalTimeSpent() / 24) * 10) / 10;
+    return Math.round((this.getTotalTimeSpent() / 8) * 10) / 10;
   }
 
   deleteItem(i: any, id: any) {
@@ -259,7 +264,7 @@ export class TimesheetComponent implements OnInit {
 
   public getTotalCost(): number {
     let member = this.timesheet != null ? this.timesheet.member : null;
-    return member != null ? this.timesheet.positionSalary.salary * this.getTotalTimeSpent() / 24 : 0;
+    return member != null ? this.timesheet.projectPosition.salary * this.getTotalTimeSpent() / 8 : 0;
   }
 }
 

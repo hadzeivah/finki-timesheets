@@ -30,6 +30,10 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "university_id", referencedColumnName = "id")
     private University university;
 
+    @ManyToOne
+    @JoinColumn(name = "project_manager_id", referencedColumnName = "id")
+    private User projectManager;
+
     @OneToMany(mappedBy = "project")
     private Set<Timesheet> timesheets;
 
@@ -110,4 +114,13 @@ public class Project extends BaseEntity {
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
     }
+
+    public User getProjectManager() {
+        return projectManager;
+    }
+
+    public void setProjectManager(User projectManager) {
+        this.projectManager = projectManager;
+    }
+
 }

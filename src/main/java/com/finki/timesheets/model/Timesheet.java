@@ -25,11 +25,10 @@ public class Timesheet extends BaseEntity {
     @OneToMany(mappedBy = "timesheet")
     private Set<Item> items;
 
+
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "position_id", referencedColumnName = "position_id")
-    })
-    private ProjectPosition positionSalary;
+    @JoinColumn(name = "project_position", referencedColumnName = "id")
+    private ProjectPosition projectPosition;
 
 
     @Column
@@ -68,14 +67,6 @@ public class Timesheet extends BaseEntity {
         this.member = member;
     }
 
-    public ProjectPosition getPositionSalary() {
-        return positionSalary;
-    }
-
-    public void setPositionSalary(ProjectPosition positionSalary) {
-        this.positionSalary = positionSalary;
-    }
-
     public Set<Item> getItems() {
         return items;
     }
@@ -90,5 +81,13 @@ public class Timesheet extends BaseEntity {
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public ProjectPosition getProjectPosition() {
+        return projectPosition;
+    }
+
+    public void setProjectPosition(ProjectPosition projectPosition) {
+        this.projectPosition = projectPosition;
     }
 }

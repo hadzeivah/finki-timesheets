@@ -6,6 +6,7 @@ import com.finki.timesheets.model.ProjectPosition;
 import com.finki.timesheets.repository.PositionRepository;
 import com.finki.timesheets.repository.PositionSalaryRepository;
 import com.finki.timesheets.service.PositionService;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +39,11 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public Position findPositionByType(String positionType) {
         return this.positionRepository.findPositionByName(positionType);
+    }
+
+    @Override
+    public Position findById(Long id) throws NotFoundException {
+        return this.positionRepository.findById(id).orElseThrow(() -> new NotFoundException("Project not found"));
     }
 }
 

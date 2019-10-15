@@ -1,21 +1,16 @@
 package com.finki.timesheets.controller;
 
 
-import com.finki.timesheets.model.ApiResponse;
-import com.finki.timesheets.model.Position;
-import com.finki.timesheets.model.Project;
-import com.finki.timesheets.model.ProjectPosition;
+import com.finki.timesheets.model.*;
 import com.finki.timesheets.model.dto.ProjectMemberDto;
 import com.finki.timesheets.model.dto.ProjectPositionsDto;
-import com.finki.timesheets.service.PositionSalaryService;
-import com.finki.timesheets.service.PositionService;
-import com.finki.timesheets.service.ProjectService;
-import com.finki.timesheets.service.TimesheetService;
+import com.finki.timesheets.service.*;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -27,14 +22,16 @@ public class ProjectController {
     private final PositionService positionService;
     private final TimesheetService timesheetService;
     private final PositionSalaryService positionSalaryService;
+    private UserService userService;
 
     @Autowired
     public ProjectController(ProjectService projectService, PositionService positionService, TimesheetService timesheetService,
-                             PositionSalaryService positionSalaryService) {
+                             PositionSalaryService positionSalaryService, UserService userService) {
         this.projectService = projectService;
         this.positionService = positionService;
         this.timesheetService = timesheetService;
         this.positionSalaryService = positionSalaryService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -48,9 +45,11 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ApiResponse<Project> saveProject(@RequestBody ProjectPositionsDto projectPosition) throws NotFoundException {
-        Project project = projectService.save(projectPosition.getProject());
-        this.positionSalaryService.saveOrUpdateAll(project, projectPosition.getPositions());
+    public ApiResponse<Project> saveProject(@RequestBody ProjectPositionsDto projectPosition, Principal principal) throws NotFoundException {
+        Project project = projectPosition.getProject();
+        User user = userService.findOne(principal.getName());
+        project.setProjectManager(user);
+        this.positionSalaryService.saveOrUpdateAll(projectService.save(project), projectPosition.getPositions());
         return new ApiResponse<>(HttpStatus.OK.value(), "Project saved successfully.", project);
     }
 

@@ -40,9 +40,9 @@ public class TimesheetServiceImpl implements TimesheetService {
     }
 
     @Override
-    public void save(Project project, Member member, ProjectPosition positionSalary) {
+    public void save(Project project, Member member, ProjectPosition projectPosition) {
         Timesheet newTimesheet = new Timesheet(project, member);
-        newTimesheet.setPositionSalary(positionSalary);
+        newTimesheet.setProjectPosition(projectPosition);
         timesheetRepository.save(newTimesheet);
     }
 

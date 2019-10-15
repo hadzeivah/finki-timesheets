@@ -28,9 +28,9 @@ public class ReportServiceImpl implements ReportService {
             Set<Timesheet> timesheets = project.getTimesheets();
             List<MemberTotalSalary> memberTotalSalaries = new ArrayList<>();
             timesheets.forEach(timesheet -> {
-                double memberSalary = timesheet.getPositionSalary().getSalary();
-                double total = (timesheet.getItems().stream().mapToLong(Item::getHours).sum() / 24.0) * memberSalary;
-                memberTotalSalaries.add(new MemberTotalSalary(timesheet.getMember(), timesheet.getPositionSalary().getPosition().getName(), memberSalary, total));
+                double memberSalary = timesheet.getProjectPosition().getSalary();
+                double total = (timesheet.getItems().stream().mapToLong(Item::getHours).sum() / 8.0) * memberSalary;
+                memberTotalSalaries.add(new MemberTotalSalary(timesheet.getMember(), timesheet.getProjectPosition().getPosition().getName(), memberSalary, total));
             });
             projectTotalSalaries.add(new ProjectTotalSalary(project, memberTotalSalaries.stream().mapToDouble(MemberTotalSalary::getTotalSalary).sum(), memberTotalSalaries));
         });
@@ -43,11 +43,12 @@ public class ReportServiceImpl implements ReportService {
         Set<Timesheet> timesheets = project.getTimesheets();
         double totalSalary = 0L;
         for (Timesheet timesheet : timesheets) {
-            double totalProjectMember = (timesheet.getItems().stream().mapToLong(Item::getHours).sum() / 24.0) * timesheet.getPositionSalary().getSalary();
+            double totalProjectMember = (timesheet.getItems().stream().mapToLong(Item::getHours).sum() / 8.0) * timesheet.getProjectPosition().getSalary();
             totalSalary += totalProjectMember;
         }
         return totalSalary;
     }
+
 
     @Override
     public ByteArrayInputStream exportReportToExcel(List<Project> projects) {

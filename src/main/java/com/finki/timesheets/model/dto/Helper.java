@@ -8,7 +8,6 @@ public class Helper {
 
     public static ProjectPosition positionFromDTO(PositionSalaryDto positionSalaryDto, Position position, Project project) {
         return new ProjectPosition(
-                new ProjectPositionKey(position.getId(), project.getId()),
                 project,
                 position,
                 positionSalaryDto.getSalary());

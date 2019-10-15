@@ -17,6 +17,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class MembersComponent implements OnInit {
 
+  members: MemberProjectsDto[];
   dataSource = new MatTableDataSource<MemberProjectsDto>();
   displayedColumns: string[] = ['fullName', 'embg', 'transactionAccount', 'positionType', 'projects', 'actions'];
   isLoading: Boolean = true;
@@ -49,6 +50,7 @@ export class MembersComponent implements OnInit {
   loadMembers() {
     this.membersService.findMembersDetails().subscribe(data => {
       this.dataSource.data = data;
+      this.members = data;
       this.isLoading = false;
     });
   }
@@ -71,7 +73,7 @@ export class MembersComponent implements OnInit {
       if (member) {
         this.membersService.addMember(member)
           .subscribe(() => {
-            this.loadMembers();
+            this.loadMembers()
           });
       }
     });
@@ -99,7 +101,6 @@ export class MembersComponent implements OnInit {
 
   deleteTimesheet(memberId: number, projectId: number, member: MemberProjectsDto) {
     this.timesheetService.deleteTimesheet(memberId, projectId).subscribe(result => {
-      console.log(result);
       if (result.status == 200) {
         member.projectPosition = member.projectPosition.filter(p => p.projectId !== projectId);
         member.projectPosition = [].concat(member.projectPosition);

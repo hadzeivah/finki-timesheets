@@ -4,6 +4,7 @@ import com.finki.timesheets.model.Position;
 import com.finki.timesheets.model.ProjectPosition;
 import com.finki.timesheets.service.PositionSalaryService;
 import com.finki.timesheets.service.PositionService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,12 @@ public class PositionController {
     @GetMapping()
     public List<Position> getAllPositions() {
         return this.positionService.findAll();
+    }
+
+
+    @GetMapping("/{id}")
+    public Position getPosition(@PathVariable Long id) throws NotFoundException {
+        return this.positionService.findById(id);
     }
 
 }

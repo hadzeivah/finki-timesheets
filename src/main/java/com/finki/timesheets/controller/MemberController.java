@@ -79,7 +79,7 @@ public class MemberController {
             List<ProjectPosition> projectPositions = new ArrayList<>();
             timesheets.forEach(timesheet ->
             {
-                projectPositions.add(new ProjectPosition(timesheet.getProject().getId(), timesheet.getProject().getName(), timesheet.getPositionSalary().getPosition().getName()));
+                projectPositions.add(new ProjectPosition(timesheet.getProject().getId(), timesheet.getProject().getName(), timesheet.getProjectPosition().getPosition().getName()));
 
             });
             MemberProjectsDto memberProjectsDto = new MemberProjectsDto(member, projectPositions);

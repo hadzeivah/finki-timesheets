@@ -23,7 +23,7 @@ export class ProjectTableComponent implements OnInit {
   selectedProject: Project;
   members: Member[];
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['projectName', 'projectNumber', 'university', 'startDate', 'endDate', 'actions'];
+  displayedColumns: string[] = ['projectName', 'projectNumber', 'university', 'projectManager', 'startDate', 'endDate', 'actions'];
   isLoading: Boolean = true;
   noData = this.dataSource.connect().pipe(map(data => data.length === 0));
 
@@ -91,7 +91,7 @@ export class ProjectTableComponent implements OnInit {
         this.projectService.updateProject(projectPosition).subscribe(() => {
 
           const foundIndex = this.projects.findIndex(x => x.id === editedProject.id);
-          this.projects.splice(foundIndex, 1);
+          this.projects[foundIndex] = projectPosition;
           this.dataSource.data = this.projects;
 
           }
@@ -130,6 +130,7 @@ export class ProjectTableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(memberPosition => {
       if (memberPosition) {
+        this.members = this.members.filter(member => member.id != memberPosition.id);
         this.projectService.assignMemberToProject(new ProjectMemberDto(project, memberPosition.member, memberPosition.positionType))
           .subscribe(result => {
             this._snackBar.open('Member successfully assigned', 'Undo', {

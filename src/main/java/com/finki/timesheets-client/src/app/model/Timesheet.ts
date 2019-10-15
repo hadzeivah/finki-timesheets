@@ -8,6 +8,6 @@ export class Timesheet {
   project: Project;
   member: Member;
   items: Item[];
-  positionSalary: any
+  projectPosition: any
 }
 

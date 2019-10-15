@@ -1,5 +1,6 @@
 import {University} from "./University";
 import {Timesheet} from "./Timesheet";
+import {User} from "./User";
 
 export class Project {
   id: number;
@@ -9,6 +10,7 @@ export class Project {
   startDate: string;
   endDate: string;
   university: University;
+  projectManager: User;
   timesheets: Timesheet[];
 }
 

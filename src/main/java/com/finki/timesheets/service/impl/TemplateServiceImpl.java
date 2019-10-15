@@ -181,7 +181,7 @@ public class TemplateServiceImpl implements TemplateService {
             currRow++;
             Optional<Item> item = t.getItems().stream().findFirst();
             Long totalHoursSpent = timesheetService.calculateTotalHoursSpentByTimesheet(t);
-            double totalEuros = totalHoursSpent / 24.0 * t.getPositionSalary().getSalary();
+            double totalEuros = totalHoursSpent / 8.0 * t.getProjectPosition().getSalary();
             totalEuros = Math.round(totalEuros * 10) / 10.0;
             double totalMKD = totalEuros * Constants.EUR;
             totalMKD = Math.round(totalMKD * 10) / 10.0;
@@ -191,7 +191,7 @@ public class TemplateServiceImpl implements TemplateService {
             curRow.getCell(2).setText(t.getMember().getEmbg() + " " + t.getMember().getTransactionAccount());
             curRow.getCell(3).setText(item.isPresent() ? item.get().getTaskDescription() : "");
             curRow.getCell(4).setText(totalHoursSpent.toString());
-            curRow.getCell(5).setText(String.valueOf(t.getPositionSalary().getSalary()));
+            curRow.getCell(5).setText(String.valueOf(t.getProjectPosition().getSalary()));
             curRow.getCell(6).setText(String.valueOf(totalEuros));
             curRow.getCell(7).setText(String.valueOf(totalMKD));
         }

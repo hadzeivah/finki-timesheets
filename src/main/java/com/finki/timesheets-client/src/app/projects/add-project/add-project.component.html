@@ -27,7 +27,7 @@
         <mat-form-field>
           <mat-select placeholder="Add university" formControlName="university"
                       [compareWith]="compareUniversityObjects">
-            <mat-option [value]="university" *ngFor="let university of universities">{{university.name}}</mat-option>
+            <mat-option [value]="university" *ngFor="let university of universities">{{university?.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 

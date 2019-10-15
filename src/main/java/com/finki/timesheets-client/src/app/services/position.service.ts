@@ -17,4 +17,8 @@ export class PositionService {
   findPositions(): Observable<Position[]> {
     return this.http.get<Position[]>(`/api/positions`);
   }
+
+  findPositionById(id): Observable<Position> {
+    return this.http.get<Position>(`/api/positions/${id}`);
+  }
 }
