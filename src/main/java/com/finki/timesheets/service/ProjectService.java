@@ -1,12 +1,13 @@
 package com.finki.timesheets.service;
 
 import com.finki.timesheets.model.Project;
+import com.finki.timesheets.model.User;
 import javassist.NotFoundException;
 
 import java.util.List;
 
 public interface ProjectService {
-    List<Project> findAll();
+    List<Project> findAllByProjectManagerIsDeletedFalse(User user);
 
     Project findById(Long id) throws NotFoundException;
 

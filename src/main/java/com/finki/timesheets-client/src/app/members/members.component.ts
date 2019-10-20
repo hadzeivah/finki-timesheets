@@ -8,6 +8,7 @@ import {MemberProjectsDto} from "../model/MemberProjectsDto";
 import {TimesheetService} from "../services/timesheet.service";
 import {map} from "rxjs/operators";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 
 
 @Component({
@@ -56,10 +57,22 @@ export class MembersComponent implements OnInit {
   }
 
   deleteMember(memberProjectsDto: MemberProjectsDto) {
-    this.membersService.deleteMember(memberProjectsDto.member.id)
-      .subscribe(data => {
-        this.dataSource.data = this.dataSource.data.filter(p => p.member.id !== memberProjectsDto.member.id);
-      });
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      disableClose: false
+    });
+
+    dialogRef.componentInstance.confirmMessage = "Are you sure you want to delete?";
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // do confirmation actions
+        this.membersService.deleteMember(memberProjectsDto.member.id)
+          .subscribe(data => {
+            this.dataSource.data = this.dataSource.data.filter(p => p.member.id !== memberProjectsDto.member.id);
+          });
+      }
+    });
   }
 
   addMemberDialog() {

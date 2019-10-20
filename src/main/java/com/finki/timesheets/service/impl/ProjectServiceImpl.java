@@ -1,6 +1,7 @@
 package com.finki.timesheets.service.impl;
 
 import com.finki.timesheets.model.Project;
+import com.finki.timesheets.model.User;
 import com.finki.timesheets.repository.ProjectRepository;
 import com.finki.timesheets.service.ProjectService;
 import javassist.NotFoundException;
@@ -19,8 +20,8 @@ public class ProjectServiceImpl implements ProjectService {
 
 
     @Override
-    public List<Project> findAll() {
-        return projectRepository.findAllByIsDeletedFalse();
+    public List<Project> findAllByProjectManagerIsDeletedFalse(User user) {
+        return projectRepository.findAllByProjectManagerAndIsDeletedFalse(user);
     }
 
     @Override

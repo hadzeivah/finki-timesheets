@@ -8,9 +8,10 @@ import com.finki.timesheets.service.*;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -35,8 +36,9 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ApiResponse<List<Project>> getProjects() {
-        return new ApiResponse<>(HttpStatus.OK.value(), "Project list fetched successfully.", projectService.findAll());
+    public ApiResponse<List<Project>> getProjectsForLoggedUser(@AuthenticationPrincipal UserDetails currentUser) {
+        User user = (User) this.userService.findOne(currentUser.getUsername());
+        return new ApiResponse<>(HttpStatus.OK.value(), "Project list fetched successfully.", projectService.findAllByProjectManagerIsDeletedFalse(user));
     }
 
     @GetMapping("/{id}")
@@ -45,9 +47,9 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ApiResponse<Project> saveProject(@RequestBody ProjectPositionsDto projectPosition, Principal principal) throws NotFoundException {
+    public ApiResponse<Project> saveProject(@RequestBody ProjectPositionsDto projectPosition, @AuthenticationPrincipal UserDetails currentUser) throws NotFoundException {
         Project project = projectPosition.getProject();
-        User user = userService.findOne(principal.getName());
+        User user = (User) this.userService.findOne(currentUser.getUsername());
         project.setProjectManager(user);
         this.positionSalaryService.saveOrUpdateAll(projectService.save(project), projectPosition.getPositions());
         return new ApiResponse<>(HttpStatus.OK.value(), "Project saved successfully.", project);

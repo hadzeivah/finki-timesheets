@@ -2,15 +2,19 @@ package com.finki.timesheets.controller;
 
 
 import com.finki.timesheets.model.Project;
+import com.finki.timesheets.model.User;
 import com.finki.timesheets.model.dto.ProjectTotalSalary;
 import com.finki.timesheets.service.ProjectService;
 import com.finki.timesheets.service.ReportService;
+import com.finki.timesheets.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
@@ -22,23 +26,28 @@ import java.util.List;
 public class ReportController {
     private final ProjectService projectService;
     private ReportService reportService;
+    private UserService userService;
 
     @Autowired
-    public ReportController(ProjectService projectService, ReportService reportService) {
+    public ReportController(ProjectService projectService, ReportService reportService, UserService userService) {
         this.projectService = projectService;
         this.reportService = reportService;
+        this.userService = userService;
     }
 
     @GetMapping()
-    public List<ProjectTotalSalary> getDetailedReport() {
-        List<Project> projects = projectService.findAll();
+    public List<ProjectTotalSalary> getDetailedReport(@AuthenticationPrincipal UserDetails currentUser) {
+        User user = (User) this.userService.findOne(currentUser.getUsername());
+        List<Project> projects = projectService.findAllByProjectManagerIsDeletedFalse(user);
         return this.reportService.calculateTotalSalaryByProject(projects);
     }
 
     @GetMapping(value = "/exportExcel", produces = "application/vnd.ms-excel")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity getExcelReport() {
-        List<Project> projects = projectService.findAll();
+    public ResponseEntity getExcelReport(@AuthenticationPrincipal UserDetails currentUser) {
+        User user = (User) this.userService.findOne(currentUser.getUsername());
+
+        List<Project> projects = projectService.findAllByProjectManagerIsDeletedFalse(user);
 
         ByteArrayInputStream generatedExcel = this.reportService.exportReportToExcel(projects);
 
