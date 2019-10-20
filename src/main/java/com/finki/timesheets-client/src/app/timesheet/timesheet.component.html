@@ -7,7 +7,7 @@
       <mat-card-subtitle>Project number: {{project?.projectNumber}}</mat-card-subtitle>
       <mat-card-subtitle>Period:{{project?.startDate | date }} - {{project?.endDate | date}}</mat-card-subtitle>
       <mat-card-subtitle>Project member: {{timesheet?.member.fullName}}</mat-card-subtitle>
-      <mat-card-subtitle>Position: {{memberPosition.name}}</mat-card-subtitle>
+      <mat-card-subtitle>Position: {{memberPosition?.name}}</mat-card-subtitle>
 
     </mat-card-header>
 
@@ -128,7 +128,6 @@
                            formControlName="taskDescription">
                   </mat-form-field>
                   <span *ngIf="!element.editing"> {{element.taskDescription}}</span>
-
 
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>

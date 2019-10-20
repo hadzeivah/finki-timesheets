@@ -1,6 +1,7 @@
 import {Project} from "./Project";
 
 export class ProjectPositionsDto {
+  id: number;
   project: Project;
   positions: any;
 

@@ -46,18 +46,27 @@ public class PositionSalaryServiceImpl implements PositionSalaryService {
     public List<ProjectPosition> saveOrUpdateAll(Project project, List<PositionSalaryDto> positions) {
 
         Map<String, Position> positionMap = this.positionRepository.findAll().stream().collect(Collectors.toMap(Position::getName, Function.identity()));
+        Map<String, ProjectPosition> projectPositionMap = this.positionSalaryRepository.findAllByProjectId(project.getId()).stream().collect(Collectors.toMap(projectPosition -> projectPosition.getPosition().getName(), projectPosition -> projectPosition));
 
-        List<ProjectPosition> positionSalaries = new ArrayList<>();
+        List<ProjectPosition> projectPositions = new ArrayList<>();
         positions.forEach(positionSalaryDto -> {
             Position position = positionMap.get(positionSalaryDto.getPositionType());
             if (position == null) {
                 position = this.positionRepository.save(new Position(positionSalaryDto.getPositionType(), positionSalaryDto.getPositionType()));
             }
-            ProjectPosition positionSalary = Helper.positionFromDTO(positionSalaryDto, position, project);
-            positionSalaries.add(positionSalary);
+            // if already exists
+            ProjectPosition projectPosition = projectPositionMap.get(position.getName());
+            if (projectPosition != null) {
+                projectPosition.setSalary(positionSalaryDto.getSalary());
+                projectPositions.add(projectPosition);
+            } else {
+                ProjectPosition positionSalary = Helper.positionFromDTO(positionSalaryDto, position, project);
+                projectPositions.add(positionSalary);
+            }
+
         });
 
-        return this.positionSalaryRepository.saveAll(positionSalaries);
+        return this.positionSalaryRepository.saveAll(projectPositions);
     }
 
 }

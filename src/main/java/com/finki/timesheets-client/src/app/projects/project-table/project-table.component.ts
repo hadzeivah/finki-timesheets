@@ -11,6 +11,7 @@ import {ProjectMemberDto} from "../../model/ProjectMemberDto";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MemberService} from "../../services/member.service";
 import {map} from "rxjs/operators";
+import {ConfirmDialogComponent} from "../../confirm-dialog/confirm-dialog.component";
 
 
 @Component({
@@ -87,12 +88,15 @@ export class ProjectTableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(projectPosition => {
       if (projectPosition) {
-        projectPosition.project.id = editedProject.id;
+        projectPosition.project.id = editedProject != null ? editedProject.id : null;
+        projectPosition.project.projectManager = editedProject.projectManager;
+
         this.projectService.updateProject(projectPosition).subscribe(() => {
 
-          const foundIndex = this.projects.findIndex(x => x.id === editedProject.id);
-          this.projects[foundIndex] = projectPosition;
-          this.dataSource.data = this.projects;
+          // const foundIndex = this.projects.findIndex(x => x.id === editedProject.id);
+          // this.projects[foundIndex] = projectPosition;
+          // this.dataSource.data = this.projects;
+          this.loadProjects();
 
           }
         )
@@ -102,11 +106,22 @@ export class ProjectTableComponent implements OnInit {
 
 
   deleteProject(project: Project): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      disableClose: false
+    });
 
-    this.projectService.deleteProject(project.id)
-      .subscribe(data => {
-        this.dataSource.data = this.dataSource.data.filter(p => p !== project);
-      });
+    dialogRef.componentInstance.confirmMessage = "Are you sure you want to delete?"
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // do confirmation actions
+        this.projectService.deleteProject(project.id)
+          .subscribe(data => {
+            this.dataSource.data = this.dataSource.data.filter(p => p !== project);
+          });
+      }
+    });
+
   }
 
   onSelectedProject(project: Project) {

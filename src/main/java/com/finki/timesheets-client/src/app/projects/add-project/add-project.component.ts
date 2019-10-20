@@ -18,7 +18,7 @@ export class AddProjectComponent {
   universities: University[];
   addProjectForm: FormGroup;
   addPositionsGroup: FormGroup;
-  project: Project;
+  editedProject: Project;
   title: string = "Add projects";
   seedData: Position[];
   projectPosition: ProjectPositionsDto;
@@ -42,7 +42,7 @@ export class AddProjectComponent {
 
     if (data) {
       this.title = "Edit projects";
-      this.project = data;
+      this.editedProject = data;
       this.updateFormFields();
     }
   }
@@ -52,8 +52,8 @@ export class AddProjectComponent {
       positions: this.fb.array([])
     });
 
-    if (this.project) {
-      this.positionService.findSalaryGroupedByPosition(this.project.id)
+    if (this.editedProject) {
+      this.positionService.findSalaryGroupedByPosition(this.editedProject.id)
         .subscribe(positionSalary => {
           this.seedData = Object.keys(positionSalary).map(function (key) {
             return new Position(key, positionSalary[key]);
@@ -116,20 +116,20 @@ export class AddProjectComponent {
   }
 
   save() {
-    this.project = <Project>this.addProjectForm.value;
-    this.projectPosition = new ProjectPositionsDto(this.project, this.positionsFormArray.value);
+    console.log(this.positionsFormArray.value);
+    this.projectPosition = new ProjectPositionsDto(<Project>this.addProjectForm.value, this.positionsFormArray.value);
     this.dialogRef.close(this.projectPosition);
   }
 
   updateFormFields() {
     this.addProjectForm.patchValue(
       {
-        name: this.project.name,
-        projectNumber: this.project.projectNumber,
-        estimatedBudget: this.project.estimatedBudget,
-        university: this.project.university,
-        startDate: this.project.startDate,
-        endDate: this.project.endDate
+        name: this.editedProject.name,
+        projectNumber: this.editedProject.projectNumber,
+        estimatedBudget: this.editedProject.estimatedBudget,
+        university: this.editedProject.university,
+        startDate: this.editedProject.startDate,
+        endDate: this.editedProject.endDate
       })
   }
 

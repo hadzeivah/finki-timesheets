@@ -35,6 +35,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {AssignMemberComponent} from './projects/assign-member/assign-member.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {ConfirmDialogComponent} from "./confirm-dialog/confirm-dialog.component";
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     MembersComponent,
     ReportsComponent,
     ReportsPageComponent,
-    AssignMemberComponent
+    AssignMemberComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -83,7 +85,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},],
   bootstrap: [AppComponent],
-  entryComponents: [AddProjectComponent, AddMemberComponent, AssignMemberComponent]
+  entryComponents: [AddProjectComponent, AddMemberComponent, AssignMemberComponent, ConfirmDialogComponent]
 })
 export class AppModule {
 }
