@@ -20,8 +20,13 @@ public class ProjectServiceImpl implements ProjectService {
 
 
     @Override
-    public List<Project> findAllByProjectManagerIsDeletedFalse(User user) {
-        return projectRepository.findAllByProjectManagerAndIsDeletedFalse(user);
+    public List<Project> findAllByProjectManagerIsDeletedFalseAndIsApprovedTrue(User user) {
+        return projectRepository.findAllByProjectManagerAndIsDeletedFalseAndIsApprovedTrue(user);
+    }
+
+    @Override
+    public List<Project> findAllUnapprovedProjects() {
+        return projectRepository.findAllByIsApprovedFalse();
     }
 
     @Override

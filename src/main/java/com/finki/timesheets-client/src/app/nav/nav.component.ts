@@ -43,6 +43,11 @@ export class NavComponent {
       icon: 'insert_chart',
       route: 'reports',
       title: 'Reports',
+    },
+    {
+      icon: 'how_to_reg',
+      route: 'approval_request',
+      title: 'Approval Request',
     }
   ];
 

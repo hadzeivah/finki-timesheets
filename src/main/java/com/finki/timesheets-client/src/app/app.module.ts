@@ -36,6 +36,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {AssignMemberComponent} from './projects/assign-member/assign-member.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {ConfirmDialogComponent} from "./confirm-dialog/confirm-dialog.component";
+import {ApprovalRequestsComponent} from './approval-requests/approval-requests.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import {ConfirmDialogComponent} from "./confirm-dialog/confirm-dialog.component"
     ReportsComponent,
     ReportsPageComponent,
     AssignMemberComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ApprovalRequestsComponent
   ],
   imports: [
     BrowserModule,

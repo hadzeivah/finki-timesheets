@@ -37,8 +37,13 @@ public class ProjectController {
 
     @GetMapping
     public ApiResponse<List<Project>> getProjectsForLoggedUser(@AuthenticationPrincipal UserDetails currentUser) {
-        User user = (User) this.userService.findOne(currentUser.getUsername());
-        return new ApiResponse<>(HttpStatus.OK.value(), "Project list fetched successfully.", projectService.findAllByProjectManagerIsDeletedFalse(user));
+        User user = this.userService.findOne(currentUser.getUsername());
+        return new ApiResponse<>(HttpStatus.OK.value(), "Project list fetched successfully.", projectService.findAllByProjectManagerIsDeletedFalseAndIsApprovedTrue(user));
+    }
+
+    @GetMapping("/unapproved")
+    public ApiResponse<List<Project>> getUnapprovedProjects() {
+        return new ApiResponse<>(HttpStatus.OK.value(), "Approved projects list fetched successfully.", projectService.findAllUnapprovedProjects());
     }
 
     @GetMapping("/{id}")
@@ -71,6 +76,15 @@ public class ProjectController {
         Project project = projectService.update(projectPosition.getProject());
         this.positionSalaryService.saveOrUpdateAll(project, projectPosition.getPositions());
         return new ApiResponse<>(HttpStatus.OK.value(), "Project updated successfully.", project);
+    }
+
+    @PutMapping("/{id}/approve")
+    public ApiResponse<Project> approveProject(@PathVariable Long id) throws NotFoundException {
+
+        Project project = projectService.findById(id);
+        project.setApproved(true);
+        projectService.save(project);
+        return new ApiResponse<>(HttpStatus.OK.value(), "Project approved", project);
     }
 
     @DeleteMapping("/{id}")

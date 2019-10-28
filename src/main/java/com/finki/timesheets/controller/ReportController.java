@@ -38,7 +38,7 @@ public class ReportController {
     @GetMapping()
     public List<ProjectTotalSalary> getDetailedReport(@AuthenticationPrincipal UserDetails currentUser) {
         User user = (User) this.userService.findOne(currentUser.getUsername());
-        List<Project> projects = projectService.findAllByProjectManagerIsDeletedFalse(user);
+        List<Project> projects = projectService.findAllByProjectManagerIsDeletedFalseAndIsApprovedTrue(user);
         return this.reportService.calculateTotalSalaryByProject(projects);
     }
 
@@ -47,7 +47,7 @@ public class ReportController {
     public ResponseEntity getExcelReport(@AuthenticationPrincipal UserDetails currentUser) {
         User user = (User) this.userService.findOne(currentUser.getUsername());
 
-        List<Project> projects = projectService.findAllByProjectManagerIsDeletedFalse(user);
+        List<Project> projects = projectService.findAllByProjectManagerIsDeletedFalseAndIsApprovedTrue(user);
 
         ByteArrayInputStream generatedExcel = this.reportService.exportReportToExcel(projects);
 

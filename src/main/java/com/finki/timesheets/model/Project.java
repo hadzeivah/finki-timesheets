@@ -40,6 +40,10 @@ public class Project extends BaseEntity {
     @Column
     private Boolean isDeleted = false;
 
+    @Column
+    private Boolean isApproved = false;
+
+
     public Project() {
     }
 
@@ -123,4 +127,11 @@ public class Project extends BaseEntity {
         this.projectManager = projectManager;
     }
 
+    public Boolean getApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(Boolean approved) {
+        isApproved = approved;
+    }
 }

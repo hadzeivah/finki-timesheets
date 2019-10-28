@@ -1,0 +1,72 @@
+<mat-card class="round-card">
+  <mat-card-title>Approval requests</mat-card-title>
+  <mat-card-content>
+    <mat-form-field class="search">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z0">
+
+      <!--Project Name -->
+      <ng-container matColumnDef="projectName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Project Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.name}}</td>
+      </ng-container>
+
+      <!-- Project Number Column -->
+      <ng-container matColumnDef="projectNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Project Number</th>
+        <td mat-cell *matCellDef="let element"> {{element?.projectNumber}}</td>
+      </ng-container>
+
+      <!-- Partner Organisation Column -->
+      <ng-container matColumnDef="university">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> University</th>
+        <td mat-cell *matCellDef="let element"> {{element?.university?.name}}</td>
+      </ng-container>
+
+      <!-- Partner Organisation Column -->
+      <ng-container matColumnDef="projectManager">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Project Manager</th>
+        <td mat-cell
+            *matCellDef="let element"> {{element?.projectManager?.firstName}} {{element?.projectManager?.lastName}}</td>
+      </ng-container>
+
+      <!-- StartDate Column -->
+      <ng-container matColumnDef="startDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date</th>
+        <td mat-cell *matCellDef="let element"> {{element.startDate | date }}</td>
+      </ng-container>
+
+      <!-- EndDate Column -->
+      <ng-container matColumnDef="endDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> End Date</th>
+        <td mat-cell *matCellDef="let element"> {{element.endDate | date }}</td>
+      </ng-container>
+
+      <!-- actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+        </th>
+        <td mat-cell *matCellDef="let element; let i=index;">
+
+          <button mat-icon-button color="primary" (click)="approveProject(element)">
+            <mat-icon>done</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let project; columns: displayedColumns;"
+          class="example-element-row"
+          [ngClass]="{'selected': project === selectedProject}"></tr>
+    </table>
+    <div class="no-records" *ngIf="noData | async">
+      No records found
+    </div>
+    <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+    <mat-paginator [pageSizeOptions]="[5,10, 20]" showFirstLastButtons></mat-paginator>
+  </mat-card-content>
+</mat-card>
