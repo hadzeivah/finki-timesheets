@@ -12,7 +12,7 @@
       <button mat-icon-button [matMenuTriggerFor]="auth">
         <mat-icon class="icon">person_outline</mat-icon>
       </button>
-      <span> {{getLoggedUser()}}</span>
+      <span> {{currentUser.username}}</span>
       <mat-menu #auth="matMenu">
         <button mat-menu-item (click)="logout()">
           <mat-icon class="icon">exit_to_app</mat-icon>
@@ -43,7 +43,19 @@
         <span class="icon-label">{{item.title}} </span>
         <mat-divider></mat-divider>
       </a>
+      <div *ngIf="isAdmin">
+        <a *ngFor="let item of admin_routes"
+           mat-list-item
+           routerLinkActive
+           #routerLinkActiveInstance="routerLinkActive"
+           [class.list-item-active]="routerLinkActiveInstance.isActive"
+           [routerLink]="[item.route]">
 
+          <mat-icon matListIcon color="accent"> {{ item.icon }} </mat-icon>
+          <span class="icon-label">{{item.title}} </span>
+          <mat-divider></mat-divider>
+        </a>
+      </div>
     </mat-nav-list>
 
   </mat-sidenav>

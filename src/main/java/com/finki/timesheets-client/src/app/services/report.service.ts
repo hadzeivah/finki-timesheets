@@ -3,6 +3,7 @@ import {ProjectTotalSalary} from "../model/ProjectTotalSalary";
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {DownloadService} from "./download.service";
+import {ReportByIO} from "../model/ReportByIO";
 
 
 @Injectable({
@@ -16,6 +17,10 @@ export class ReportService {
 
   findReport(): Observable<ProjectTotalSalary[]> {
     return this.http.get<ProjectTotalSalary[]>('/api/reports');
+  }
+
+  findReportTotalByIo() {
+    return this.http.get<ReportByIO[]>('/api/reports/total_by_io');
   }
 
   exportReportToExcel(): Observable<HttpResponse<Blob>> {

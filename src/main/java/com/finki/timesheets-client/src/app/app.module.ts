@@ -7,7 +7,7 @@ import {AuthService} from './services/auth.service';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {routing} from './app.routing';
-import {TokenInterceptor} from './services/interceptor';
+import {JwtInterceptor} from './services/helpers/JwtInterceptor';
 import {TimesheetComponent} from './timesheet/timesheet.component';
 import {CustomMaterialModule} from './material/material.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -37,6 +37,7 @@ import {AssignMemberComponent} from './projects/assign-member/assign-member.comp
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {ConfirmDialogComponent} from "./confirm-dialog/confirm-dialog.component";
 import {ApprovalRequestsComponent} from './approval-requests/approval-requests.component';
+import {ErrorInterceptor} from "./services/helpers/ErrorInterceptor";
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import {ApprovalRequestsComponent} from './approval-requests/approval-requests.c
   ],
   providers: [ErrorHandler, AuthService, TimesheetService, TranslateService, JwtHelperService,
     {provide: JWT_OPTIONS, useValue: JWT_OPTIONS},
-    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},],
   bootstrap: [AppComponent],
   entryComponents: [AddProjectComponent, AddMemberComponent, AssignMemberComponent, ConfirmDialogComponent]

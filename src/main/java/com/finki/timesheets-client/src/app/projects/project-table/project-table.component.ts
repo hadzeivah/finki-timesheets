@@ -24,7 +24,7 @@ export class ProjectTableComponent implements OnInit {
   selectedProject: Project;
   members: Member[];
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['projectName', 'projectNumber', 'university', 'projectManager', 'startDate', 'endDate', 'actions'];
+  displayedColumns: string[] = ['projectName', 'projectNumber', 'university', 'projectManager', 'startDate', 'endDate', 'approved', 'actions'];
   isLoading: Boolean = true;
   noData = this.dataSource.connect().pipe(map(data => data.length === 0));
 
@@ -71,6 +71,9 @@ export class ProjectTableComponent implements OnInit {
       if (projectPosition) {
 
         this.projectService.addProject(projectPosition).subscribe(() => {
+          this._snackBar.open('Project successfully added', 'Undo', {
+            duration: 2000
+          });
           this.loadProjects();
           }
         );

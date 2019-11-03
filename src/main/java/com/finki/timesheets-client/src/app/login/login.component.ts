@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../services/auth.service';
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-login',
@@ -24,16 +25,13 @@ export class LoginComponent implements OnInit {
       username: this.loginForm.controls.username.value,
       password: this.loginForm.controls.password.value
     };
-    this.authService.login(loginPayload).subscribe(data => {
-      if (data.status === 200) {
-        window.localStorage.setItem('token', data.result.token);
-        window.localStorage.setItem('username', loginPayload.username);
+    this.authService.login(loginPayload).pipe(first())
+      .subscribe(data => {
         this.router.navigate(['projects']);
-      } else {
+      }, error => {
         this.invalidLogin = true;
-        alert(data.message);
-      }
-    });
+        alert(error.message);
+      });
   }
 
   ngOnInit() {

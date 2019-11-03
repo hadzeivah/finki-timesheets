@@ -1,11 +1,10 @@
 package com.finki.timesheets.model;
 
-import java.util.Date;
-
 public class AuthToken {
 
     private String token;
     private String username;
+    private String role;
 
 
     public AuthToken(){
@@ -35,5 +34,13 @@ public class AuthToken {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

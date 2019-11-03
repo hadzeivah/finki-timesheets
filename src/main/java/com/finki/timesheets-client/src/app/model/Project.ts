@@ -12,5 +12,11 @@ export class Project {
   university: University;
   projectManager: User;
   timesheets: Timesheet[];
+  approved: boolean;
+  deleted: boolean;
+
+  public constructor(init?: Partial<Project>) {
+    Object.assign(this, init);
+  }
 }
 

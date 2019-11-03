@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
+import {Role} from "../model/Role";
+import {User} from "../model/User";
 
 interface ROUTE {
   icon?: string;
@@ -15,6 +17,7 @@ interface ROUTE {
 })
 export class NavComponent {
   isExpanded = true;
+  currentUser: User;
   @Output() toggleSidenav = new EventEmitter<void>();
 
   routes: ROUTE[] = [
@@ -43,15 +46,19 @@ export class NavComponent {
       icon: 'insert_chart',
       route: 'reports',
       title: 'Reports',
-    },
+    }
+  ];
+  admin_routes: ROUTE[] = [
     {
       icon: 'how_to_reg',
       route: 'approval_request',
-      title: 'Approval Request',
+      title: 'Requests'
     }
   ];
 
   constructor(private authService: AuthService, private router: Router) {
+    this.authService.currentUser.subscribe(user => this.currentUser = user);
+
   }
 
 
@@ -59,12 +66,13 @@ export class NavComponent {
     return this.authService.isAuthenticated();
   }
 
-  public getLoggedUser() {
-    return this.authService.getLoggedUser();
+
+  get isAdmin() {
+    return this.currentUser && this.currentUser.role === Role.Admin;
   }
 
   logout() {
-    AuthService.logout();
+    this.authService.logout();
     this.router.navigate(['login']);
   }
 

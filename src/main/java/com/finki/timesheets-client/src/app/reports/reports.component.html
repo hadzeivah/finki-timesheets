@@ -1,104 +1,155 @@
+<div class="space-container">
 <mat-form-field class="search">
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
 </mat-form-field>
 
-<table mat-table
-       [dataSource]="dataSource" multiTemplateDataRows
-       class="mat-elevation-z0">
+  <span class="spacer"></span>
 
-  <!--Chevron  -->
-  <ng-container matColumnDef="chevron">
-    <th mat-header-cell *matHeaderCellDef>
-      <button mat-icon-button color="primary" matTooltip="Export to excel" (click)="exportToExcel()">
-        <mat-icon>save_alt</mat-icon>
-      </button>
-    </th>
-    <td mat-cell *matCellDef="let element">
-      <mat-icon color="primary">
-        {{element == expandedElement ? 'expand_more' : 'chevron_right'}}
-      </mat-icon>
-    </td>
-  </ng-container>
-
-
-  <!--Project Name -->
-  <ng-container matColumnDef="projectName">
-    <th mat-header-cell *matHeaderCellDef> Project Name</th>
-    <td mat-cell *matCellDef="let project">{{project.name}}</td>
-  </ng-container>
-
-  <!--Project Name -->
-  <ng-container matColumnDef="total">
-    <th mat-header-cell *matHeaderCellDef> Total</th>
-    <td mat-cell *matCellDef="let project"> {{project.totalSalary | currency: 'EUR'}} </td>
-  </ng-container>
-
-
-  <!--Project Name -->
-  <ng-container matColumnDef="budget">
-    <th mat-header-cell *matHeaderCellDef> Budget</th>
-    <td mat-cell *matCellDef="let project"> {{project.estimatedBudget | currency: 'EUR'}} </td>
-  </ng-container>
-
-  <!--Project Name -->
-  <ng-container matColumnDef="difference">
-    <th mat-header-cell *matHeaderCellDef> Difference</th>
-    <td mat-cell *matCellDef="let project"> {{project.estimatedBudget - project.totalSalary | currency: 'EUR'}}  </td>
-  </ng-container>
-
-  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-  <ng-container matColumnDef="expandedDetail">
-    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-      <div class="example-element-detail"
-           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-        <table mat-table [dataSource]="expandedDataSource">
-          <ng-container matColumnDef="person">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
-              <mat-icon color="primary">
-                person
-              </mat-icon>
-            </td>
-          </ng-container>
-          <!-- Member's name  Column -->
-          <ng-container matColumnDef="memberName">
-            <th mat-header-cell *matHeaderCellDef> Member Name</th>
-            <td mat-cell *matCellDef="let member">  {{ member.fullName}} </td>
-          </ng-container>
-
-          <!-- Total Column -->
-          <ng-container matColumnDef="total">
-            <th mat-header-cell *matHeaderCellDef> Total</th>
-            <td mat-cell *matCellDef="let member"> {{member.totalSalary | currency: 'EUR'}} </td>
-          </ng-container>
-
-          <!-- Position Column -->
-          <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef> Position</th>
-            <td mat-cell *matCellDef="let member"> {{member.position}} </td>
-          </ng-container>
-
-          <!-- Salary Column -->
-          <ng-container matColumnDef="salary">
-            <th mat-header-cell *matHeaderCellDef> Salary</th>
-            <td mat-cell *matCellDef="let member"> {{member.salary  | currency: 'EUR'}} </td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="expandedColumnsToDisplay"></tr>
-          <tr mat-row *matRowDef="let row; columns: expandedColumnsToDisplay; "></tr>
-        </table>
-      </div>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-  <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
-      class="example-element-row"
-      [class.example-expanded-row]="expandedElement === element"
-      (click)=onSelectedRow(element)>
-  </tr>
-  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-</table>
-<div class="no-records" *ngIf="noData | async">
-  No records found
+  <mat-form-field>
+    <mat-label>Choose report type</mat-label>
+    <mat-select (selectionChange)="onChange($event)">
+      <mat-option *ngFor="let report of reports" [value]="report">
+        {{report}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
-<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<div *ngIf="selectedReport === ReportType.TOTAL_PROJECTS">
+  <table mat-table
+         [dataSource]="dataSource" multiTemplateDataRows
+         class="mat-elevation-z0">
+
+    <!--Chevron  -->
+    <ng-container matColumnDef="chevron">
+      <th mat-header-cell *matHeaderCellDef>
+        <button mat-icon-button color="primary" matTooltip="Export to excel" (click)="exportToExcel()">
+          <mat-icon>save_alt</mat-icon>
+        </button>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-icon color="primary">
+          {{element == expandedElement ? 'expand_more' : 'chevron_right'}}
+        </mat-icon>
+      </td>
+    </ng-container>
+
+
+    <!--Project Name -->
+    <ng-container matColumnDef="projectName">
+      <th mat-header-cell *matHeaderCellDef> Project Name</th>
+      <td mat-cell *matCellDef="let project">{{project.name}}</td>
+    </ng-container>
+
+    <!--Project Name -->
+    <ng-container matColumnDef="total">
+      <th mat-header-cell *matHeaderCellDef> Total</th>
+      <td mat-cell *matCellDef="let project"> {{project.totalSalary | currency: 'EUR'}} </td>
+    </ng-container>
+
+
+    <!--Project Name -->
+    <ng-container matColumnDef="budget">
+      <th mat-header-cell *matHeaderCellDef> Budget</th>
+      <td mat-cell *matCellDef="let project"> {{project.estimatedBudget | currency: 'EUR'}} </td>
+    </ng-container>
+
+    <!--Project Name -->
+    <ng-container matColumnDef="difference">
+      <th mat-header-cell *matHeaderCellDef> Difference</th>
+      <td mat-cell *matCellDef="let project"> {{project.estimatedBudget - project.totalSalary | currency: 'EUR'}}  </td>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+        <div class="example-element-detail"
+             [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+          <table mat-table [dataSource]="expandedDataSource">
+            <ng-container matColumnDef="person">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element">
+                <mat-icon color="primary">
+                  person
+                </mat-icon>
+              </td>
+            </ng-container>
+            <!-- Member's name  Column -->
+            <ng-container matColumnDef="memberName">
+              <th mat-header-cell *matHeaderCellDef> Member Name</th>
+              <td mat-cell *matCellDef="let member">  {{ member.fullName}} </td>
+            </ng-container>
+
+            <!-- Total Column -->
+            <ng-container matColumnDef="total">
+              <th mat-header-cell *matHeaderCellDef> Total</th>
+              <td mat-cell *matCellDef="let member"> {{member.totalSalary | currency: 'EUR'}} </td>
+            </ng-container>
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="position">
+              <th mat-header-cell *matHeaderCellDef> Position</th>
+              <td mat-cell *matCellDef="let member"> {{member.position}} </td>
+            </ng-container>
+
+            <!-- Salary Column -->
+            <ng-container matColumnDef="salary">
+              <th mat-header-cell *matHeaderCellDef> Salary</th>
+              <td mat-cell *matCellDef="let member"> {{member.salary  | currency: 'EUR'}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="expandedColumnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let row; columns: expandedColumnsToDisplay; "></tr>
+          </table>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+        class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element"
+        (click)=onSelectedRow(element)>
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+  </table>
+  <div class="no-records" *ngIf="noData | async">
+    No records found
+  </div>
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+</div>
+
+
+<div *ngIf="selectedReport === ReportType.TOTAL_IO">
+  <table mat-table
+         [dataSource]="dataSource2"
+         class="mat-elevation-z0">
+
+    <!--Project Name -->
+    <ng-container matColumnDef="projectName">
+      <th mat-header-cell *matHeaderCellDef> Project Name</th>
+      <td mat-cell *matCellDef="let element">{{element.projectName}}</td>
+    </ng-container>
+
+    <!--Total -->
+    <ng-container matColumnDef="total">
+      <th mat-header-cell *matHeaderCellDef> Total</th>
+      <td mat-cell *matCellDef="let element"> {{element.total | currency: 'EUR'}} </td>
+    </ng-container>
+
+
+    <!--Project Name -->
+    <ng-container matColumnDef="intellectualOutput">
+      <th mat-header-cell *matHeaderCellDef> Intellectual Output</th>
+      <td mat-cell *matCellDef="let element"> {{element.intellectualOutput }} </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay2"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplay2;"
+        class="example-element-row">
+    </tr>
+  </table>
+  <div class="no-records" *ngIf="noData2 | async">
+    No records found
+  </div>
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+</div>

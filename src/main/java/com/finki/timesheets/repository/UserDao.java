@@ -1,4 +1,4 @@
-package com.finki.timesheets.dao;
+package com.finki.timesheets.repository;
 
 import com.finki.timesheets.model.User;
 import org.springframework.data.repository.CrudRepository;

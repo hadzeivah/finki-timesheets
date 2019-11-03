@@ -7,7 +7,7 @@ import javassist.NotFoundException;
 import java.util.List;
 
 public interface ProjectService {
-    List<Project> findAllByProjectManagerIsDeletedFalseAndIsApprovedTrue(User user);
+    List<Project> findAllByProjectManagerIsDeletedFalse(User user);
 
     List<Project> findAllUnapprovedProjects();
 

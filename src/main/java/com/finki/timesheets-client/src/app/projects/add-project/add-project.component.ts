@@ -116,8 +116,7 @@ export class AddProjectComponent {
   }
 
   save() {
-    console.log(this.positionsFormArray.value);
-    this.projectPosition = new ProjectPositionsDto(<Project>this.addProjectForm.value, this.positionsFormArray.value);
+    this.projectPosition = new ProjectPositionsDto(this.addProjectForm.value, this.positionsFormArray.value);
     this.dialogRef.close(this.projectPosition);
   }
 

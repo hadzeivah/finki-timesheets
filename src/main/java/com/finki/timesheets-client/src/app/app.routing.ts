@@ -7,6 +7,7 @@ import {MembersComponent} from "./members/members.component";
 import {AuthGuardService as AuthGuard} from "./services/guards/auth-guard.service";
 import {ReportsPageComponent} from "./pages/reports-page/reports-page.component";
 import {ApprovalRequestsComponent} from "./approval-requests/approval-requests.component";
+import {RoleGuardService as RoleGuard} from "./services/guards/role-guard.service";
 
 const routes: Routes = [
   {
@@ -41,7 +42,10 @@ const routes: Routes = [
   {
     path: 'approval_request',
     component: ApprovalRequestsComponent,
-    canActivate: [AuthGuard]
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: 'admin'
+    }
   },
   {
     path: '',

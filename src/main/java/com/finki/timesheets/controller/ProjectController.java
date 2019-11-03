@@ -38,7 +38,7 @@ public class ProjectController {
     @GetMapping
     public ApiResponse<List<Project>> getProjectsForLoggedUser(@AuthenticationPrincipal UserDetails currentUser) {
         User user = this.userService.findOne(currentUser.getUsername());
-        return new ApiResponse<>(HttpStatus.OK.value(), "Project list fetched successfully.", projectService.findAllByProjectManagerIsDeletedFalseAndIsApprovedTrue(user));
+        return new ApiResponse<>(HttpStatus.OK.value(), "Project list fetched successfully.", projectService.findAllByProjectManagerIsDeletedFalse(user));
     }
 
     @GetMapping("/unapproved")

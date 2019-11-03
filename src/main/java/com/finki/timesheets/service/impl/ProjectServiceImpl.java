@@ -20,8 +20,8 @@ public class ProjectServiceImpl implements ProjectService {
 
 
     @Override
-    public List<Project> findAllByProjectManagerIsDeletedFalseAndIsApprovedTrue(User user) {
-        return projectRepository.findAllByProjectManagerAndIsDeletedFalseAndIsApprovedTrue(user);
+    public List<Project> findAllByProjectManagerIsDeletedFalse(User user) {
+        return projectRepository.findAllByProjectManagerAndIsDeletedFalse(user);
     }
 
     @Override
@@ -40,7 +40,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project update(Project project) {
+    public Project update(Project project) throws NotFoundException {
+
+        Project previous = findById(project.getId());
+        project.setApproved(previous.getApproved());
+        project.setDeleted(previous.getDeleted());
+
         return projectRepository.save(project);
     }
 

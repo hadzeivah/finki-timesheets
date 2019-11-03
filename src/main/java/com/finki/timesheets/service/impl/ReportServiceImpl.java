@@ -2,9 +2,11 @@ package com.finki.timesheets.service.impl;
 
 import com.finki.timesheets.model.Item;
 import com.finki.timesheets.model.Project;
+import com.finki.timesheets.model.ReportByIO;
 import com.finki.timesheets.model.Timesheet;
 import com.finki.timesheets.model.dto.MemberTotalSalary;
 import com.finki.timesheets.model.dto.ProjectTotalSalary;
+import com.finki.timesheets.repository.ReportByIORepository;
 import com.finki.timesheets.service.ReportService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -19,6 +21,12 @@ import java.util.Set;
 
 @Service(value = "ReportService")
 public class ReportServiceImpl implements ReportService {
+
+    private ReportByIORepository reportByIORepository;
+
+    public ReportServiceImpl(ReportByIORepository reportByIORepository) {
+        this.reportByIORepository = reportByIORepository;
+    }
 
     @Override
     public List<ProjectTotalSalary> calculateTotalSalaryByProject(List<Project> projects) {
@@ -35,6 +43,11 @@ public class ReportServiceImpl implements ReportService {
             projectTotalSalaries.add(new ProjectTotalSalary(project, memberTotalSalaries.stream().mapToDouble(MemberTotalSalary::getTotalSalary).sum(), memberTotalSalaries));
         });
         return projectTotalSalaries;
+    }
+
+    @Override
+    public List<ReportByIO> getReportTotalByIntellectualOutput() {
+        return reportByIORepository.findAll();
     }
 
     @Override

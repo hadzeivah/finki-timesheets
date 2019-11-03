@@ -2,6 +2,7 @@ package com.finki.timesheets.controller;
 
 
 import com.finki.timesheets.model.Project;
+import com.finki.timesheets.model.ReportByIO;
 import com.finki.timesheets.model.User;
 import com.finki.timesheets.model.dto.ProjectTotalSalary;
 import com.finki.timesheets.service.ProjectService;
@@ -38,8 +39,13 @@ public class ReportController {
     @GetMapping()
     public List<ProjectTotalSalary> getDetailedReport(@AuthenticationPrincipal UserDetails currentUser) {
         User user = (User) this.userService.findOne(currentUser.getUsername());
-        List<Project> projects = projectService.findAllByProjectManagerIsDeletedFalseAndIsApprovedTrue(user);
+        List<Project> projects = projectService.findAllByProjectManagerIsDeletedFalse(user);
         return this.reportService.calculateTotalSalaryByProject(projects);
+    }
+
+    @GetMapping("total_by_io")
+    public List<ReportByIO> findReportTotalByIntellectualOutput() {
+        return this.reportService.getReportTotalByIntellectualOutput();
     }
 
     @GetMapping(value = "/exportExcel", produces = "application/vnd.ms-excel")
@@ -47,7 +53,7 @@ public class ReportController {
     public ResponseEntity getExcelReport(@AuthenticationPrincipal UserDetails currentUser) {
         User user = (User) this.userService.findOne(currentUser.getUsername());
 
-        List<Project> projects = projectService.findAllByProjectManagerIsDeletedFalseAndIsApprovedTrue(user);
+        List<Project> projects = projectService.findAllByProjectManagerIsDeletedFalse(user);
 
         ByteArrayInputStream generatedExcel = this.reportService.exportReportToExcel(projects);
 

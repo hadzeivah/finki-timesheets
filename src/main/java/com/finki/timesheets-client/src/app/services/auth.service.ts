@@ -1,24 +1,42 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {ApiResponse} from '../model/api.response';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {User} from "../model/User";
+import {map} from "rxjs/operators";
+import decode from 'jwt-decode';
 
 @Injectable()
 export class AuthService {
+  private currentUserSubject: BehaviorSubject<User>;
+  public currentUser: Observable<User>;
 
   constructor(private http: HttpClient, public jwtHelper: JwtHelperService) {
-  }
-
-  login(loginPayload): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>('/api/token/generate-token', loginPayload);
+    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUser = this.currentUserSubject.asObservable();
 
   }
 
-  static logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
+  login(loginPayload) {
+    return this.http.post<ApiResponse>('/api/token/generate-token', loginPayload)
+      .pipe(map(user => {
+        // login successful if there's a jwt token in the response
+        if (user.result && user.result.token) {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+
+          user.result.role = decode(user.result.token).scopes;
+          localStorage.setItem('currentUser', JSON.stringify(user.result));
+          this.currentUserSubject.next(user.result);
+        }
+
+        return user;
+      }));
+  }
+
+  logout() {
+    localStorage.removeItem("currentUser");
+    this.currentUserSubject.next(null);
   }
 
   getUsers(): Observable<ApiResponse> {
@@ -42,11 +60,12 @@ export class AuthService {
   }
 
   public isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let token = currentUser != null ? currentUser.token : null;
     return !this.jwtHelper.isTokenExpired(token);
   }
 
-  public getLoggedUser(): string {
-    return localStorage.getItem("username");
+  public get currentUserValue(): User {
+    return this.currentUserSubject.value;
   }
 }

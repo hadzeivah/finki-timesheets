@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-    List<Project> findAllByProjectManagerAndIsDeletedFalseAndIsApprovedTrue(User user);
+    List<Project> findAllByProjectManagerAndIsDeletedFalse(User user);
 
     List<Project> findAllByIsApprovedFalse();
 }
