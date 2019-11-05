@@ -8,6 +8,8 @@ import {AuthGuardService as AuthGuard} from "./services/guards/auth-guard.servic
 import {ReportsPageComponent} from "./pages/reports-page/reports-page.component";
 import {ApprovalRequestsComponent} from "./approval-requests/approval-requests.component";
 import {RoleGuardService as RoleGuard} from "./services/guards/role-guard.service";
+import {Role} from "./model/Role";
+import {WorkPackageComponent} from "./work-package/work-package.component";
 
 const routes: Routes = [
   {
@@ -40,11 +42,16 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'work_package',
+    component: WorkPackageComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'approval_request',
     component: ApprovalRequestsComponent,
     canActivate: [RoleGuard],
     data: {
-      expectedRole: 'admin'
+      expectedRole: Role.Admin
     }
   },
   {

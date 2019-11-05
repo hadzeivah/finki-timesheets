@@ -1,0 +1,22 @@
+<mat-accordion>
+  <div *ngFor="let workPackage of workPackages">
+    <mat-expansion-panel (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{workPackage.name}}
+        </mat-panel-title>
+        <mat-panel-description>
+
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let task of workPackage.tasks">
+        {{task.description}}
+      </div>
+
+      <div *ngFor="let output of workPackage.outputs">
+        {{output.description}}
+      </div>
+    </mat-expansion-panel>
+  </div>
+</mat-accordion>

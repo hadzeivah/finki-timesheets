@@ -38,6 +38,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {ConfirmDialogComponent} from "./confirm-dialog/confirm-dialog.component";
 import {ApprovalRequestsComponent} from './approval-requests/approval-requests.component';
 import {ErrorInterceptor} from "./services/helpers/ErrorInterceptor";
+import {WorkPackageComponent} from './work-package/work-package.component';
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -57,7 +59,8 @@ import {ErrorInterceptor} from "./services/helpers/ErrorInterceptor";
     ReportsPageComponent,
     AssignMemberComponent,
     ConfirmDialogComponent,
-    ApprovalRequestsComponent
+    ApprovalRequestsComponent,
+    WorkPackageComponent
   ],
   imports: [
     BrowserModule,
@@ -81,7 +84,8 @@ import {ErrorInterceptor} from "./services/helpers/ErrorInterceptor";
     MatProgressBarModule,
     MatSortModule,
     MatTooltipModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatExpansionModule
   ],
   providers: [ErrorHandler, AuthService, TimesheetService, TranslateService, JwtHelperService,
     {provide: JWT_OPTIONS, useValue: JWT_OPTIONS},

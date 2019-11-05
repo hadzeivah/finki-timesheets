@@ -28,6 +28,11 @@ export class NavComponent {
     },
     {
       icon: 'folder',
+      route: 'work_package',
+      title: 'Work Package',
+    },
+    {
+      icon: 'create_new_folder',
       route: 'projects',
       title: 'Projects',
     },
