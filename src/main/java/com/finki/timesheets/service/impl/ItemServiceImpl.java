@@ -64,4 +64,9 @@ public class ItemServiceImpl implements ItemService {
         }
         return itemDto;
     }
+
+    @Override
+    public List<Item> saveAll(List<Item> items) {
+        return itemRepository.saveAll(items);
+    }
 }

@@ -29,7 +29,7 @@ export class NavComponent {
     {
       icon: 'folder',
       route: 'work_package',
-      title: 'Work Package',
+      title: 'Packages',
     },
     {
       icon: 'create_new_folder',

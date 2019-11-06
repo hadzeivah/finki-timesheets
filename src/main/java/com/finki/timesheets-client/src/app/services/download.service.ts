@@ -43,5 +43,4 @@ export class DownloadService {
     const blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.wordprocessingml.documentrtg; charset=utf-8"});
     fileSaver.saveAs(blob, filename)
   }
-
 }

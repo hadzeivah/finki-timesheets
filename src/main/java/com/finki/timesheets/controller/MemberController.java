@@ -61,7 +61,7 @@ public class MemberController {
         Member member = this.memberService.findById(id);
         member.setDeleted(true);
         memberService.update(member);
-        return new ApiResponse<>(HttpStatus.OK.value(), "Member fetched successfully.", null);
+        return new ApiResponse<>(HttpStatus.OK.value(), "Member deleted successfully.", null);
     }
 
     @GetMapping("/positions")

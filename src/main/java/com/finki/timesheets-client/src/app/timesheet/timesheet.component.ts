@@ -13,6 +13,8 @@ import {Project} from "../model/Project";
 import {Member} from "../model/Member";
 import {map} from "rxjs/operators";
 import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
+import {HttpEventType, HttpResponse} from "@angular/common/http";
+import {UploadService} from "../services/upload.service";
 
 @Component({
   selector: 'app-timesheet',
@@ -21,6 +23,8 @@ import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
 })
 export class TimesheetComponent implements OnInit {
 
+  arrayBuffer: any;
+  file: File;
   displayedColumns: string[] = ['startDate', 'endDate', 'hours', 'taskDescription', 'intellectualOutput', 'actions'];
   items: Item[] = [];
   timesheet: Timesheet;
@@ -90,6 +94,7 @@ export class TimesheetComponent implements OnInit {
               private holidayService: HolidayService,
               private itemService: ItemService,
               private projectService: ProjectService,
+              private uploadService: UploadService,
               private fb: FormBuilder) {
 
     this.dataSource.filterPredicate = (data: Item, filter) => {
@@ -265,6 +270,35 @@ export class TimesheetComponent implements OnInit {
   public getTotalCost(): number {
     let member = this.timesheet != null ? this.timesheet.member : null;
     return member != null ? this.timesheet.projectPosition.salary * this.getTotalTimeSpent() / 8 : 0;
+  }
+
+  uploadFile(files: FileList) {
+
+    if (files.length == 0) {
+      console.log("No file selected!");
+      return
+    }
+    let file: File = files[0];
+    this.uploadService.uploadFile(file, 1)
+      .subscribe(
+        event => {
+          if (event.type == HttpEventType.UploadProgress) {
+            const percentDone = Math.round(100 * event.loaded / event.total);
+            console.log(`File is ${percentDone}% loaded.`);
+          } else if (event instanceof HttpResponse) {
+            console.log('File is completely loaded!');
+          }
+        },
+        (err) => {
+          console.log("Upload Error:", err);
+        }, () => {
+          console.log("Upload done");
+        }
+      )
+  }
+
+  selectFile(event) {
+    this.uploadFile(event.target.files);
   }
 }
 

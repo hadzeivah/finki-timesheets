@@ -7,6 +7,8 @@ import {UniversityService} from "../../services/university.service";
 import {PositionService} from "../../services/position.service";
 import {Position} from "../../model/Position";
 import {ProjectPositionsDto} from "../../model/ProjectPositionsDto";
+import {WorkPackagesService} from "../../services/work-packages.service";
+import {WorkPackage} from "../../model/WorkPackage";
 
 @Component({
   selector: 'app-add-project',
@@ -22,15 +24,19 @@ export class AddProjectComponent {
   title: string = "Add projects";
   seedData: Position[];
   projectPosition: ProjectPositionsDto;
+  workPackages: WorkPackage[];
 
   constructor(
     public dialogRef: MatDialogRef<AddProjectComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Project,
     private fb: FormBuilder,
     private universityService: UniversityService,
-    private positionService: PositionService) {
+    private positionService: PositionService,
+    private workPackagesService: WorkPackagesService) {
 
     this.getUniversities();
+    this.getWorkPackages();
+
     this.addProjectForm = this.fb.group({
       name: ['', Validators.required],
       projectNumber: ['', Validators.required],
@@ -110,6 +116,15 @@ export class AddProjectComponent {
     this.universityService.findUniversities()
       .subscribe(data => {
           this.universities = data.result;
+        }, err => console.log('HTTP Error', err),
+      );
+
+  }
+
+  getWorkPackages() {
+    this.workPackagesService.findWorkPackages()
+      .subscribe(data => {
+          this.workPackages = data;
         }, err => console.log('HTTP Error', err),
       );
 

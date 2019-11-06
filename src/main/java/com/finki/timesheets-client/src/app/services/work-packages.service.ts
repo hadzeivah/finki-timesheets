@@ -14,4 +14,12 @@ export class WorkPackagesService {
   findWorkPackages(): Observable<WorkPackage[]> {
     return this.http.get<WorkPackage[]>(`/api/work_packages`);
   }
+
+  saveTasks(workPackage: WorkPackage): Observable<WorkPackage> {
+    return this.http.post<WorkPackage>(`/api/work_packages/tasks`, workPackage);
+  }
+
+  saveOutputs(workPackage: WorkPackage): Observable<WorkPackage> {
+    return this.http.post<WorkPackage>(`/api/work_packages/outputs`, workPackage);
+  }
 }

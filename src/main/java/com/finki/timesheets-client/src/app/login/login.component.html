@@ -27,13 +27,15 @@
               Password is required
             </mat-error>
           </mat-form-field>
+
+          <div *ngIf="invalidLogin">
+            <mat-error> Invalid credentials.</mat-error>
+          </div>
+
           <button mat-raised-button color="primary" [disabled]="loginForm.invalid">
             <mat-icon>input</mat-icon>
             Login
           </button>
-          <div *ngIf="invalidLogin">
-            <mat-error> Invalid credentials.</mat-error>
-          </div>
         </form>
       </div>
     </mat-card-content>

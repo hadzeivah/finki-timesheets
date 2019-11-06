@@ -4,11 +4,12 @@ package com.finki.timesheets.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "items")
-public class Item {
+public class Item implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +21,10 @@ public class Item {
     private Timesheet timesheet;
 
     @Column
-    private LocalDateTime startDate;
+    private LocalDateTime startDate = LocalDateTime.now();
 
     @Column
-    private LocalDateTime endDate;
+    private LocalDateTime endDate = LocalDateTime.now();
 
     @Column
     private Integer hours;

@@ -4,7 +4,6 @@ import com.finki.timesheets.model.Item;
 import com.finki.timesheets.model.dto.ItemDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ItemService {
     Item save(ItemDto item);
@@ -16,4 +15,6 @@ public interface ItemService {
     Item findById(Long id);
 
     ItemDto update(ItemDto itemDto);
+
+    List<Item> saveAll(List<Item> items);
 }

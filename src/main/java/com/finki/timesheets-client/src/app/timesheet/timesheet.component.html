@@ -13,6 +13,10 @@
 
 
     <mat-card-content>
+
+      <input type="file" style="display: inline-block;" (change)="selectFile($event)" placeholder="Upload file"
+             accept=".xlsx">
+
       <!--Item Form-->
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="space-container">
