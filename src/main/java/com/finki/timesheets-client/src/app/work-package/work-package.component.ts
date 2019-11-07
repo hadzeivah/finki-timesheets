@@ -18,6 +18,7 @@ export class WorkPackageComponent implements OnInit {
   outputs: Output [] = [];
   taskDescription = new FormControl('', Validators.required);
   intellectualOutput = new FormControl('', Validators.required);
+  workPackageName = new FormControl('', Validators.required);
 
   constructor(public workPackagesService: WorkPackagesService) {
   }
@@ -43,5 +44,17 @@ export class WorkPackageComponent implements OnInit {
   addOutput(workPackage: WorkPackage) {
     workPackage.outputs.push(new Output(this.taskDescription.value));
     this.workPackagesService.saveOutputs(workPackage).subscribe();
+  }
+
+  addWorkPackage() {
+
+  }
+
+  deleteTask(taskId: number) {
+
+  }
+
+  deleteOutput(id: number) {
+
   }
 }

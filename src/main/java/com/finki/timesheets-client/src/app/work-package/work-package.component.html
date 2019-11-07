@@ -1,8 +1,20 @@
 <mat-card class="round-card">
   <mat-card-header>
     <mat-card-title>Work packages</mat-card-title>
+
   </mat-card-header>
   <mat-card-content>
+
+    <div>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Work package name" [formControl]="workPackageName">
+      </mat-form-field>
+      <button mat-icon-button color="primary" (click)="addWorkPackage()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
     <mat-accordion>
       <div *ngFor="let workPackage of workPackages">
         <mat-expansion-panel class="mat-elevation-z0" (opened)="panelOpenState = true"
@@ -18,10 +30,6 @@
 
           <div>
 
-            <div *ngFor="let task of workPackage.tasks">
-              {{task.description}}
-            </div>
-
             <mat-form-field>
               <mat-label>Task description</mat-label>
               <input matInput placeholder="Task description" [formControl]="taskDescription">
@@ -30,15 +38,17 @@
               <mat-icon>add</mat-icon>
             </button>
 
+            <div *ngFor="let task of workPackage.tasks">
+              {{task.description}}
+              <button mat-icon-button color="primary" (click)="deleteTask(task.id)">
+                <mat-icon class="close-icon">close</mat-icon>
+              </button>
+            </div>
+
+
           </div>
 
           <div>
-
-            <div *ngFor="let output of workPackage.outputs">
-              {{output.description}}
-
-            </div>
-
             <mat-form-field floatLabel="auto">
               <mat-label>Intellectual output</mat-label>
               <input matInput placeholder="Intellectual output" [formControl]="intellectualOutput">
@@ -47,6 +57,14 @@
             <button mat-icon-button color="primary" (click)="addOutput(workPackage)">
               <mat-icon>add</mat-icon>
             </button>
+            <div *ngFor="let output of workPackage.outputs">
+              {{output.description}}
+              <button mat-icon-button color="primary" (click)="deleteOutput(output.id)">
+                <mat-icon class="close-icon">close</mat-icon>
+              </button>
+
+            </div>
+
           </div>
 
         </mat-expansion-panel>
