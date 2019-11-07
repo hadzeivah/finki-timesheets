@@ -1,5 +1,8 @@
 package com.finki.timesheets.model.dto;
 
+import com.finki.timesheets.model.Output;
+import com.finki.timesheets.model.Task;
+
 import java.time.LocalDateTime;
 
 public class ItemDto {
@@ -8,8 +11,8 @@ public class ItemDto {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private int hours;
-    private String taskDescription;
-    private String intellectualOutput;
+    private Task taskDescription;
+    private Output intellectualOutput;
 
     public Long getId() {
         return id;
@@ -51,19 +54,19 @@ public class ItemDto {
         this.hours = hours;
     }
 
-    public String getTaskDescription() {
+    public Task getTaskDescription() {
         return taskDescription;
     }
 
-    public void setTaskDescription(String taskDescription) {
+    public void setTaskDescription(Task taskDescription) {
         this.taskDescription = taskDescription;
     }
 
-    public String getIntellectualOutput() {
+    public Output getIntellectualOutput() {
         return intellectualOutput;
     }
 
-    public void setIntellectualOutput(String intellectualOutput) {
+    public void setIntellectualOutput(Output intellectualOutput) {
         this.intellectualOutput = intellectualOutput;
     }
 }

@@ -3,9 +3,12 @@ package com.finki.timesheets.controller;
 
 import com.finki.timesheets.model.ApiResponse;
 import com.finki.timesheets.model.Item;
+import com.finki.timesheets.model.Timesheet;
 import com.finki.timesheets.model.dto.ItemDto;
 import com.finki.timesheets.service.ItemService;
+import com.finki.timesheets.service.TimesheetService;
 import com.finki.timesheets.service.utils.CsvUtils;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +24,12 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final TimesheetService timesheetService;
 
     @Autowired
-    public ItemController(ItemService itemService) {
+    public ItemController(ItemService itemService, TimesheetService timesheetService) {
         this.itemService = itemService;
+        this.timesheetService = timesheetService;
     }
 
     @GetMapping(params = {"timesheetId"})
@@ -49,9 +54,17 @@ public class ItemController {
     }
 
     @PostMapping(value = "/{id}/import", consumes = "multipart/form-data")
-    public ResponseEntity<String> importTimesheetItems(@RequestParam("file") MultipartFile file, @PathVariable Long id) throws IOException {
+    public ResponseEntity<String> importTimesheetItems(@RequestParam("file") MultipartFile file, @PathVariable Long id) throws IOException, NotFoundException {
+        List<Item> items = CsvUtils.read(Item.class, file.getInputStream());
+        Timesheet timesheet = this.timesheetService.findById(id);
 
-        this.itemService.saveAll(CsvUtils.read(Item.class, file.getInputStream()));
-        return new ResponseEntity<String>("ime", HttpStatus.OK);
+        items.forEach(item -> {
+            item.setTimesheet(timesheet);
+            item.setIntellectualOutput(timesheet.getItems().iterator().next().getIntellectualOutput());
+            item.setTaskDescription(timesheet.getItems().iterator().next().getTaskDescription());
+        });
+
+        this.itemService.saveAll(items);
+        return new ResponseEntity<String>(file.getName(), HttpStatus.OK);
     }
 }

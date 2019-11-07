@@ -31,6 +31,10 @@ public class Project extends BaseEntity {
     private University university;
 
     @ManyToOne
+    @JoinColumn(name = "work_package_id", referencedColumnName = "id")
+    private WorkPackage workPackage;
+
+    @ManyToOne
     @JoinColumn(name = "project_manager_id", referencedColumnName = "id")
     private User projectManager;
 
@@ -133,5 +137,13 @@ public class Project extends BaseEntity {
 
     public void setApproved(Boolean approved) {
         isApproved = approved;
+    }
+
+    public WorkPackage getWorkPackage() {
+        return workPackage;
+    }
+
+    public void setWorkPackage(WorkPackage workPackage) {
+        this.workPackage = workPackage;
     }
 }

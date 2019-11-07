@@ -279,7 +279,7 @@ export class TimesheetComponent implements OnInit {
       return
     }
     let file: File = files[0];
-    this.uploadService.uploadFile(file, 1)
+    this.uploadService.uploadFile(file, this.timesheet.id)
       .subscribe(
         event => {
           if (event.type == HttpEventType.UploadProgress) {
@@ -293,6 +293,7 @@ export class TimesheetComponent implements OnInit {
           console.log("Upload Error:", err);
         }, () => {
           console.log("Upload done");
+          this.getTimesheet();
         }
       )
   }

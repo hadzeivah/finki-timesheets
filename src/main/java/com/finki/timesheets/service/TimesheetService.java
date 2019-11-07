@@ -15,6 +15,8 @@ public interface TimesheetService {
 
     List<Timesheet> findAll();
 
+    Timesheet findById(Long id) throws NotFoundException;
+
     Timesheet findTimesheetByProjectIdAndMemberId(Long projectId, Long memberId) throws NotFoundException;
 
     ApiResponse delete(Long memberId, Long projectId) throws NotFoundException;

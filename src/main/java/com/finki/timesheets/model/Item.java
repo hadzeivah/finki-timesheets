@@ -4,12 +4,11 @@ package com.finki.timesheets.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "items")
-public class Item implements Serializable {
+public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +28,13 @@ public class Item implements Serializable {
     @Column
     private Integer hours;
 
-    @Column
-    private String taskDescription;
+    @ManyToOne
+    @JoinColumn(name = "task_id", referencedColumnName = "id")
+    private Task taskDescription;
 
-    @Column
-    private String intellectualOutput;
+    @ManyToOne
+    @JoinColumn(name = "output_id", referencedColumnName = "id")
+    private Output intellectualOutput;
 
     public Item() {
     }
@@ -78,20 +79,19 @@ public class Item implements Serializable {
         this.hours = hours;
     }
 
-
-    public String getTaskDescription() {
+    public Task getTaskDescription() {
         return taskDescription;
     }
 
-    public void setTaskDescription(String taskDescription) {
+    public void setTaskDescription(Task taskDescription) {
         this.taskDescription = taskDescription;
     }
 
-    public String getIntellectualOutput() {
+    public Output getIntellectualOutput() {
         return intellectualOutput;
     }
 
-    public void setIntellectualOutput(String intellectualOutput) {
+    public void setIntellectualOutput(Output intellectualOutput) {
         this.intellectualOutput = intellectualOutput;
     }
 }

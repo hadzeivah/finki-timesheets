@@ -1,50 +1,58 @@
-<mat-accordion>
-  <div *ngFor="let workPackage of workPackages">
-    <mat-expansion-panel (opened)="panelOpenState = true"
-                         (closed)="panelOpenState = false">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{workPackage.name}}
-        </mat-panel-title>
-        <mat-panel-description>
+<mat-card class="round-card">
+  <mat-card-header>
+    <mat-card-title>Work packages</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-accordion>
+      <div *ngFor="let workPackage of workPackages">
+        <mat-expansion-panel class="mat-elevation-z0" (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{workPackage.name}}
+            </mat-panel-title>
+            <mat-panel-description>
 
-        </mat-panel-description>
-      </mat-expansion-panel-header>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
 
-      <div>
+          <div>
 
-        <div *ngFor="let task of workPackage.tasks">
-          {{task.description}}
-        </div>
+            <div *ngFor="let task of workPackage.tasks">
+              {{task.description}}
+            </div>
 
-        <mat-form-field>
-          <mat-label>Task description</mat-label>
-          <input matInput placeholder="Task description" [formControl]="taskDescription">
-        </mat-form-field>
-        <button mat-icon-button color="primary" (click)="addTask(workPackage)">
-          <mat-icon>add</mat-icon>
-        </button>
+            <mat-form-field>
+              <mat-label>Task description</mat-label>
+              <input matInput placeholder="Task description" [formControl]="taskDescription">
+            </mat-form-field>
+            <button mat-icon-button color="primary" (click)="addTask(workPackage)">
+              <mat-icon>add</mat-icon>
+            </button>
+
+          </div>
+
+          <div>
+
+            <div *ngFor="let output of workPackage.outputs">
+              {{output.description}}
+
+            </div>
+
+            <mat-form-field floatLabel="auto">
+              <mat-label>Intellectual output</mat-label>
+              <input matInput placeholder="Intellectual output" [formControl]="intellectualOutput">
+            </mat-form-field>
+
+            <button mat-icon-button color="primary" (click)="addOutput(workPackage)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+
+        </mat-expansion-panel>
 
       </div>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>
 
-      <div>
-
-        <div *ngFor="let output of workPackage.outputs">
-          {{output.description}}
-
-        </div>
-
-        <mat-form-field floatLabel="auto">
-          <mat-label>Intellectual output</mat-label>
-          <input matInput placeholder="Intellectual output" [formControl]="intellectualOutput">
-        </mat-form-field>
-
-        <button mat-icon-button color="primary" (click)="addOutput(workPackage)">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-
-    </mat-expansion-panel>
-
-  </div>
-</mat-accordion>

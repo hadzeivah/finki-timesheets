@@ -189,7 +189,7 @@ public class TemplateServiceImpl implements TemplateService {
             curRow.getCell(0).setText(String.valueOf(currRow));
             curRow.getCell(1).setText(t.getMember().getFullName());
             curRow.getCell(2).setText(t.getMember().getEmbg() + " " + t.getMember().getTransactionAccount());
-            curRow.getCell(3).setText(item.isPresent() ? item.get().getTaskDescription() : "");
+            curRow.getCell(3).setText(item.isPresent() ? item.get().getTaskDescription().getDescription() : "");
             curRow.getCell(4).setText(totalHoursSpent.toString());
             curRow.getCell(5).setText(String.valueOf(t.getProjectPosition().getSalary()));
             curRow.getCell(6).setText(String.valueOf(totalEuros));

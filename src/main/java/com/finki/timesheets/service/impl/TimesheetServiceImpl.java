@@ -52,6 +52,11 @@ public class TimesheetServiceImpl implements TimesheetService {
     }
 
     @Override
+    public Timesheet findById(Long id) throws NotFoundException {
+        return this.timesheetRepository.findById(id).orElseThrow(() -> new NotFoundException("Timesheet not found"));
+    }
+
+    @Override
     public Timesheet findTimesheetByProjectIdAndMemberId(Long projectId, Long memberId) throws NotFoundException {
         return timesheetRepository.findTimesheetByProjectIdAndMemberId(projectId, memberId).orElseThrow(() -> new NotFoundException("Timesheet not found"));
     }
