@@ -162,8 +162,14 @@
               <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>
 
-                  <mat-icon type="button" mat-raised-button (click)="fileInput.click()">attachment</mat-icon>
+                  <button mat-icon-button color='primary' (click)="fileInput.click()">
+                    <mat-icon>attachment</mat-icon>
+                  </button>
                   <input hidden (change)="selectFile($event)" #fileInput type="file" id="file" accept=".xlsx">
+
+                  <button mat-icon-button color="primary" (click)="downloadTimesheetTemplate()">
+                    <mat-icon>save_alt</mat-icon>
+                  </button>
 
                 </th>
                 <td mat-cell *matCellDef="let element; let i=index;">

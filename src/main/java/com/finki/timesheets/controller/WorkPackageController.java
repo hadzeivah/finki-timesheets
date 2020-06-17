@@ -36,6 +36,12 @@ public class WorkPackageController {
         return this.workPackageService.findAll();
     }
 
+    @PostMapping
+    public WorkPackage createWorkPackage(@RequestBody WorkPackage workPackage) {
+
+        return this.workPackageService.save(workPackage);
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         this.workPackageService.delete(id);

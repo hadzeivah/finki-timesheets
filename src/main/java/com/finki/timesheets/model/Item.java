@@ -20,10 +20,10 @@ public class Item {
     private Timesheet timesheet;
 
     @Column
-    private LocalDateTime startDate = LocalDateTime.now();
+    private LocalDateTime startDate;
 
     @Column
-    private LocalDateTime endDate = LocalDateTime.now();
+    private LocalDateTime endDate;
 
     @Column
     private Integer hours;

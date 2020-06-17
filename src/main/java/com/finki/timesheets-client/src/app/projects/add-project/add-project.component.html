@@ -96,7 +96,7 @@
       <ng-template matStepLabel>Set work package</ng-template>
 
       <mat-form-field>
-        <mat-select placeholder="Add work package" formControlName="workPackages">
+        <mat-select placeholder="Add work package" formControlName="workPackage">
           <mat-option [value]="workPackage" *ngFor="let workPackage of workPackages">{{workPackage?.name}}</mat-option>
         </mat-select>
       </mat-form-field>

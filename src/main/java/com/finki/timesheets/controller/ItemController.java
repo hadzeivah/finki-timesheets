@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -58,10 +60,15 @@ public class ItemController {
         List<Item> items = CsvUtils.read(Item.class, file.getInputStream());
         Timesheet timesheet = this.timesheetService.findById(id);
 
+        AtomicInteger counter = new AtomicInteger();
+
         items.forEach(item -> {
             item.setTimesheet(timesheet);
+            item.setStartDate(LocalDateTime.now().plusDays(counter.get()));
+            item.setEndDate(LocalDateTime.now().plusDays(counter.get() + 1));
             item.setIntellectualOutput(timesheet.getItems().iterator().next().getIntellectualOutput());
             item.setTaskDescription(timesheet.getItems().iterator().next().getTaskDescription());
+            counter.getAndIncrement();
         });
 
         this.itemService.saveAll(items);

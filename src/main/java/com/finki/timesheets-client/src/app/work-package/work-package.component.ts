@@ -47,7 +47,11 @@ export class WorkPackageComponent implements OnInit {
   }
 
   addWorkPackage() {
-
+    let workPackage = new WorkPackage(this.workPackageName.value);
+    this.workPackagesService.saveWorkPackage(workPackage).subscribe(
+      workPackage => {
+        this.workPackages.push(workPackage);
+      });
   }
 
   deleteTask(taskId: number) {

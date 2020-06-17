@@ -22,4 +22,8 @@ export class WorkPackagesService {
   saveOutputs(workPackage: WorkPackage): Observable<WorkPackage> {
     return this.http.post<WorkPackage>(`/api/work_packages/outputs`, workPackage);
   }
+
+  saveWorkPackage(workPackage: WorkPackage): Observable<WorkPackage> {
+    return this.http.post<WorkPackage>(`/api/work_packages`, workPackage);
+  }
 }

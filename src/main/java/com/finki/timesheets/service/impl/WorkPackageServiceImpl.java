@@ -31,4 +31,9 @@ public class WorkPackageServiceImpl implements WorkPackageService {
     public void delete(Long id) {
         this.workPackageRepository.deleteById(id);
     }
+
+    @Override
+    public WorkPackage save(WorkPackage workPackage) {
+        return this.workPackageRepository.save(workPackage);
+    }
 }

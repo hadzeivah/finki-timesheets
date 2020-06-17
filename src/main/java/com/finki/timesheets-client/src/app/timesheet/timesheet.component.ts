@@ -15,6 +15,7 @@ import {map} from "rxjs/operators";
 import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
 import {HttpEventType, HttpResponse} from "@angular/common/http";
 import {UploadService} from "../services/upload.service";
+import {DownloadService} from "../services/download.service";
 
 @Component({
   selector: 'app-timesheet',
@@ -95,6 +96,7 @@ export class TimesheetComponent implements OnInit {
               private itemService: ItemService,
               private projectService: ProjectService,
               private uploadService: UploadService,
+              private downloadService: DownloadService,
               private fb: FormBuilder) {
 
     this.dataSource.filterPredicate = (data: Item, filter) => {
@@ -300,6 +302,13 @@ export class TimesheetComponent implements OnInit {
 
   selectFile(event) {
     this.uploadFile(event.target.files);
+  }
+
+  downloadTimesheetTemplate() {
+    let link = document.createElement("a");
+    link.download = "timesheet-upload-template.csv";
+    link.href = "assets/timesheet-upload-template.csv";
+    link.click();
   }
 }
 

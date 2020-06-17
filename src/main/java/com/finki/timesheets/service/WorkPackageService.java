@@ -11,4 +11,6 @@ public interface WorkPackageService {
     WorkPackage findOne(Long id) throws NotFoundException;
 
     void delete(Long id);
+
+    WorkPackage save(WorkPackage workPackage);
 }

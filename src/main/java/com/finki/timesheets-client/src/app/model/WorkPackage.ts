@@ -6,5 +6,9 @@ export class WorkPackage {
   name: string;
   tasks: Task [];
   outputs: Output [];
+
+  constructor(name: string) {
+    this.name = name;
+  }
 }
 
