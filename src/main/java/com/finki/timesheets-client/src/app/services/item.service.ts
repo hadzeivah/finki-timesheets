@@ -18,8 +18,9 @@ export class ItemService {
         .set('timesheetId', timesheetId.toString())
     });
   }
-  addItem(item: Item): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(`/api/items`, item);
+
+  addItem(item: Item): Observable<Item> {
+    return this.http.post<Item>(`/api/items`, item);
   }
   deleteItem(id: number): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(`/api/items/${id}`);

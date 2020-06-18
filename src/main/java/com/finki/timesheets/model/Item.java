@@ -2,9 +2,14 @@ package com.finki.timesheets.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.validation.constraints.Pattern;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "items")
@@ -20,12 +25,16 @@ public class Item {
     private Timesheet timesheet;
 
     @Column
-    private LocalDateTime startDate;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate startDate;
+
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate endDate;
 
     @Column
-    private LocalDateTime endDate;
-
-    @Column
+    @Pattern(regexp = "[0-8]")
     private Integer hours;
 
     @ManyToOne
@@ -55,19 +64,19 @@ public class Item {
         this.timesheet = timesheet;
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

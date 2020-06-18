@@ -10,6 +10,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,5 +70,16 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> saveAll(List<Item> items) {
         return itemRepository.saveAll(items);
+    }
+
+    @Transactional
+    @Override
+    public void importItems(@Valid List<Item> items, Timesheet timesheet) {
+
+        items.forEach(item -> {
+            item.setTimesheet(timesheet);
+        });
+
+        this.saveAll(items);
     }
 }

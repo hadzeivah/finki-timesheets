@@ -170,6 +170,7 @@ export class TimesheetComponent implements OnInit {
         this.timesheet = data;
         this.dataSource.data = this.timesheet.items;
         this.items = this.timesheet.items;
+        console.log(data);
         this.setItemsForm();
       }, err => console.log('HTTP Error', err));
   }
@@ -195,6 +196,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   deleteItem(i: any, id: any) {
+    console.log(id);
     this.itemService.deleteItem(id).subscribe(() => {
       const foundIndex = this.items.findIndex(x => x.id === id);
       this.items.splice(foundIndex, 1);
@@ -231,7 +233,8 @@ export class TimesheetComponent implements OnInit {
     const newItem: Item = Object.assign({}, this.form.value);
     newItem.timesheetId = this.timesheet.id;
     this.itemService.addItem(newItem).subscribe(item => {
-      this.items.push(item.result);
+      console.log(item);
+      this.items.push(item);
       this.dataSource.data = this.items;
       const itemCtrl = this.itemsForm.get('items') as FormArray;
       itemCtrl.push(this.setItemsFormArray(newItem));

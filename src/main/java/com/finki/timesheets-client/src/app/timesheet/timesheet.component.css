@@ -22,7 +22,7 @@ table {
   border-radius: 50%;
 }
 
-mat-form-field.mat-form-field {
+mat-form-field.mat-form-field, mat-select.mat-form-field {
   font-size: 10px;
   width: 180px;
 }

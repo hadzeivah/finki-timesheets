@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -40,8 +38,8 @@ public class ItemController {
     }
 
     @PostMapping
-    public ApiResponse<Item> saveItem(@RequestBody ItemDto item) {
-        return new ApiResponse<>(HttpStatus.OK.value(), "Item saved successfully.", itemService.save(item));
+    public Item saveItem(@RequestBody ItemDto item) {
+        return itemService.save(item);
     }
 
     @PutMapping("/{id}")
@@ -58,20 +56,10 @@ public class ItemController {
     @PostMapping(value = "/{id}/import", consumes = "multipart/form-data")
     public ResponseEntity<String> importTimesheetItems(@RequestParam("file") MultipartFile file, @PathVariable Long id) throws IOException, NotFoundException {
         List<Item> items = CsvUtils.read(Item.class, file.getInputStream());
+
         Timesheet timesheet = this.timesheetService.findById(id);
 
-        AtomicInteger counter = new AtomicInteger();
-
-        items.forEach(item -> {
-            item.setTimesheet(timesheet);
-            item.setStartDate(LocalDateTime.now().plusDays(counter.get()));
-            item.setEndDate(LocalDateTime.now().plusDays(counter.get() + 1));
-            item.setIntellectualOutput(timesheet.getItems().iterator().next().getIntellectualOutput());
-            item.setTaskDescription(timesheet.getItems().iterator().next().getTaskDescription());
-            counter.getAndIncrement();
-        });
-
-        this.itemService.saveAll(items);
-        return new ResponseEntity<String>(file.getName(), HttpStatus.OK);
+        this.itemService.importItems(items, timesheet);
+        return new ResponseEntity<>(file.getName(), HttpStatus.OK);
     }
 }

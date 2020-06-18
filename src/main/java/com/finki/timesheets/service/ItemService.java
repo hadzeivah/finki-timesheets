@@ -1,6 +1,7 @@
 package com.finki.timesheets.service;
 
 import com.finki.timesheets.model.Item;
+import com.finki.timesheets.model.Timesheet;
 import com.finki.timesheets.model.dto.ItemDto;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface ItemService {
     ItemDto update(ItemDto itemDto);
 
     List<Item> saveAll(List<Item> items);
+
+    void importItems(List<Item> items, Timesheet timesheet);
 }

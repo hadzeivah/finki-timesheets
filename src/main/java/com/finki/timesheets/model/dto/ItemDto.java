@@ -3,13 +3,13 @@ package com.finki.timesheets.model.dto;
 import com.finki.timesheets.model.Output;
 import com.finki.timesheets.model.Task;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class ItemDto {
     private Long id;
     private Long timesheetId;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private int hours;
     private Task taskDescription;
     private Output intellectualOutput;
@@ -30,19 +30,19 @@ public class ItemDto {
         this.timesheetId = timesheetId;
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
