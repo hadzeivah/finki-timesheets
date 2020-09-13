@@ -30,6 +30,7 @@ public class Member extends BaseEntity {
     @Column
     private Boolean isDeleted = false;
 
+    private String fullName;
 
     public Member() {
     }

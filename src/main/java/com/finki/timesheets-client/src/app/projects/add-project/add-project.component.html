@@ -1,8 +1,8 @@
 <h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content>
   <mat-horizontal-stepper linear="true" #stepper>
-    <mat-step [stepControl]="addProjectForm">
-      <form [formGroup]="addProjectForm" class="column-container">
+    <mat-step [stepControl]="addProjectsGroup">
+      <form [formGroup]="addProjectsGroup" class="column-container">
         <ng-template matStepLabel>Create project</ng-template>
 
         <mat-form-field>
@@ -93,14 +93,17 @@
       </form>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Set work package</ng-template>
+      <form [formGroup]="addWorkPackageGroup">
 
-      <mat-form-field>
-        <mat-select placeholder="Add work package" formControlName="workPackage">
-          <mat-option [value]="workPackage" *ngFor="let workPackage of workPackages">{{workPackage?.name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <ng-template matStepLabel>Set work package</ng-template>
 
+        <mat-form-field>
+          <mat-select placeholder="Add work package" formControlName="workPackage">
+            <mat-option [value]="workPackage"
+                        *ngFor="let workPackage of workPackages">{{workPackage?.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
       <div>
         You are now done.
 

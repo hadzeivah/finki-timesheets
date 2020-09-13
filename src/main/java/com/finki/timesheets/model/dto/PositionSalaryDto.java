@@ -6,6 +6,9 @@ public class PositionSalaryDto {
     private String positionType;
     private int salary;
 
+    public PositionSalaryDto() {
+    }
+
     public PositionSalaryDto(String name, int salary) {
         this.positionType = name;
         this.salary = salary;

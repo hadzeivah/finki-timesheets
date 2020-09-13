@@ -8,10 +8,10 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {AssignMemberComponent} from "../assign-member/assign-member.component";
 import {ProjectMemberDto} from "../../model/ProjectMemberDto";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {MemberService} from "../../services/member.service";
 import {map} from "rxjs/operators";
 import {ConfirmDialogComponent} from "../../confirm-dialog/confirm-dialog.component";
+import {NotificationService} from "../../services/notification.service";
 
 
 @Component({
@@ -34,7 +34,7 @@ export class ProjectTableComponent implements OnInit {
   constructor(private projectService: ProjectService,
               private memberService: MemberService,
               public dialog: MatDialog,
-              private _snackBar: MatSnackBar) {
+              public notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -70,10 +70,9 @@ export class ProjectTableComponent implements OnInit {
     dialogRef.afterClosed().subscribe(projectPosition => {
       if (projectPosition) {
 
+        console.log(projectPosition);
         this.projectService.addProject(projectPosition).subscribe(() => {
-          this._snackBar.open('Project successfully added', 'Undo', {
-            duration: 2000
-          });
+          this.notificationService.openSnackBar('Project successfully added');
           this.loadProjects();
           }
         );
@@ -151,10 +150,8 @@ export class ProjectTableComponent implements OnInit {
         this.members = this.members.filter(member => member.id != memberPosition.id);
         this.projectService.assignMemberToProject(new ProjectMemberDto(project, memberPosition.member, memberPosition.positionType))
           .subscribe(result => {
-            this._snackBar.open('Member successfully assigned', 'Undo', {
-              duration: 2000
-            });
-          });
+            this.notificationService.openSnackBar('Member successfully assigned');
+          })
       }
     });
 

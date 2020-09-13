@@ -7,8 +7,8 @@ import {MatSort} from "@angular/material/sort";
 import {MemberProjectsDto} from "../model/MemberProjectsDto";
 import {TimesheetService} from "../services/timesheet.service";
 import {map} from "rxjs/operators";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
+import {NotificationService} from "../services/notification.service";
 
 
 @Component({
@@ -28,8 +28,8 @@ export class MembersComponent implements OnInit {
 
   constructor(private membersService: MemberService,
               private timesheetService: TimesheetService,
-              public dialog: MatDialog,
-              private _snackBar: MatSnackBar) {
+              private notificationService: NotificationService,
+              public dialog: MatDialog) {
     this.loadMembers();
   }
 
@@ -86,8 +86,8 @@ export class MembersComponent implements OnInit {
       if (member) {
         this.membersService.addMember(member)
           .subscribe(() => {
-            this.loadMembers()
-          });
+            this.loadMembers();
+          }, error => this.notificationService.openSnackBar(error));
       }
     });
   }
@@ -118,12 +118,8 @@ export class MembersComponent implements OnInit {
         member.projectPosition = member.projectPosition.filter(p => p.projectId !== projectId);
         member.projectPosition = [].concat(member.projectPosition);
       } else {
-        this._snackBar.open(result.message, 'Undo', {
-          duration: 2000
-        });
+        this.notificationService.openSnackBar(result.message);
       }
-
-
     });
   }
 }

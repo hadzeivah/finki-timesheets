@@ -130,17 +130,12 @@ create table project_position
 
 create table project_position
 (
-    position_id bigint  not null
-        constraint uk_constraint
-            unique
-        constraint fk_positions
-            references positions,
-    project_id  bigint  not null
-        constraint fk_projects
-            references projects,
-    salary      integer not null,
-    constraint project_position_pkey
-        primary key (position_id, project_id)
+    id          bigserial PRIMARY KEY,
+    position_id bigint not null,
+    project_id  bigint not null,
+    salary      bigint,
+    FOREIGN KEY (position_id) REFERENCES positions (id),
+    FOREIGN KEY (project_id) REFERENCES projects (id)
 );
 
 create table holidays
@@ -184,3 +179,116 @@ INSERT INTO holidays (id, date, name)
 VALUES (DEFAULT, '2019-11-23T18:30:00.000Z', null);
 INSERT INTO holidays (id, date, name)
 VALUES (DEFAULT, '2019-12-08T18:30:00.000Z', null);
+
+
+INSERT INTO users (id, first_name, last_name, username, password)
+VALUES (1, 'Hristina', 'Hadjieva', 'hadjieva.hristina', '$2a$04$4vwa/ugGbBVDvbWaKUVZBuJbjyQyj6tqntjSmG8q.hi97.xSdhj/2');
+
+INSERT INTO users (id, first_name, last_name, username, password)
+VALUES (2, 'Ivan', 'Chorbev', 'chorbev.ivan', '$2a$04$4vwa/ugGbBVDvbWaKUVZBuJbjyQyj6tqntjSmG8q.hi97.xSdhj/2');
+
+INSERT INTO public.positions (description, name)
+VALUES ('MANAGER', 'MANAGER');
+INSERT INTO public.positions (description, name)
+VALUES ('TEACHER', 'TEACHER');
+INSERT INTO public.positions (description, name)
+VALUES ('TRAINER', 'TRAINER');
+INSERT INTO public.positions (description, name)
+VALUES ('RESEARCHER', 'RESEARCHER');
+INSERT INTO public.positions (description, name)
+VALUES ('TECHNICIAN', 'TECHNICIAN');
+INSERT INTO public.positions (description, name)
+VALUES ('ADMINISTRATIVE', 'ADMINISTRATIVE');
+
+INSERT INTO public.university (id, dean, name)
+VALUES (1, 'Вон Проф. д-р Иван Чорбев', 'Факултет за информатички науки и компјутерско инженерство - ФИНКИ');
+
+
+CREATE OR REPLACE VIEW report_total_by_intellectual_output AS
+select row_number() OVER ()    AS id,
+       t.project_id,
+       p.name                  as project_name,
+       intellectual_output,
+       sum(hours * salary) / 8 as total
+from items
+         join timesheets t on items.timesheet_id = t.id
+         join projects p on t.project_id = p.id
+         join project_position pp on pp.id = t.project_position
+GROUP BY t.project_id, p.name, intellectual_output, salary;
+
+
+
+create table roles
+(
+    id   bigint not null
+        constraint role_pkey
+            primary key,
+    name varchar(255)
+);
+
+
+
+INSERT INTO roles (id, name)
+VALUES (1, 'ADMIN');
+INSERT INTO roles (id, name)
+VALUES (2, 'USER');
+
+INSERT INTO user_roles (user_id, role_id)
+VALUES (1, 1);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (2, 2);
+
+
+INSERT INTO public.work_packages (id, name)
+VALUES (DEFAULT, 'WP1');
+
+INSERT INTO public.work_packages (id, name)
+VALUES (DEFAULT, 'WP2');
+
+INSERT INTO public.work_packages (id, name)
+VALUES (DEFAULT, 'WP3');
+
+INSERT INTO public.work_packages (id, name)
+VALUES (DEFAULT, 'WP3');
+
+INSERT INTO public.work_packages (id, name)
+VALUES (DEFAULT, 'WP4');
+
+INSERT INTO public.work_packages (id, name)
+VALUES (DEFAULT, 'WP5');
+
+
+INSERT INTO public.tasks (id, description, work_package_id)
+VALUES (DEFAULT, '1.2 Developing an action plan', 1);
+INSERT INTO public.tasks (id, description, work_package_id)
+VALUES (DEFAULT, '1.3 Analysing the content of international educational master programs in Computer Linguistics', 1);
+INSERT INTO public.tasks (id, description, work_package_id)
+VALUES (DEFAULT,
+        '1.4 Teaching and instructing CA academic staff in syntactic, morphological and semantic structure of the English language',
+        1);
+INSERT INTO public.tasks (id, description, work_package_id)
+VALUES (DEFAULT, '1.5 Purchasing equipment for administrative and teaching issues', 1);
+INSERT INTO public.tasks (id, description, work_package_id)
+VALUES (DEFAULT, '1.1 Mobility to EU university for the kick off meeting', 1)
+
+
+
+INSERT INTO public.outputs (id, description, work_package_id)
+VALUES (DEFAULT, '1.1 Action plan on developing Interdisciplinary program.', 1);
+INSERT INTO public.outputs (id, description, work_package_id)
+VALUES (DEFAULT, '1.2 Analysed international master programs.', 1);
+INSERT INTO public.outputs (id, description, work_package_id)
+VALUES (DEFAULT, '1.3 Competence building in syntactic, morphological and semantic knowledge of English language', 1);
+INSERT INTO public.outputs (id, description, work_package_id)
+VALUES (DEFAULT, '1.4 Equipment for administrative and teaching issues.', 1);
+
+
+
+CREATE OR REPLACE VIEW report_total_by_intellectual_output AS
+select row_number() OVER () AS id, member_id, t.project_id, sum(hours * salary) / 8 as total
+from items
+         join timesheets t on items.timesheet_id = t.id
+         join projects p on t.project_id = p.id
+         join project_position pp on pp.id = t.project_position
+GROUP BY t.member_id, t.project_id, p.name, salary;
+

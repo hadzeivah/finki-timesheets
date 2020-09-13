@@ -9,6 +9,9 @@ public class ProjectMemberDto {
     private Member member;
     private PositionType positionType;
 
+    public ProjectMemberDto() {
+    }
+
     public ProjectMemberDto(Project project, Member member, PositionType position) {
         this.project = project;
         this.member = member;

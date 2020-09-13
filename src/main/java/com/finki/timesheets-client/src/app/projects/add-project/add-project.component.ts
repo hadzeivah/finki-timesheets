@@ -18,8 +18,9 @@ import {WorkPackage} from "../../model/WorkPackage";
 export class AddProjectComponent {
 
   universities: University[];
-  addProjectForm: FormGroup;
+  addProjectsGroup: FormGroup;
   addPositionsGroup: FormGroup;
+  addWorkPackageGroup: FormGroup;
   editedProject: Project;
   title: string = "Add projects";
   seedData: Position[];
@@ -37,7 +38,7 @@ export class AddProjectComponent {
     this.getUniversities();
     this.getWorkPackages();
 
-    this.addProjectForm = this.fb.group({
+    this.addProjectsGroup = this.fb.group({
       name: ['', Validators.required],
       projectNumber: ['', Validators.required],
       estimatedBudget: ['', Validators.required],
@@ -73,11 +74,18 @@ export class AddProjectComponent {
         this.seedPositionFormArray();
       });
     }
+    this.addWorkPackageGroup = this.fb.group({
+      workPackage: ['', Validators.required]
+    });
 
   }
 
   get positionsFormArray() {
     return (<FormArray>this.addPositionsGroup.get('positions'));
+  }
+
+  get workPackage() {
+    return this.addWorkPackageGroup.get('workPackage');
   }
 
   createPositionGroup() {
@@ -131,12 +139,12 @@ export class AddProjectComponent {
   }
 
   save() {
-    this.projectPosition = new ProjectPositionsDto(this.addProjectForm.value, this.positionsFormArray.value);
+    this.projectPosition = new ProjectPositionsDto(this.addProjectsGroup.value, this.positionsFormArray.value, this.workPackage.value);
     this.dialogRef.close(this.projectPosition);
   }
 
   updateFormFields() {
-    this.addProjectForm.patchValue(
+    this.addProjectsGroup.patchValue(
       {
         name: this.editedProject.name,
         projectNumber: this.editedProject.projectNumber,
@@ -144,7 +152,10 @@ export class AddProjectComponent {
         university: this.editedProject.university,
         startDate: this.editedProject.startDate,
         endDate: this.editedProject.endDate
-      })
+      });
+    this.addWorkPackageGroup.patchValue(({
+      workPackage: this.editedProject.workPackage
+    }))
   }
 
   getFormControl() {

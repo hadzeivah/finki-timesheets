@@ -4,8 +4,6 @@ import com.finki.timesheets.model.Project;
 
 import java.util.List;
 
-;
-
 
 public class ProjectPositionsDto {
     private Project project;

@@ -4,6 +4,7 @@ import com.finki.timesheets.model.Project;
 import com.finki.timesheets.model.User;
 import com.finki.timesheets.repository.ProjectRepository;
 import com.finki.timesheets.service.ProjectService;
+import com.finki.timesheets.service.WorkPackageService;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,11 @@ import java.util.List;
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
+    private WorkPackageService workPackageService;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, WorkPackageService workPackageService) {
         this.projectRepository = projectRepository;
+        this.workPackageService = workPackageService;
     }
 
 

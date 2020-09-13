@@ -6,7 +6,7 @@ import {map} from "rxjs/operators";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {ProjectService} from "../services/project.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {NotificationService} from "../services/notification.service";
 
 @Component({
   selector: 'app-approval-requests',
@@ -27,7 +27,7 @@ export class ApprovalRequestsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private projectService: ProjectService,
-              private _snackBar: MatSnackBar) {
+              private notificationService: NotificationService) {
   }
 
 
@@ -54,9 +54,7 @@ export class ApprovalRequestsComponent implements OnInit {
   approveProject(project: Project) {
     this.projectService.approveProject(project).subscribe(result => {
       this.dataSource.data = this.dataSource.data.filter(p => p.id !== project.id);
-      this._snackBar.open(result.message, 'Undo', {
-        duration: 2000
-      });
+      this.notificationService.openSnackBar(result.message)
     });
   }
 }

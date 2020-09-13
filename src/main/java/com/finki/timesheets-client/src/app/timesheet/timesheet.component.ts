@@ -24,7 +24,6 @@ import {DownloadService} from "../services/download.service";
 })
 export class TimesheetComponent implements OnInit {
 
-  arrayBuffer: any;
   file: File;
   displayedColumns: string[] = ['startDate', 'endDate', 'hours', 'taskDescription', 'intellectualOutput', 'actions'];
   items: Item[] = [];
