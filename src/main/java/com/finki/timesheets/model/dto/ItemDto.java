@@ -8,8 +8,7 @@ import java.time.LocalDate;
 public class ItemDto {
     private Long id;
     private Long timesheetId;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate date;
     private int hours;
     private Task taskDescription;
     private Output intellectualOutput;
@@ -30,20 +29,12 @@ public class ItemDto {
         this.timesheetId = timesheetId;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public int getHours() {

@@ -4,8 +4,7 @@ import {Output} from "./Output";
 export class Item {
   id: number;
   timesheetId: number;
-  startDate: string;
-  endDate: string;
+  date: string;
   hours: number;
   taskDescription: Task;
   intellectualOutput: Output;

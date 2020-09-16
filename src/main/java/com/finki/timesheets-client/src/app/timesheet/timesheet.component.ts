@@ -16,6 +16,7 @@ import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
 import {HttpEventType, HttpResponse} from "@angular/common/http";
 import {UploadService} from "../services/upload.service";
 import {DownloadService} from "../services/download.service";
+import {NotificationService} from "../services/notification.service";
 
 @Component({
   selector: 'app-timesheet',
@@ -25,7 +26,7 @@ import {DownloadService} from "../services/download.service";
 export class TimesheetComponent implements OnInit {
 
   file: File;
-  displayedColumns: string[] = ['startDate', 'endDate', 'hours', 'taskDescription', 'intellectualOutput', 'actions'];
+  displayedColumns: string[] = ['date', 'hours', 'taskDescription', 'intellectualOutput', 'actions'];
   items: Item[] = [];
   timesheet: Timesheet;
   _project: Project;
@@ -96,16 +97,16 @@ export class TimesheetComponent implements OnInit {
               private projectService: ProjectService,
               private uploadService: UploadService,
               private downloadService: DownloadService,
+              private notificationService: NotificationService,
               private fb: FormBuilder) {
 
     this.dataSource.filterPredicate = (data: Item, filter) => {
       if (this.fromDate && this.toDate) {
         let fromDate = new Date(this.fromDate);
         let toDate = new Date(this.toDate);
-        let itemStartDate = new Date(data.startDate);
-        let itemEndDate = new Date(data.endDate);
+        let itemDate = new Date(data.date);
 
-        return itemStartDate.getTime() >= fromDate.getTime() && itemEndDate.getTime() <= toDate.getTime();
+        return itemDate.getTime() >= fromDate.getTime() && itemDate.getTime() <= toDate.getTime();
       }
       return true;
     };
@@ -129,9 +130,8 @@ export class TimesheetComponent implements OnInit {
 
   buildInsertForm() {
     this.form = this.fb.group({
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
-      hours: ['', Validators.required],
+      date: ['', Validators.required],
+      hours: ['', [Validators.required, Validators.min(1), Validators.max(8)]],
       taskDescription: ['', Validators.required],
       intellectualOutput: ['', Validators.required],
     });
@@ -169,15 +169,13 @@ export class TimesheetComponent implements OnInit {
         this.timesheet = data;
         this.dataSource.data = this.timesheet.items;
         this.items = this.timesheet.items;
-        console.log(data);
         this.setItemsForm();
       }, err => console.log('HTTP Error', err));
   }
 
   private setItemsFormArray(item: Item) {
     return this.fb.group({
-      startDate: [item.startDate],
-      endDate: [item.endDate],
+      date: [item.date],
       hours: [item.hours],
       taskDescription: [item.taskDescription],
       intellectualOutput: [item.intellectualOutput]
@@ -209,8 +207,7 @@ export class TimesheetComponent implements OnInit {
     const updatedItem = {
       id: element.id,
       timesheetId: this.timesheet.id,
-      startDate: this.getItemsFormGroup(index).controls['startDate'].value,
-      endDate: this.getItemsFormGroup(index).controls['endDate'].value,
+      date: this.getItemsFormGroup(index).controls['date'].value,
       hours: this.getItemsFormGroup(index).controls['hours'].value,
       taskDescription: this.getItemsFormGroup(index).controls['taskDescription'].value,
       intellectualOutput: this.getItemsFormGroup(index).controls['intellectualOutput'].value,
@@ -232,12 +229,13 @@ export class TimesheetComponent implements OnInit {
     const newItem: Item = Object.assign({}, this.form.value);
     newItem.timesheetId = this.timesheet.id;
     this.itemService.addItem(newItem).subscribe(item => {
-      console.log(item);
       this.items.push(item);
       this.dataSource.data = this.items;
       const itemCtrl = this.itemsForm.get('items') as FormArray;
       itemCtrl.push(this.setItemsFormArray(newItem));
-    }, err => console.log('HTTP Error', err));
+    }, error => {
+      this.notificationService.openSnackBar(error)
+    });
   }
 
   private setItemsForm() {
@@ -252,8 +250,7 @@ export class TimesheetComponent implements OnInit {
   private updateItemFormValues(item: Item, index: number) {
     const itemCtrl = this.itemsForm.get('items') as FormArray;
     itemCtrl.controls[index].patchValue({
-      startDate: item.startDate,
-      endDate: item.endDate,
+      date: item.date,
       hours: item.hours,
       taskDescription: item.taskDescription,
       intellectualOutput: item.intellectualOutput

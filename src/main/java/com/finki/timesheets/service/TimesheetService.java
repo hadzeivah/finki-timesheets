@@ -9,8 +9,6 @@ public interface TimesheetService {
 
     List<Timesheet> findTimesheetsByProject(Long projectId);
 
-    Long calculateTotalHoursSpentByTimesheet(Timesheet timesheet);
-
     void save(Project project, Member member, ProjectPosition positionSalary);
 
     List<Timesheet> findAll();

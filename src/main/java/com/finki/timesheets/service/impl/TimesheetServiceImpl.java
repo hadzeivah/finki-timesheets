@@ -2,7 +2,6 @@ package com.finki.timesheets.service.impl;
 
 import com.finki.timesheets.model.*;
 import com.finki.timesheets.repository.TimesheetRepository;
-import com.finki.timesheets.service.ItemService;
 import com.finki.timesheets.service.TimesheetService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,28 +14,15 @@ import java.util.List;
 public class TimesheetServiceImpl implements TimesheetService {
 
     private final TimesheetRepository timesheetRepository;
-    private ItemService itemService;
 
     @Autowired
-    public TimesheetServiceImpl(TimesheetRepository timesheetRepository, ItemService itemService) {
+    public TimesheetServiceImpl(TimesheetRepository timesheetRepository) {
         this.timesheetRepository = timesheetRepository;
-        this.itemService = itemService;
     }
 
     @Override
     public List<Timesheet> findTimesheetsByProject(Long projectId) {
         return timesheetRepository.findTimesheetByProjectId(projectId);
-    }
-
-    @Override
-    public Long calculateTotalHoursSpentByTimesheet(Timesheet timesheet) {
-
-        List<Item> items = itemService.findItemsByTimesheet(timesheet.getId());
-
-        if (items.isEmpty())
-            return 0L;
-        else
-            return items.stream().mapToLong(Item::getHours).sum();
     }
 
     @Override

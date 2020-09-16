@@ -4,10 +4,12 @@ import com.finki.timesheets.model.Constants;
 import com.finki.timesheets.model.Item;
 import com.finki.timesheets.model.Project;
 import com.finki.timesheets.model.Timesheet;
+import com.finki.timesheets.service.ItemService;
 import com.finki.timesheets.service.ReportService;
 import com.finki.timesheets.service.TemplateService;
 import com.finki.timesheets.service.TimesheetService;
 import com.finki.timesheets.service.utils.StringUtils;
+import javassist.NotFoundException;
 import org.apache.poi.ooxml.POIXMLException;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
@@ -26,15 +28,16 @@ public class TemplateServiceImpl implements TemplateService {
 
 
     private static final String CLASS_PATH = "/templates/";
-    private static final String FILE_DIRECTORY = "D:\\Ivan_Chorbev-Templates\\";
     private TimesheetService timesheetService;
+    private ItemService itemService;
     private ReportService reportService;
     private HashMap<String, String> replacementValues = new HashMap<>();
     private String today = StringUtils.formatDateToString_DDMMYYYY(LocalDateTime.now());
 
 
-    public TemplateServiceImpl(TimesheetService timesheetService, ReportService reportService) {
+    public TemplateServiceImpl(TimesheetService timesheetService, ItemService itemService, ReportService reportService) {
         this.timesheetService = timesheetService;
+        this.itemService = itemService;
         this.reportService = reportService;
     }
 
@@ -45,20 +48,24 @@ public class TemplateServiceImpl implements TemplateService {
         Map<String, ByteArrayInputStream> documents = new HashMap<>();
 
         filenames.forEach(filename -> {
-            switch (filename) {
-                case "invoice":
-                    documents.put(filename + ".docx", invoiceTemplate(filename, project));
-                    break;
-                case "solution":
-                    documents.put(filename + ".docx", solutionContractTemplate(filename, project));
-                    break;
-                case "requirement":
-                    documents.put(filename + ".docx", requirementContractTemplate(filename, project));
-                    break;
-                case "coverLetter":
-                    documents.put(filename + ".docx", coverLetterTemplate(filename, project));
+            try {
+                switch (filename) {
+                    case "invoice":
+                        documents.put(filename + ".docx", invoiceTemplate(filename, project));
+                        break;
+                    case "solution":
+                        documents.put(filename + ".docx", solutionContractTemplate(filename, project));
+
+                    case "requirement":
+                        documents.put(filename + ".docx", requirementContractTemplate(filename, project));
+                        break;
+                    case "coverLetter":
+                        documents.put(filename + ".docx", coverLetterTemplate(filename, project));
+                }
+                filenamesAsDocx.add(filename + ".docx");
+            } catch (NotFoundException e) {
+                e.printStackTrace();
             }
-            filenamesAsDocx.add(filename + ".docx");
         });
 
 
@@ -92,7 +99,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public ByteArrayInputStream requirementContractTemplate(String filename, Project project) {
+    public ByteArrayInputStream requirementContractTemplate(String filename, Project project) throws NotFoundException {
         String filepath = CLASS_PATH + "BaranjeTS6 - Copy.docx";
 
         this.buildPlaceholders(project);
@@ -100,13 +107,13 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public ByteArrayInputStream solutionContractTemplate(String filename, Project project) {
+    public ByteArrayInputStream solutionContractTemplate(String filename, Project project) throws NotFoundException {
         String filepath = CLASS_PATH + "Resenie06 - Copy.docx";
         this.buildPlaceholders(project);
         return generateTimesheetTableByProject(project.getId(), filepath);
     }
 
-    private ByteArrayInputStream generateTimesheetTableByProject(Long projectId, String filepath) {
+    private ByteArrayInputStream generateTimesheetTableByProject(Long projectId, String filepath) throws NotFoundException {
         XWPFDocument doc = openDocument(filepath);
         List<Timesheet> timesheets = timesheetService.findTimesheetsByProject(projectId);
         replaceTable(doc, timesheets);
@@ -115,7 +122,7 @@ public class TemplateServiceImpl implements TemplateService {
         return saveDocument(doc);
     }
 
-    private XWPFDocument replaceTable(XWPFDocument doc, List<Timesheet> timesheets) {
+    private XWPFDocument replaceTable(XWPFDocument doc, List<Timesheet> timesheets) throws NotFoundException {
         XWPFTable table = null;
         int count = 0;
         for (XWPFParagraph paragraph : doc.getParagraphs()) {
@@ -164,7 +171,7 @@ public class TemplateServiceImpl implements TemplateService {
         return doc;
     }
 
-    private XWPFDocument fillTimesheetTable(XWPFDocument doc, XWPFTable table, List<Timesheet> timesheets) {
+    private XWPFDocument fillTimesheetTable(XWPFDocument doc, XWPFTable table, List<Timesheet> timesheets) throws NotFoundException {
         int currRow = 0;
         XWPFTableRow header = table.getRow(0);
         header.getCell(0).setText("Бр.");
@@ -180,7 +187,7 @@ public class TemplateServiceImpl implements TemplateService {
             XWPFTableRow curRow = table.createRow();
             currRow++;
             Optional<Item> item = t.getItems().stream().findFirst();
-            Long totalHoursSpent = timesheetService.calculateTotalHoursSpentByTimesheet(t);
+            Long totalHoursSpent = itemService.calculateTotalHoursSpentByTimesheet(t);
             double totalEuros = totalHoursSpent / 8.0 * t.getProjectPosition().getSalary();
             totalEuros = Math.round(totalEuros * 10) / 10.0;
             double totalMKD = totalEuros * Constants.EUR;

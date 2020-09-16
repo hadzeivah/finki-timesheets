@@ -34,11 +34,16 @@ public class ItemController {
 
     @GetMapping(params = {"timesheetId"})
     public List<Item> findItemsByTimesheetId(@RequestParam("timesheetId") Long timesheetId) {
-        return itemService.findItemsByTimesheet(timesheetId);
+        try {
+            return itemService.findItemsByTimesheet(timesheetId);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @PostMapping
-    public Item saveItem(@RequestBody ItemDto item) {
+    public Item saveItem(@RequestBody ItemDto item) throws Exception {
         return itemService.save(item);
     }
 

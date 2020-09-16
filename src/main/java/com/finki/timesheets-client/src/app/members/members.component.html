@@ -29,7 +29,7 @@
       <ng-container matColumnDef="positionType">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> PositionType</th>
         <td mat-cell *matCellDef="let element">
-          <tr *ngFor="let position of element.projectPosition">
+          <tr *ngFor="let position of element?.projectPosition">
             <td>{{position?.positionName}}</td>
           </tr>
         </td>
@@ -39,7 +39,7 @@
       <ng-container matColumnDef="projects">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Projects</th>
         <td mat-cell *matCellDef="let member">
-          <tr *ngFor="let project of member.projectPosition">
+          <tr *ngFor="let project of member?.projectPosition">
             <td>{{project?.projectName}}</td>
             <mat-icon color="primary" (click)="deleteTimesheet(member.member.id , project.projectId , member)">close
             </mat-icon>

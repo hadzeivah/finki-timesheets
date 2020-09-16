@@ -8,7 +8,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Entity
@@ -24,17 +23,11 @@ public class Item {
     @JoinColumn(name = "timesheet_id", referencedColumnName = "id")
     private Timesheet timesheet;
 
-    @Column
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate startDate;
-
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate endDate;
+    private LocalDate date;
 
     @Column
-    @Pattern(regexp = "[0-8]")
     private Integer hours;
 
     @ManyToOne
@@ -46,6 +39,14 @@ public class Item {
     private Output intellectualOutput;
 
     public Item() {
+    }
+
+    public Item(Timesheet timesheet, LocalDate date, int hours, Task taskDescription, Output intellectualOutput) {
+        this.timesheet = timesheet;
+        this.date = date;
+        this.hours = hours;
+        this.taskDescription = taskDescription;
+        this.intellectualOutput = intellectualOutput;
     }
 
     public Long getId() {
@@ -64,20 +65,12 @@ public class Item {
         this.timesheet = timesheet;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public Integer getHours() {

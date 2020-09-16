@@ -19,21 +19,12 @@
         <div class="space-container">
           <!-- Start Date Form Field-->
           <mat-form-field appearance="outline" floatLabel="auto">
-            <input matInput [matDatepicker]="startDatePicker"
+            <input matInput [matDatepicker]="datePicker"
                    [matDatepickerFilter]="weekendFilter"
                    placeholder="Choose a date"
-                   formControlName="startDate">
-            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #startDatePicker [dateClass]="dateClass()"></mat-datepicker>
-          </mat-form-field>
-          <!-- End Date Form Field-->
-          <mat-form-field appearance="outline" floatLabel="auto">
-            <input matInput [matDatepicker]="endDatePicker"
-                   [matDatepickerFilter]="weekendFilter"
-                   placeholder="Choose a date"
-                   formControlName="endDate">
-            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #endDatePicker [dateClass]="dateClass()"></mat-datepicker>
+                   formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker [dateClass]="dateClass()"></mat-datepicker>
           </mat-form-field>
 
           <!-- Hours Form Field-->
@@ -67,40 +58,21 @@
         <div class="item">
           <form [formGroup]="itemsForm">
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z0" formArrayName="items">
-              <!-- Start Date Column -->
-              <ng-container matColumnDef="startDate">
-                <th mat-header-cell *matHeaderCellDef> Start date</th>
-                <td mat-cell *matCellDef="let element; let index = index;" [formGroupName]="index">
-                  <mat-form-field *ngIf="element.editing" appearance="outline"
-                                  floatLabel="{{ element.editing ? 'float' : 'never'}}">
-                    <input matInput
-                           [matDatepicker]="picker"
-                           [matDatepickerFilter]="weekendFilter"
-                           placeholder="Choose start date"
-                           formControlName="startDate">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker
-                                    [dateClass]="dateClass()"></mat-datepicker>
-                  </mat-form-field>
-                  <span *ngIf="!element.editing"> {{element.startDate | date}}</span>
-                </td>
-                <td mat-footer-cell *matFooterCellDef> Total</td>
-              </ng-container>
 
-              <!-- End Date Column -->
-              <ng-container matColumnDef="endDate">
-                <th mat-header-cell *matHeaderCellDef> End date</th>
+              <!-- Date Column -->
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Date</th>
                 <td mat-cell *matCellDef="let element; let index= index" [formGroupName]="index">
-                  <mat-form-field *ngIf="element.editing" appearance="outline"
-                                  floatLabel="{{ element.editing ? 'float' : 'never'}}">
+                  <mat-form-field *ngIf="element?.editing" appearance="outline"
+                                  floatLabel="{{ element?.editing ? 'float' : 'never'}}">
                     <input matInput [matDatepicker]="picker"
                            [matDatepickerFilter]="weekendFilter"
-                           placeholder="Choose end date"
-                           formControlName="endDate">
+                           placeholder="Choose date date"
+                           formControlName="date">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker [dateClass]="dateClass()"></mat-datepicker>
                   </mat-form-field>
-                  <span *ngIf="!element.editing"> {{element.endDate | date }}</span>
+                  <span *ngIf="!element?.editing"> {{element?.date | date }}</span>
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>
               </ng-container>
@@ -109,13 +81,13 @@
               <ng-container matColumnDef="hours">
                 <th mat-header-cell *matHeaderCellDef> Hours</th>
                 <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
-                  <mat-form-field *ngIf="element.editing" appearance="outline"
-                                  floatLabel="{{ element.editing ? 'float' : 'never'}}">
+                  <mat-form-field *ngIf="element?.editing" appearance="outline"
+                                  floatLabel="{{ element?.editing ? 'float' : 'never'}}">
                     <mat-label>Hours</mat-label>
                     <input matInput placeholder="Hours"
                            formControlName="hours">
                   </mat-form-field>
-                  <span *ngIf="!element.editing"> {{element.hours}}</span>
+                  <span *ngIf="!element?.editing"> {{element?.hours}}</span>
 
                 </td>
                 <td mat-footer-cell *matFooterCellDef> {{getTotalTimeSpent()}} h / {{getTotalTimeSpentInDays()}} days
@@ -127,7 +99,7 @@
                 <th mat-header-cell *matHeaderCellDef> Task Description</th>
                 <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
 
-                  <mat-form-field *ngIf="element.editing" appearance="outline" floatLabel="auto">
+                  <mat-form-field *ngIf="element?.editing" appearance="outline" floatLabel="auto">
 
                     <mat-select placeholder="Choose task" formControlName="taskDescription">
                       <mat-option [value]="element?.taskDescription"
@@ -135,7 +107,7 @@
                     </mat-select>
                   </mat-form-field>
 
-                  <span *ngIf="!element.editing"> {{element?.taskDescription?.description}}</span>
+                  <span *ngIf="!element?.editing"> {{element?.taskDescription?.description}}</span>
 
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>
@@ -147,18 +119,18 @@
                 <th mat-header-cell *matHeaderCellDef> Intellectual Output</th>
                 <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
 
-                  <mat-form-field *ngIf="element.editing" appearance="outline" floatLabel="auto">
+                  <mat-form-field *ngIf="element?.editing" appearance="outline" floatLabel="auto">
                     <mat-select placeholder="Choose output" formControlName="intellectualOutput">
                       <mat-option [value]="element?.intellectualOutput"
                                   *ngFor="let output of _project?.workPackage?.outputs">{{output?.description}}</mat-option>
                     </mat-select>
                   </mat-form-field>
 
-                  <span *ngIf="!element.editing"> {{element?.intellectualOutput?.description}}</span>
+                  <span *ngIf="!element?.editing"> {{element?.intellectualOutput?.description}}</span>
 
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                  <mat-error *ngIf="getTotalTimeSpent()>160"> There are inserted more hours then allowed</mat-error>
+                  <mat-error *ngIf="getTotalTimeSpent() > 160"> There are inserted more hours then allowed</mat-error>
                 </td>
               </ng-container>
 
@@ -178,11 +150,11 @@
                 </th>
                 <td mat-cell *matCellDef="let element; let i=index;">
 
-                  <button *ngIf="!element.editing" mat-icon-button color="primary" focusable="false"
+                  <button *ngIf="!element?.editing" mat-icon-button color="primary" focusable="false"
                           (click)="startEdit(i,element)">
                     <mat-icon>edit</mat-icon>
                   </button>
-                  <button *ngIf="element.editing" mat-icon-button color="primary" focusable="false"
+                  <button *ngIf="element?.editing" mat-icon-button color="primary" focusable="false"
                           (click)="confirmEditCreate(element, i)">
                     <mat-icon>check</mat-icon>
                   </button>
