@@ -292,3 +292,11 @@ from items
          join project_position pp on pp.id = t.project_position
 GROUP BY t.member_id, t.project_id, p.name, salary;
 
+create or replace view working_hours_summary_by_member(id, date, member_id, hours) as
+SELECT row_number() OVER () AS id,
+       date,
+       member_id,
+       sum(hours)
+from timesheets
+         join items i on timesheets.id = i.timesheet_id
+GROUP BY member_id, date;
