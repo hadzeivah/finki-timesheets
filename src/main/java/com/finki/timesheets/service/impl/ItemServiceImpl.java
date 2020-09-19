@@ -47,7 +47,7 @@ public class ItemServiceImpl implements ItemService {
         if (workingHoursSummaryByMember != null && workingHoursSummaryByMember.getHours() > MAX_HOURS) {
             throw new Exception("The maximum hours per day has been exceeded");
         } else
-        return itemRepository.save(newItem);
+            return itemRepository.save(newItem);
     }
 
     @Override
@@ -95,12 +95,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public void importItems(@Valid List<Item> items, Timesheet timesheet) {
-
-        items.forEach(item -> {
-            item.setTimesheet(timesheet);
-        });
-
+    public void importItems(@Valid List<Item> items) {
         this.saveAll(items);
     }
 }

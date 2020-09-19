@@ -21,4 +21,13 @@ public class OutputServiceImpl implements OutputService {
     public List<Output> saveAll(List<Output> outputs) {
         return this.outputRepository.saveAll(outputs);
     }
+
+    @Override
+    public void delete(Long id) {
+        this.outputRepository.deleteById(id);
+    }
+
+    public Output findByDescription(String name) {
+        return this.outputRepository.findByDescription(name);
+    }
 }

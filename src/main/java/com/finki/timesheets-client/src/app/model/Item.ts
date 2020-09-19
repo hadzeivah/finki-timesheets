@@ -9,5 +9,6 @@ export class Item {
   taskDescription: Task;
   intellectualOutput: Output;
   editing: boolean;
+  exceededWorkingHours: boolean = false;
 }
 

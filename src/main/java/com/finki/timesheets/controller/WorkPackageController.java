@@ -7,7 +7,6 @@ import com.finki.timesheets.model.WorkPackage;
 import com.finki.timesheets.service.OutputService;
 import com.finki.timesheets.service.TaskService;
 import com.finki.timesheets.service.WorkPackageService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +47,7 @@ public class WorkPackageController {
     }
 
     @PostMapping("/tasks")
-    public ApiResponse<Task> saveTasks(@RequestBody WorkPackage workPackage) throws NotFoundException {
+    public ApiResponse<Task> saveTasks(@RequestBody WorkPackage workPackage) {
 
         workPackage.getTasks().forEach(task -> {
             task.setWorkPackage(workPackage);
@@ -64,5 +63,18 @@ public class WorkPackageController {
             outputs.setWorkPackage(workPackage);
         });
         return new ApiResponse<>(HttpStatus.OK.value(), "Outputs saved successfully.", this.outputService.saveAll(new ArrayList<>(workPackage.getOutputs())));
+    }
+
+
+    @DeleteMapping("/outputs/{id}")
+    public ApiResponse<Void> deleteOutput(@PathVariable Long id) {
+        outputService.delete(id);
+        return new ApiResponse<>(HttpStatus.OK.value(), "Output fetched successfully.", null);
+    }
+
+    @DeleteMapping("/tasks/{id}")
+    public ApiResponse<Void> deleteTask(@PathVariable Long id) {
+        taskService.delete(id);
+        return new ApiResponse<>(HttpStatus.OK.value(), "Task fetched successfully.", null);
     }
 }

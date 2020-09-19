@@ -13,8 +13,8 @@ export class TimesheetService {
   constructor(private http: HttpClient) {
   }
 
-  findAllTimesheets(): Observable<Timesheet[]> {
-    return this.http.get<Timesheet[]>('/api/timesheets')
+  findWorkingHoursSummaryByMember(memberId: number): Observable<any> {
+    return this.http.get<any>(`/api/timesheets/working_hours_summary/member/${memberId}`)
   }
 
   findTimesheet(projectId: number, memberId: number): Observable<Timesheet> {

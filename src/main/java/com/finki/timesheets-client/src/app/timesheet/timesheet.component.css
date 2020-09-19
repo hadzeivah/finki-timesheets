@@ -30,3 +30,7 @@ mat-form-field.mat-form-field, mat-select.mat-form-field {
 tr.mat-footer-row {
   font-weight: bold;
 }
+
+.make-red {
+  background-color: red;
+}

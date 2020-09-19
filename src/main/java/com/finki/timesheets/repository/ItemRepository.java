@@ -12,4 +12,8 @@ import java.util.Optional;
 @Repository
 public interface ItemRepository extends JpaRepository<Item,Long> {
     Optional<List<Item>> findItemsByTimesheet(Timesheet timesheet);
+
+    int countByIntellectualOutputId(Long id);
+
+    int countByTaskDescriptionId(Long id);
 }

@@ -8,7 +8,6 @@ import com.finki.timesheets.model.Timesheet;
 import com.finki.timesheets.model.dto.MemberProjectsDto;
 import com.finki.timesheets.model.dto.ProjectPosition;
 import com.finki.timesheets.service.MemberService;
-import com.finki.timesheets.service.TimesheetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +23,10 @@ import java.util.Set;
 public class MemberController {
 
     private final MemberService memberService;
-    private final TimesheetService timesheetService;
 
     @Autowired
-    public MemberController(MemberService memberService, TimesheetService timesheetService) {
+    public MemberController(MemberService memberService) {
         this.memberService = memberService;
-        this.timesheetService = timesheetService;
     }
 
     @GetMapping

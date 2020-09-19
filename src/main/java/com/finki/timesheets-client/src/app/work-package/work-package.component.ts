@@ -4,6 +4,8 @@ import {WorkPackage} from "../model/WorkPackage";
 import {FormControl, Validators} from "@angular/forms";
 import {Output} from "../model/Output";
 import {Task} from "../model/Task";
+import {TaskService} from "../services/task.service";
+import {IntellectualOutputService} from "../services/intellectualOutput.service";
 
 @Component({
   selector: 'app-work-package',
@@ -20,7 +22,9 @@ export class WorkPackageComponent implements OnInit {
   intellectualOutput = new FormControl('', Validators.required);
   workPackageName = new FormControl('', Validators.required);
 
-  constructor(public workPackagesService: WorkPackagesService) {
+  constructor(private workPackagesService: WorkPackagesService,
+              private taskService: TaskService,
+              private outputService: IntellectualOutputService) {
   }
 
   ngOnInit() {
@@ -54,11 +58,15 @@ export class WorkPackageComponent implements OnInit {
       });
   }
 
-  deleteTask(taskId: number) {
-
+  deleteTask(id: number) {
+    this.taskService.deleteTask(id).subscribe(() =>
+      this.getWorkPackages()
+    );
   }
 
   deleteOutput(id: number) {
-
-  }
+    this.outputService.deleteOutput(id).subscribe(() =>
+      this.getWorkPackages()
+    )
+  };
 }

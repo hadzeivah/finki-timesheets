@@ -40,6 +40,7 @@ export class TimesheetComponent implements OnInit {
   _member: Member;
   noData = this.dataSource.connect().pipe(map(data => data.length === 0));
   memberPosition: Position;
+  workingHoursSummaryByMember: any;
 
 
   @Input()
@@ -123,9 +124,6 @@ export class TimesheetComponent implements OnInit {
       this.datesToHighlight = holidays;
       }
     );
-    this.positionsService.findPositionById(this.timesheet.projectPosition.id).subscribe(position =>
-      this.memberPosition = position
-    )
   }
 
   buildInsertForm() {
@@ -170,6 +168,18 @@ export class TimesheetComponent implements OnInit {
         this.dataSource.data = this.timesheet.items;
         this.items = this.timesheet.items;
         this.setItemsForm();
+        this.positionsService.findPositionById(this.timesheet.projectPosition.id).subscribe(position =>
+          this.memberPosition = position
+        );
+        this.timesheetService.findWorkingHoursSummaryByMember(this.timesheet.member.id).subscribe(result => {
+            this.workingHoursSummaryByMember = result;
+
+            this.items.filter(item => this.workingHoursSummaryByMember[item.date].hours > 8).forEach(i =>
+              i.exceededWorkingHours = true
+            );
+
+          }
+        );
       }, err => console.log('HTTP Error', err));
   }
 
@@ -193,7 +203,6 @@ export class TimesheetComponent implements OnInit {
   }
 
   deleteItem(i: any, id: any) {
-    console.log(id);
     this.itemService.deleteItem(id).subscribe(() => {
       const foundIndex = this.items.findIndex(x => x.id === id);
       this.items.splice(foundIndex, 1);
@@ -211,7 +220,8 @@ export class TimesheetComponent implements OnInit {
       hours: this.getItemsFormGroup(index).controls['hours'].value,
       taskDescription: this.getItemsFormGroup(index).controls['taskDescription'].value,
       intellectualOutput: this.getItemsFormGroup(index).controls['intellectualOutput'].value,
-      editing: false
+      editing: false,
+      exceededWorkingHours: element.exceededWorkingHours
     };
     this.itemService.updateItem(updatedItem).subscribe(item => {
       const foundIndex = this.items.findIndex(x => x.id === item.result.id);
@@ -291,9 +301,7 @@ export class TimesheetComponent implements OnInit {
           }
         },
         (err) => {
-          console.log("Upload Error:", err);
         }, () => {
-          console.log("Upload done");
           this.getTimesheet();
         }
       )
@@ -305,8 +313,8 @@ export class TimesheetComponent implements OnInit {
 
   downloadTimesheetTemplate() {
     let link = document.createElement("a");
-    link.download = "timesheet-upload-template.csv";
-    link.href = "assets/timesheet-upload-template.csv";
+    link.download = "timesheet-upload-template.xlsx";
+    link.href = "assets/timesheet-upload-template.xlsx";
     link.click();
   }
 }

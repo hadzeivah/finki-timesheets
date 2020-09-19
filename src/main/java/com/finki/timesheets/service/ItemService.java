@@ -22,5 +22,5 @@ public interface ItemService {
 
     List<Item> saveAll(List<Item> items);
 
-    void importItems(List<Item> items, Timesheet timesheet);
+    void importItems(List<Item> items);
 }

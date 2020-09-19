@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OutputRepository extends JpaRepository<Output, Long> {
+    Output findByDescription(String name);
 }
