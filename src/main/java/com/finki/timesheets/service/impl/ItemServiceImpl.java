@@ -44,10 +44,10 @@ public class ItemServiceImpl implements ItemService {
 
         WorkingHoursSummary workingHoursSummaryByMember = this.workingHoursSummaryByMemberService.findByMemberIdAndDate(timesheet.getMember().getId(), item.getDate());
 
-        if (workingHoursSummaryByMember != null && workingHoursSummaryByMember.getHours() > MAX_HOURS) {
+        if (workingHoursSummaryByMember != null && workingHoursSummaryByMember.getHours() >= MAX_HOURS) {
             throw new Exception("The maximum hours per day has been exceeded");
-        } else
-            return itemRepository.save(newItem);
+        }
+        return itemRepository.save(newItem);
     }
 
     @Override
