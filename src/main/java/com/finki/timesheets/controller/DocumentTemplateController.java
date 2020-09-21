@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/templates")
+@RequestMapping("/api/templates")
 public class DocumentTemplateController {
 
     private final TemplateService templateService;

@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/work_packages")
+@RequestMapping("/api/work_packages")
 public class WorkPackageController {
 
     private final WorkPackageService workPackageService;

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/holidays")
+@RequestMapping("/api/holidays")
 public class HolidayController {
 
     private final HolidayService holidayService;

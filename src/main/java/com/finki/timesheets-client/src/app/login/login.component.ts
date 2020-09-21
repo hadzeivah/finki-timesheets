@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
       .subscribe(data => {
         this.router.navigate(['projects']);
       }, error => {
+        console.log(error);
         this.invalidLogin = true;
         alert(error.message);
       });

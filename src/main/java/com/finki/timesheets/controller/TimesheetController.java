@@ -15,9 +15,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/timesheets")
+@RequestMapping("/api/timesheets")
 public class TimesheetController {
 
     private final TimesheetService timesheetService;

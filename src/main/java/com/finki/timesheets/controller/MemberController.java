@@ -17,9 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 public class MemberController {
 
     private final MemberService memberService;

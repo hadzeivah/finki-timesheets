@@ -19,7 +19,7 @@ export class AuthService {
   }
 
   login(loginPayload) {
-    return this.http.post<ApiResponse>('/api/token/generate-token', loginPayload)
+    return this.http.post<ApiResponse>('/token/generate-token', loginPayload)
       .pipe(map(user => {
         // login successful if there's a jwt token in the response
         if (user.result && user.result.token) {

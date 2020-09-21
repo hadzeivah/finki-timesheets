@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/projects")
+@RequestMapping("/api/projects")
 public class ProjectController {
 
     private final ProjectService projectService;
