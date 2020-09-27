@@ -14,5 +14,4 @@ public interface PositionService {
     Position findPositionByType(String positionType);
 
     Position findById(Long id) throws NotFoundException;
-
 }

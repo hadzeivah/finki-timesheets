@@ -21,16 +21,16 @@ public class ProjectController {
     private final ProjectService projectService;
     private final PositionService positionService;
     private final TimesheetService timesheetService;
-    private final PositionSalaryService positionSalaryService;
+    private final ProjectPositionService projectPositionService;
     private UserService userService;
 
     @Autowired
     public ProjectController(ProjectService projectService, PositionService positionService, TimesheetService timesheetService,
-                             PositionSalaryService positionSalaryService, UserService userService) {
+                             ProjectPositionService projectPositionService, UserService userService) {
         this.projectService = projectService;
         this.positionService = positionService;
         this.timesheetService = timesheetService;
-        this.positionSalaryService = positionSalaryService;
+        this.projectPositionService = projectPositionService;
         this.userService = userService;
     }
 
@@ -55,7 +55,7 @@ public class ProjectController {
         Project project = projectPosition.getProject();
         User user = (User) this.userService.findOne(currentUser.getUsername());
         project.setProjectManager(user);
-        this.positionSalaryService.saveOrUpdateAll(projectService.save(project), projectPosition.getPositions());
+        this.projectPositionService.saveOrUpdateAll(projectService.save(project), projectPosition.getPositions());
         return new ApiResponse<>(HttpStatus.OK.value(), "Project saved successfully.", project);
     }
 
@@ -63,7 +63,7 @@ public class ProjectController {
     public ApiResponse<Project> assignMemberToProject(@RequestBody ProjectMemberDto projectMember) {
 
         Position position = this.positionService.findPositionByType(projectMember.getPositionType().name());
-        ProjectPosition positionSalary = this.positionSalaryService.findByProjectAndPosition(projectMember.getProject(), position);
+        ProjectPosition positionSalary = this.projectPositionService.findByProjectAndPosition(projectMember.getProject(), position);
         this.timesheetService.save(projectMember.getProject(), projectMember.getMember(), positionSalary);
         return new ApiResponse<>(HttpStatus.OK.value(), "Member assigned to project successfully.", null);
     }
@@ -73,7 +73,7 @@ public class ProjectController {
     public ApiResponse<Project> update(@RequestBody ProjectPositionsDto projectPosition) throws NotFoundException {
 
         Project project = projectService.update(projectPosition.getProject());
-        this.positionSalaryService.saveOrUpdateAll(project, projectPosition.getPositions());
+        this.projectPositionService.saveOrUpdateAll(project, projectPosition.getPositions());
         return new ApiResponse<>(HttpStatus.OK.value(), "Project updated successfully.", project);
     }
 

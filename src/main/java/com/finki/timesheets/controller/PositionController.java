@@ -2,8 +2,8 @@ package com.finki.timesheets.controller;
 
 import com.finki.timesheets.model.Position;
 import com.finki.timesheets.model.ProjectPosition;
-import com.finki.timesheets.service.PositionSalaryService;
 import com.finki.timesheets.service.PositionService;
+import com.finki.timesheets.service.ProjectPositionService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +19,12 @@ import java.util.Map;
 public class PositionController {
 
     private final PositionService positionService;
-    private PositionSalaryService positionSalaryService;
+    private ProjectPositionService projectPositionService;
 
     @Autowired
-    public PositionController(PositionService positionService, PositionSalaryService positionSalaryService) {
+    public PositionController(PositionService positionService, ProjectPositionService projectPositionService) {
         this.positionService = positionService;
-        this.positionSalaryService = positionSalaryService;
+        this.projectPositionService = projectPositionService;
     }
 
     @GetMapping("/salaries/map/project/{id}")
@@ -34,7 +34,7 @@ public class PositionController {
 
     @GetMapping("/salaries/project/{id}")
     public List<ProjectPosition> getProjectPositionsSalaries(@PathVariable Long id) {
-        return this.positionSalaryService.findAllByProjectId(id);
+        return this.projectPositionService.findAllByProjectId(id);
     }
 
     @GetMapping()
@@ -43,9 +43,9 @@ public class PositionController {
     }
 
 
-    @GetMapping("/{id}")
-    public Position getPosition(@PathVariable Long id) throws NotFoundException {
-        return this.positionService.findById(id);
+    @GetMapping("/projectPosition/{id}")
+    public Position getPositionByProjectAndMember(@PathVariable Long id) throws NotFoundException {
+        return this.projectPositionService.findById(id).getPosition();
     }
 
 }

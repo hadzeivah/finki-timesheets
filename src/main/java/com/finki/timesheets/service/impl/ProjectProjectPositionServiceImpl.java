@@ -7,8 +7,9 @@ import com.finki.timesheets.model.ProjectPosition;
 import com.finki.timesheets.model.dto.Helper;
 import com.finki.timesheets.model.dto.PositionSalaryDto;
 import com.finki.timesheets.repository.PositionRepository;
-import com.finki.timesheets.repository.PositionSalaryRepository;
-import com.finki.timesheets.service.PositionSalaryService;
+import com.finki.timesheets.repository.ProjectPositionRepository;
+import com.finki.timesheets.service.ProjectPositionService;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,26 +20,31 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-@Service(value = "positionSalaryService")
-public class PositionSalaryServiceImpl implements PositionSalaryService {
+@Service(value = "projectPositionService")
+public class ProjectProjectPositionServiceImpl implements ProjectPositionService {
 
     private final PositionRepository positionRepository;
-    private final PositionSalaryRepository positionSalaryRepository;
+    private final ProjectPositionRepository projectPositionRepository;
 
 
-    public PositionSalaryServiceImpl(PositionRepository positionRepository, PositionSalaryRepository positionSalaryRepository) {
+    public ProjectProjectPositionServiceImpl(PositionRepository positionRepository, ProjectPositionRepository projectPositionRepository) {
         this.positionRepository = positionRepository;
-        this.positionSalaryRepository = positionSalaryRepository;
+        this.projectPositionRepository = projectPositionRepository;
     }
 
     @Override
     public List<ProjectPosition> findAllByProjectId(Long id) {
-        return this.positionSalaryRepository.findAllByProjectId(id);
+        return this.projectPositionRepository.findAllByProjectId(id);
     }
 
     @Override
     public ProjectPosition findByProjectAndPosition(Project project, Position position) {
-        return this.positionSalaryRepository.findByProjectAndPosition(project, position);
+        return this.projectPositionRepository.findByProjectAndPosition(project, position);
+    }
+
+    @Override
+    public ProjectPosition findById(Long id) throws NotFoundException {
+        return this.projectPositionRepository.findById(id).orElseThrow(() -> new NotFoundException("Project position not found"));
     }
 
     @Override
@@ -46,7 +52,7 @@ public class PositionSalaryServiceImpl implements PositionSalaryService {
     public List<ProjectPosition> saveOrUpdateAll(Project project, List<PositionSalaryDto> positions) {
 
         Map<String, Position> positionMap = this.positionRepository.findAll().stream().collect(Collectors.toMap(Position::getName, Function.identity()));
-        Map<String, ProjectPosition> projectPositionMap = this.positionSalaryRepository.findAllByProjectId(project.getId()).stream().collect(Collectors.toMap(projectPosition -> projectPosition.getPosition().getName(), projectPosition -> projectPosition));
+        Map<String, ProjectPosition> projectPositionMap = this.projectPositionRepository.findAllByProjectId(project.getId()).stream().collect(Collectors.toMap(projectPosition -> projectPosition.getPosition().getName(), projectPosition -> projectPosition));
 
         List<ProjectPosition> projectPositions = new ArrayList<>();
         positions.forEach(positionSalaryDto -> {
@@ -66,7 +72,7 @@ public class PositionSalaryServiceImpl implements PositionSalaryService {
 
         });
 
-        return this.positionSalaryRepository.saveAll(projectPositions);
+        return this.projectPositionRepository.saveAll(projectPositions);
     }
 
 }

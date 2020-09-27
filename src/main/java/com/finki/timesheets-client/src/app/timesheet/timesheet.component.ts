@@ -17,6 +17,7 @@ import {HttpEventType, HttpResponse} from "@angular/common/http";
 import {UploadService} from "../services/upload.service";
 import {DownloadService} from "../services/download.service";
 import {NotificationService} from "../services/notification.service";
+import {Constants} from "../model/Constants";
 
 @Component({
   selector: 'app-timesheet',
@@ -41,7 +42,6 @@ export class TimesheetComponent implements OnInit {
   noData = this.dataSource.connect().pipe(map(data => data.length === 0));
   memberPosition: Position;
   workingHoursSummaryByMember: any;
-
 
   @Input()
   set member(member: Member) {
@@ -129,7 +129,7 @@ export class TimesheetComponent implements OnInit {
   buildInsertForm() {
     this.form = this.fb.group({
       date: ['', Validators.required],
-      hours: ['', [Validators.required, Validators.min(1), Validators.max(8)]],
+      hours: ['', [Validators.required, Validators.min(1), Validators.max(Constants.MAX_WORKING_HOURS)]],
       taskDescription: ['', Validators.required],
       intellectualOutput: ['', Validators.required],
     });
@@ -151,8 +151,7 @@ export class TimesheetComponent implements OnInit {
 
   createItem(): FormGroup {
     return this.fb.group({
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+      date: ['', Validators.required],
       hours: ['', Validators.required],
       taskDescription: ['', Validators.required],
       intellectualOutput: ['', Validators.required],
@@ -168,13 +167,13 @@ export class TimesheetComponent implements OnInit {
         this.dataSource.data = this.timesheet.items;
         this.items = this.timesheet.items;
         this.setItemsForm();
-        this.positionsService.findPositionById(this.timesheet.projectPosition.id).subscribe(position =>
+        this.positionsService.findPositionByProjectPositionId(this.timesheet.projectPosition.id).subscribe(position =>
           this.memberPosition = position
         );
         this.timesheetService.findWorkingHoursSummaryByMember(this.timesheet.member.id).subscribe(result => {
             this.workingHoursSummaryByMember = result;
 
-            this.items.filter(item => this.workingHoursSummaryByMember[item.date].hours > 8).forEach(i =>
+          this.items.filter(item => this.workingHoursSummaryByMember[item.date].hours > Constants.MAX_WORKING_HOURS).forEach(i =>
               i.exceededWorkingHours = true
             );
 
@@ -199,7 +198,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   getTotalTimeSpentInDays() {
-    return Math.round((this.getTotalTimeSpent() / 8) * 10) / 10;
+    return Math.round((this.getTotalTimeSpent() / Constants.MAX_WORKING_HOURS) * 10) / 10;
   }
 
   deleteItem(i: any, id: any) {
@@ -280,7 +279,7 @@ export class TimesheetComponent implements OnInit {
 
   public getTotalCost(): number {
     let member = this.timesheet != null ? this.timesheet.member : null;
-    return member != null ? this.timesheet.projectPosition.salary * this.getTotalTimeSpent() / 8 : 0;
+    return member != null ? this.timesheet.projectPosition.salary * this.getTotalTimeSpent() / Constants.MAX_WORKING_HOURS : 0;
   }
 
   uploadFile(files: FileList) {

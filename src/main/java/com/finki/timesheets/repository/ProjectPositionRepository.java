@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Repository
-public interface PositionSalaryRepository extends JpaRepository<ProjectPosition, Long> {
+public interface ProjectPositionRepository extends JpaRepository<ProjectPosition, Long> {
     List<ProjectPosition> findAllByProjectId(Long id);
 
     ProjectPosition findByProjectAndPosition(Project project, Position position);

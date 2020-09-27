@@ -4,7 +4,7 @@ package com.finki.timesheets.service.impl;
 import com.finki.timesheets.model.Position;
 import com.finki.timesheets.model.ProjectPosition;
 import com.finki.timesheets.repository.PositionRepository;
-import com.finki.timesheets.repository.PositionSalaryRepository;
+import com.finki.timesheets.repository.ProjectPositionRepository;
 import com.finki.timesheets.service.PositionService;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,17 +18,17 @@ import java.util.stream.Collectors;
 public class PositionServiceImpl implements PositionService {
 
     private final PositionRepository positionRepository;
-    private final PositionSalaryRepository positionSalaryRepository;
+    private final ProjectPositionRepository projectPositionRepository;
 
 
-    public PositionServiceImpl(PositionRepository positionRepository, PositionSalaryRepository positionSalaryRepository) {
+    public PositionServiceImpl(PositionRepository positionRepository, ProjectPositionRepository projectPositionRepository) {
         this.positionRepository = positionRepository;
-        this.positionSalaryRepository = positionSalaryRepository;
+        this.projectPositionRepository = projectPositionRepository;
     }
 
     @Override
     public Map<String, Integer> getAllPositionsAndSalaryMapByProject(Long id) {
-        return this.positionSalaryRepository.findAllByProjectId(id).stream().collect(Collectors.toMap(p -> p.getPosition().getName(), ProjectPosition::getSalary));
+        return this.projectPositionRepository.findAllByProjectId(id).stream().collect(Collectors.toMap(p -> p.getPosition().getName(), ProjectPosition::getSalary));
     }
 
     @Override

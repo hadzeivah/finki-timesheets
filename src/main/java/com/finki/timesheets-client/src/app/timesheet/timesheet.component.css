@@ -31,6 +31,14 @@ tr.mat-footer-row {
   font-weight: bold;
 }
 
+tr.mat-row {
+  height: 25px !important;
+}
+
+.mat-cell {
+  font-size: 12px;
+}
+
 .make-red {
-  background-color: red;
+  background-color: #ff4d4d;
 }

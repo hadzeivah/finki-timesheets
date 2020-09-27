@@ -3,8 +3,7 @@ import {Project} from "../../model/Project";
 import {Member} from "../../model/Member";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ProjectService} from "../../services/project.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {MemberService} from "../../services/member.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-timesheet-page',
@@ -27,9 +26,7 @@ export class TimesheetPageComponent implements OnInit {
 
 
   constructor(private projectService: ProjectService,
-              private memberService: MemberService,
-              public router: Router,
-              private route: ActivatedRoute) {
+              public router: Router) {
 
   }
 
