@@ -41,13 +41,17 @@ export class WorkPackageComponent implements OnInit {
   }
 
   addTask(workPackage: WorkPackage) {
-    workPackage.tasks.push(new Task(this.taskDescription.value));
-    this.workPackagesService.saveTasks(workPackage).subscribe();
+    let task = new Task(this.taskDescription.value);
+    this.workPackagesService.saveTask(workPackage.id, task).subscribe(
+      task => workPackage.tasks.push(task)
+    );
   }
 
   addOutput(workPackage: WorkPackage) {
-    workPackage.outputs.push(new Output(this.taskDescription.value));
-    this.workPackagesService.saveOutputs(workPackage).subscribe();
+    let output = new Output(this.intellectualOutput.value);
+    this.workPackagesService.saveOutput(workPackage.id, output).subscribe(
+      output => workPackage.outputs.push(output)
+    );
   }
 
   addWorkPackage() {

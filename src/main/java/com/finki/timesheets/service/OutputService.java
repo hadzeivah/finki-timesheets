@@ -10,4 +10,6 @@ public interface OutputService {
     void delete(Long id);
 
     Output findByDescription(String description);
+
+    Output save(Output output);
 }

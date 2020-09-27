@@ -15,7 +15,7 @@
       </button>
     </div>
 
-    <mat-accordion>
+    <mat-accordion multi>
       <div *ngFor="let workPackage of workPackages">
         <mat-expansion-panel class="mat-elevation-z0" (opened)="panelOpenState = true"
                              (closed)="panelOpenState = false">

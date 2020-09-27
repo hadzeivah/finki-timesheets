@@ -11,4 +11,5 @@ public interface TaskService {
 
     Task findByDescription(String stringCellValue);
 
+    Task save(Task task);
 }

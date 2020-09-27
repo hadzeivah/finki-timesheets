@@ -30,4 +30,9 @@ public class OutputServiceImpl implements OutputService {
     public Output findByDescription(String name) {
         return this.outputRepository.findByDescription(name);
     }
+
+    @Override
+    public Output save(Output output) {
+        return this.outputRepository.save(output);
+    }
 }

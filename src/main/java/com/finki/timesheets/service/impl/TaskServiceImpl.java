@@ -31,4 +31,9 @@ public class TaskServiceImpl implements TaskService {
     public Task findByDescription(String description) {
         return this.taskRepository.findByDescription(description);
     }
+
+    @Override
+    public Task save(Task task) {
+        return taskRepository.save(task);
+    }
 }
