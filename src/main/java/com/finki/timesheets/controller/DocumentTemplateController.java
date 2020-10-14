@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/templates")
 public class DocumentTemplateController {
@@ -33,7 +32,7 @@ public class DocumentTemplateController {
         this.projectService = projectService;
     }
 
-    @GetMapping(value = "project/{projectId}", produces = "application/vnd.ms-word")
+    @GetMapping(value = "project/{projectId}", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity getFileFromFileSystem(@RequestParam String filenames, @PathVariable Long projectId) throws NotFoundException {
 
@@ -72,7 +71,7 @@ public class DocumentTemplateController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/vnd.ms-word"))
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
                 .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Access-Control-Expose-Headers", "Content-Disposition")
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + documentName)
                 .body(new InputStreamResource(document));

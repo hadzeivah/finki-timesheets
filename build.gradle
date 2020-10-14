@@ -29,6 +29,7 @@ dependencies {
 	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	compile 'org.apache.poi:poi-ooxml:4.1.0'
+	compile group: 'org.springframework.security', name: 'spring-security-cas', version: '5.2.2.RELEASE'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }

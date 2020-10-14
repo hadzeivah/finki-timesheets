@@ -16,7 +16,7 @@ export class DownloadService {
     let headers = new HttpHeaders();
     let params = new HttpParams();
 
-    headers = headers.append('Accept', "application/vnd.ms-word");
+    headers = headers.append('Accept', "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
     params = params.append('filenames', filenames.join(','));
 
     return this.downloadFile(headers, params, `/api/templates/project/${projectId}`);
@@ -40,7 +40,7 @@ export class DownloadService {
   };
 
   saveFile(data: any, filename?: string) {
-    const blob = new Blob([data], {type: "application/vnd.ms-word"});
+    const blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
     fileSaver.saveAs(blob, filename)
   }
 }

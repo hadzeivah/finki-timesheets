@@ -1,68 +1,79 @@
 package com.finki.timesheets.config;
 
+import org.jasig.cas.client.session.SingleSignOutFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.cas.ServiceProperties;
+import org.springframework.security.cas.authentication.CasAuthenticationProvider;
+import org.springframework.security.cas.web.CasAuthenticationFilter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
-import javax.annotation.Resource;
+import java.util.Collections;
 
-@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Resource(name = "userService")
-    private UserDetailsService userDetailsService;
-
-    private final JwtAuthenticationEntryPoint unauthorizedHandler;
-
-    public WebSecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler) {
-        this.unauthorizedHandler = unauthorizedHandler;
-    }
-
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+    private AuthenticationProvider authenticationProvider;
+    private AuthenticationEntryPoint authenticationEntryPoint;
+    private SingleSignOutFilter singleSignOutFilter;
+    private LogoutFilter logoutFilter;
 
     @Autowired
-    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-                .passwordEncoder(encoder());
-    }
+    public WebSecurityConfig(
+            CasAuthenticationProvider casAuthenticationProvider,
+            AuthenticationEntryPoint authenticationEntryPoint,
+            LogoutFilter logoutFilter,
+            SingleSignOutFilter singleSignOutFilter) {
 
-    @Bean
-    public JwtAuthenticationFilter authenticationTokenFilterBean() throws Exception {
-        return new JwtAuthenticationFilter();
+        this.authenticationProvider = casAuthenticationProvider;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.logoutFilter = logoutFilter;
+        this.singleSignOutFilter = singleSignOutFilter;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().
-                authorizeRequests()
-                .antMatchers("/token/*", "/signup").permitAll()
-                .anyRequest().authenticated()
+        http.authorizeRequests().antMatchers("/secured.*", "/login").authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                .addFilterBefore(singleSignOutFilter, CasAuthenticationFilter.class)
+                .addFilterBefore(logoutFilter, LogoutFilter.class)
+                .csrf().ignoringAntMatchers("/exit/cas");
+
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider);
+    }
+
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return new ProviderManager(Collections.singletonList(authenticationProvider));
     }
 
     @Bean
-    public BCryptPasswordEncoder encoder(){
-        return new BCryptPasswordEncoder();
+    public CasAuthenticationFilter casAuthenticationFilter(ServiceProperties sp) throws Exception {
+        CasAuthenticationFilter filter = new CasAuthenticationFilter();
+        filter.setServiceProperties(sp);
+        filter.setAuthenticationManager(authenticationManager());
+        return filter;
     }
 
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
