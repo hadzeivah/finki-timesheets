@@ -24,7 +24,7 @@ public class CasSecurityConfig {
     @Bean
     public ServiceProperties serviceProperties() {
         ServiceProperties serviceProperties = new ServiceProperties();
-        serviceProperties.setService("https://localhost:8080");
+        serviceProperties.setService("https://timesheets.finki.ukim.mk");
         serviceProperties.setSendRenew(false);
         return serviceProperties;
     }
