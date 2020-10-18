@@ -31,8 +31,9 @@ public class AuthController {
     }
 
 
-    @GetMapping()
+    @GetMapping("")
     public String login() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return "redirect:/secured";
     }
 

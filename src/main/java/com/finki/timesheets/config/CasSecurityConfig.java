@@ -24,8 +24,9 @@ public class CasSecurityConfig {
     @Bean
     public ServiceProperties serviceProperties() {
         ServiceProperties serviceProperties = new ServiceProperties();
-        serviceProperties.setService("https://timesheets.finki.ukim.mk");
+        serviceProperties.setService("https://timesheets.finki.ukim.mk/login/cas");
         serviceProperties.setSendRenew(false);
+        serviceProperties.setAuthenticateAllArtifacts(true);
         return serviceProperties;
     }
 
