@@ -3,7 +3,7 @@ package com.finki.timesheets.config;
 import com.finki.timesheets.service.impl.CasUserDetailService;
 import org.jasig.cas.client.session.SingleSignOutFilter;
 import org.jasig.cas.client.session.SingleSignOutHttpSessionListener;
-import org.jasig.cas.client.validation.Cas30ServiceTicketValidator;
+import org.jasig.cas.client.validation.Cas10TicketValidator;
 import org.jasig.cas.client.validation.TicketValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +41,7 @@ public class CasSecurityConfig {
 
     @Bean
     public TicketValidator ticketValidator() {
-        return new Cas30ServiceTicketValidator("https://cas.finki.ukim.mk/cas");
+        return new Cas10TicketValidator("https://cas.finki.ukim.mk/cas");
     }
 
     @Bean
