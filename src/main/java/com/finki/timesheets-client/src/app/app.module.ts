@@ -1,11 +1,10 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
-
 import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
 import {AuthService} from './services/auth.service';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
-FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {routing} from './app.routing';
 import {TimesheetComponent} from './timesheet/timesheet.component';
 import {CustomMaterialModule} from './material/material.module';
@@ -24,7 +23,7 @@ import {DocumentPageComponent} from './pages/document-page/document-page.compone
 import {MembersComponent} from './members/members.component';
 import {TranslateLoader, TranslateModule, TranslateService} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
-import {JWT_OPTIONS, JwtHelperService} from "@auth0/angular-jwt";
+import {JWT_OPTIONS} from "@auth0/angular-jwt";
 import {MatStepperModule} from "@angular/material/stepper";
 import {ReportsComponent} from './reports/reports.component';
 import {ReportsPageComponent} from './pages/reports-page/reports-page.component';
