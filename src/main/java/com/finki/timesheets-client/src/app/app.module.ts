@@ -5,9 +5,8 @@ import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
 import {AuthService} from './services/auth.service';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {routing} from './app.routing';
-import {JwtInterceptor} from './services/helpers/JwtInterceptor';
 import {TimesheetComponent} from './timesheet/timesheet.component';
 import {CustomMaterialModule} from './material/material.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -87,9 +86,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
     MatCheckboxModule,
     MatExpansionModule
   ],
-  providers: [ErrorHandler, AuthService, TimesheetService, TranslateService, JwtHelperService,
+  providers: [ErrorHandler, AuthService, TimesheetService, TranslateService,
     {provide: JWT_OPTIONS, useValue: JWT_OPTIONS},
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},],
   bootstrap: [AppComponent],
