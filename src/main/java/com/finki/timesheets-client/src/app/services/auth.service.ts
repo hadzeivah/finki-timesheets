@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {ApiResponse} from '../model/api.response';
-import {JwtHelperService} from '@auth0/angular-jwt';
 import {User} from "../model/User";
 import {map} from "rxjs/operators";
 import decode from 'jwt-decode';
@@ -12,7 +11,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
-  constructor(private http: HttpClient, public jwtHelper: JwtHelperService) {
+  constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
 

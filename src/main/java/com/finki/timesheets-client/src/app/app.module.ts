@@ -88,7 +88,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
   providers: [ErrorHandler, AuthService, TimesheetService, TranslateService,
     {provide: JWT_OPTIONS, useValue: JWT_OPTIONS},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},],
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
   entryComponents: [AddProjectComponent, AddMemberComponent, AssignMemberComponent, ConfirmDialogComponent]
 })
