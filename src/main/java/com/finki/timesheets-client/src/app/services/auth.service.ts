@@ -43,8 +43,8 @@ export class AuthService {
     return this.http.get<ApiResponse>('/api/users');
   }
 
-  getUserById(id: number): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(`/api/users/${id}`);
+  getLoggedUser(): Observable<User> {
+    return this.http.get<User>('/api/loggedUser');
   }
 
   createUser(user: User): Observable<ApiResponse> {
@@ -61,8 +61,8 @@ export class AuthService {
 
   public isAuthenticated(): boolean {
     let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    let token = currentUser != null ? currentUser.token : null;
-    return !this.jwtHelper.isTokenExpired(token);
+    this.currentUserSubject.next(currentUser);
+    return currentUser != null;
   }
 
   public get currentUserValue(): User {

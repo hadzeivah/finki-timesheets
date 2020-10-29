@@ -12,7 +12,7 @@
       <button mat-icon-button [matMenuTriggerFor]="auth">
         <mat-icon class="icon">person_outline</mat-icon>
       </button>
-      <span> {{currentUser.username}}</span>
+      <span> {{currentUser?.username}}</span>
       <mat-menu #auth="matMenu">
         <button mat-menu-item (click)="logout()">
           <mat-icon class="icon">exit_to_app</mat-icon>
