@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
 import {Role} from "../model/Role";
@@ -15,7 +15,7 @@ interface ROUTE {
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss']
 })
-export class NavComponent implements OnInit {
+export class NavComponent {
   isExpanded = true;
   currentUser: User;
   @Output() toggleSidenav = new EventEmitter<void>();
@@ -77,16 +77,8 @@ export class NavComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(['login']);
+    this.authService.logout().subscribe();
   }
-
-  ngOnInit(): void {
-    this.authService.getLoggedUser().subscribe(user => {
-      localStorage.setItem('currentUser', JSON.stringify(user));
-    });
-  }
-
 
 }
 

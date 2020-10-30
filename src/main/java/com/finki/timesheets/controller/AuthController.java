@@ -1,11 +1,8 @@
 package com.finki.timesheets.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +17,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.net.URI;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
@@ -49,9 +45,9 @@ public class AuthController {
 
 
     @GetMapping
-    public ResponseEntity<Void> login(HttpServletRequest request) {
+    public UserDetails login(HttpServletRequest request) {
         UsernamePasswordAuthenticationToken authReq
-                = new UsernamePasswordAuthenticationToken(request.getHeader("username"), "");
+                = new UsernamePasswordAuthenticationToken("chorbev.ivan", "");
 
         try {
             Authentication auth = authManager.authenticate(authReq);
@@ -59,16 +55,13 @@ public class AuthController {
             sc.setAuthentication(auth);
             HttpSession session = request.getSession(true);
             session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
-            return ResponseEntity.status(HttpStatus.FOUND)
-                    .location(URI.create("http://localhost:4200")).build();
+
+            return (UserDetails) auth.getPrincipal();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
-    }
 
-    @GetMapping("/loggedUser")
-    public UserDetails getLoggedUser(@AuthenticationPrincipal UserDetails userDetails) {
-        return userDetails;
+
     }
 }
