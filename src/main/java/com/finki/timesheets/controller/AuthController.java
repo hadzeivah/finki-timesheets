@@ -47,7 +47,7 @@ public class AuthController {
     @GetMapping
     public UserDetails login(HttpServletRequest request) {
         UsernamePasswordAuthenticationToken authReq
-                = new UsernamePasswordAuthenticationToken("chorbev.ivan", "");
+                = new UsernamePasswordAuthenticationToken(request.getHeader("username"), "");
 
         try {
             Authentication auth = authManager.authenticate(authReq);
