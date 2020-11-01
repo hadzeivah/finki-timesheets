@@ -49,30 +49,46 @@ public class ProjectProjectPositionServiceImpl implements ProjectPositionService
 
     @Override
     @Transactional
-    public List<ProjectPosition> saveOrUpdateAll(Project project, List<PositionSalaryDto> positions) {
+    public void delete(Project project, List<PositionSalaryDto> positionsToDelete) {
 
-        Map<String, Position> positionMap = this.positionRepository.findAll().stream().collect(Collectors.toMap(Position::getName, Function.identity()));
-        Map<String, ProjectPosition> projectPositionMap = this.projectPositionRepository.findAllByProjectId(project.getId()).stream().collect(Collectors.toMap(projectPosition -> projectPosition.getPosition().getName(), projectPosition -> projectPosition));
+        List<Position> positions = this.positionRepository.findAllByNameIn(positionsToDelete.stream()
+                .map(PositionSalaryDto::getPositionType).collect(Collectors.toList()));
+
+        this.projectPositionRepository.deleteByProjectAndPositionIn(project, positions);
+        this.positionRepository.deleteAll(positions);
+    }
+
+    @Override
+    @Transactional
+    public void saveOrUpdateAll(Project project, List<PositionSalaryDto> salaryByPositionList) {
+
+        Map<String, Position> positionsMappedByName = this.positionRepository.findAll()
+                .stream()
+                .collect(Collectors.toMap(Position::getName, Function.identity()));
+
+        Map<String, ProjectPosition> positionsOnProjectMappedByName = this.projectPositionRepository.findAllByProjectId(project.getId())
+                .stream()
+                .collect(Collectors.toMap(projectPosition -> projectPosition.getPosition().getName(), projectPosition -> projectPosition));
 
         List<ProjectPosition> projectPositions = new ArrayList<>();
-        positions.forEach(positionSalaryDto -> {
-            Position position = positionMap.get(positionSalaryDto.getPositionType());
+        salaryByPositionList.forEach(salaryByPosition -> {
+            Position position = positionsMappedByName.get(salaryByPosition.getPositionType());
             if (position == null) {
-                position = this.positionRepository.save(new Position(positionSalaryDto.getPositionType(), positionSalaryDto.getPositionType()));
+                position = this.positionRepository.save(new Position(salaryByPosition.getPositionType(), salaryByPosition.getPositionType()));
             }
             // if already exists
-            ProjectPosition projectPosition = projectPositionMap.get(position.getName());
+            ProjectPosition projectPosition = positionsOnProjectMappedByName.get(position.getName());
             if (projectPosition != null) {
-                projectPosition.setSalary(positionSalaryDto.getSalary());
+                projectPosition.setSalary(salaryByPosition.getSalary());
                 projectPositions.add(projectPosition);
             } else {
-                ProjectPosition positionSalary = Helper.positionFromDTO(positionSalaryDto, position, project);
+                ProjectPosition positionSalary = Helper.positionFromDTO(salaryByPosition, position, project);
                 projectPositions.add(positionSalary);
             }
 
         });
 
-        return this.projectPositionRepository.saveAll(projectPositions);
+        this.projectPositionRepository.saveAll(projectPositions);
     }
 
 }

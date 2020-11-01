@@ -48,9 +48,9 @@ export class ProjectTableComponent implements OnInit {
     this.projectService.findProjects()
       .subscribe(data => {
           this.dataSource.data = data.result;
-        this.projects = data.result;
-        this.isLoading = false;
-        }, err => console.log('HTTP Error', err),
+          this.projects = data.result;
+          this.isLoading = false;
+        }, err => this.notificationService.openSnackBar(err.message)
       );
   }
 
@@ -69,8 +69,6 @@ export class ProjectTableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(projectPosition => {
       if (projectPosition) {
-
-        console.log(projectPosition);
         this.projectService.addProject(projectPosition).subscribe(() => {
           this.notificationService.openSnackBar('Project successfully added');
           this.loadProjects();
@@ -89,7 +87,7 @@ export class ProjectTableComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(projectPosition => {
-      if (projectPosition) {
+      if (projectPosition && projectPosition.changed) {
         projectPosition.project.id = editedProject != null ? editedProject.id : null;
         projectPosition.project.projectManager = editedProject.projectManager;
 

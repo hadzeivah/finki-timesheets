@@ -5,13 +5,13 @@ import com.finki.timesheets.model.Project;
 import java.util.List;
 
 
-public class ProjectPositionsDto {
+public class ProjectDetailsDto {
     private Project project;
     private List<PositionSalaryDto> positions;
+    private List<PositionSalaryDto> positionsToDelete;
 
-    public ProjectPositionsDto() {
+    public ProjectDetailsDto() {
     }
-
 
 
     public Project getProject() {
@@ -29,5 +29,13 @@ public class ProjectPositionsDto {
 
     public void setPositions(List<PositionSalaryDto> positions) {
         this.positions = positions;
+    }
+
+    public List<PositionSalaryDto> getPositionsToDelete() {
+        return positionsToDelete;
+    }
+
+    public void setPositionsToDelete(List<PositionSalaryDto> positionsToDelete) {
+        this.positionsToDelete = positionsToDelete;
     }
 }

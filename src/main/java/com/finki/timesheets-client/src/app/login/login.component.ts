@@ -20,7 +20,7 @@ export class LoginComponent {
           notificationService.openSnackBar("Not allowed access");
         }
       }
-      , error => console.log(error));
+      , error => notificationService.openSnackBar(error.message));
   }
 }
 

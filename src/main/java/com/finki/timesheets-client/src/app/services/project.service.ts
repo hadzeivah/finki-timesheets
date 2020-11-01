@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ApiResponse} from '../model/api.response';
-import {ProjectPositionsDto} from "../model/ProjectPositionsDto";
+import {ProjectDetailsDto} from "../model/ProjectDetailsDto";
 import {ProjectMemberDto} from "../model/ProjectMemberDto";
 import {Project} from "../model/Project";
 
@@ -30,7 +30,7 @@ export class ProjectService {
     return this.http.post<ApiResponse>(`/api/projects/assignMember`, projectMemberDto);
   }
 
-  addProject(projectDto: ProjectPositionsDto): Observable<ApiResponse> {
+  addProject(projectDto: ProjectDetailsDto): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(`/api/projects`, projectDto);
   }
 
@@ -38,7 +38,7 @@ export class ProjectService {
     return this.http.delete<ApiResponse>(`/api/projects/${id}`);
   }
 
-  updateProject(projectDto: ProjectPositionsDto): Observable<ApiResponse> {
+  updateProject(projectDto: ProjectDetailsDto): Observable<ApiResponse> {
     return this.http.put<ApiResponse>(`/api/projects/${projectDto.project.id}`, projectDto);
   }
 

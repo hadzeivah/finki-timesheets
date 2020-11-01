@@ -9,7 +9,7 @@ import javassist.NotFoundException;
 import java.util.List;
 
 public interface ProjectPositionService {
-    List<ProjectPosition> saveOrUpdateAll(Project project, List<PositionSalaryDto> positions);
+    void saveOrUpdateAll(Project project, List<PositionSalaryDto> positions);
 
     List<ProjectPosition> findAllByProjectId(Long id);
 
@@ -17,4 +17,5 @@ public interface ProjectPositionService {
 
     ProjectPosition findById(Long id) throws NotFoundException;
 
+    void delete(Project project, List<PositionSalaryDto> positionsToDelete);
 }

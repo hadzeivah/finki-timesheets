@@ -6,9 +6,10 @@ import {University} from "../../model/University";
 import {UniversityService} from "../../services/university.service";
 import {PositionService} from "../../services/position.service";
 import {Position} from "../../model/Position";
-import {ProjectPositionsDto} from "../../model/ProjectPositionsDto";
+import {ProjectDetailsDto} from "../../model/ProjectDetailsDto";
 import {WorkPackagesService} from "../../services/work-packages.service";
 import {WorkPackage} from "../../model/WorkPackage";
+import {NotificationService} from "../../services/notification.service";
 
 @Component({
   selector: 'app-add-project',
@@ -24,8 +25,9 @@ export class AddProjectComponent {
   editedProject: Project;
   title: string = "Add projects";
   seedData: Position[];
-  projectPosition: ProjectPositionsDto;
+  projectPosition: ProjectDetailsDto;
   workPackages: WorkPackage[];
+  positionToDelete: any = [];
 
   constructor(
     public dialogRef: MatDialogRef<AddProjectComponent>,
@@ -33,7 +35,8 @@ export class AddProjectComponent {
     private fb: FormBuilder,
     private universityService: UniversityService,
     private positionService: PositionService,
-    private workPackagesService: WorkPackagesService) {
+    private workPackagesService: WorkPackagesService,
+    private notificationService: NotificationService) {
 
     this.getUniversities();
     this.getWorkPackages();
@@ -47,6 +50,14 @@ export class AddProjectComponent {
       endDate: ['', Validators.required]
     });
 
+    this.addPositionsGroup = this.fb.group({
+      positions: this.fb.array([])
+    });
+
+    this.addWorkPackageGroup = this.fb.group({
+      workPackage: [null, Validators.required]
+    });
+
     if (data) {
       this.title = "Edit projects";
       this.editedProject = data;
@@ -55,9 +66,6 @@ export class AddProjectComponent {
   }
 
   ngOnInit() {
-    this.addPositionsGroup = this.fb.group({
-      positions: this.fb.array([])
-    });
 
     if (this.editedProject) {
       this.positionService.findSalaryGroupedByPosition(this.editedProject.id)
@@ -74,10 +82,6 @@ export class AddProjectComponent {
         this.seedPositionFormArray();
       });
     }
-    this.addWorkPackageGroup = this.fb.group({
-      workPackage: ['', Validators.required]
-    });
-
   }
 
   get positionsFormArray() {
@@ -100,6 +104,7 @@ export class AddProjectComponent {
   }
 
   removePositionToPositionsFormArray(index) {
+    this.positionToDelete.push(this.positionsFormArray.value[index]);
     this.positionsFormArray.removeAt(index);
   }
 
@@ -124,7 +129,7 @@ export class AddProjectComponent {
     this.universityService.findUniversities()
       .subscribe(data => {
           this.universities = data.result;
-        }, err => console.log('HTTP Error', err),
+        }, err => this.notificationService.openSnackBar(err.message)
       );
 
   }
@@ -133,13 +138,14 @@ export class AddProjectComponent {
     this.workPackagesService.findWorkPackages()
       .subscribe(data => {
           this.workPackages = data;
-        }, err => console.log('HTTP Error', err),
+        }, err => this.notificationService.openSnackBar(err.message)
       );
 
   }
 
   save() {
-    this.projectPosition = new ProjectPositionsDto(this.addProjectsGroup.value, this.positionsFormArray.value, this.workPackage.value);
+    this.projectPosition = new ProjectDetailsDto(this.addProjectsGroup.value, this.positionsFormArray.value, this.positionToDelete, this.workPackage.value);
+    this.projectPosition.changed = this.addProjectsGroup.dirty || this.addWorkPackageGroup.dirty || this.addPositionsGroup.dirty;
     this.dialogRef.close(this.projectPosition);
   }
 
@@ -153,9 +159,9 @@ export class AddProjectComponent {
         startDate: this.editedProject.startDate,
         endDate: this.editedProject.endDate
       });
-    this.addWorkPackageGroup.patchValue(({
+    this.addWorkPackageGroup.patchValue({
       workPackage: this.editedProject.workPackage
-    }))
+    });
   }
 
   getFormControl() {
@@ -164,6 +170,10 @@ export class AddProjectComponent {
 
   compareUniversityObjects(university1: any, university2: any) {
     return university1 && university2 && university1.id == university2.id;
+  }
+
+  compareWorkPackageObjects(workPackage1: any, workPackage2: any) {
+    return workPackage1 && workPackage2 && workPackage1.id == workPackage2.id;
   }
 }
 

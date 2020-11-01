@@ -2,8 +2,8 @@ package com.finki.timesheets.controller;
 
 
 import com.finki.timesheets.model.*;
+import com.finki.timesheets.model.dto.ProjectDetailsDto;
 import com.finki.timesheets.model.dto.ProjectMemberDto;
-import com.finki.timesheets.model.dto.ProjectPositionsDto;
 import com.finki.timesheets.service.*;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +51,9 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ApiResponse<Project> saveProject(@RequestBody ProjectPositionsDto projectPosition, @AuthenticationPrincipal UserDetails currentUser) throws NotFoundException {
+    public ApiResponse<Project> saveProject(@RequestBody ProjectDetailsDto projectPosition, @AuthenticationPrincipal UserDetails currentUser) throws NotFoundException {
         Project project = projectPosition.getProject();
-        User user = (User) this.userService.findOne(currentUser.getUsername());
+        User user = this.userService.findOne(currentUser.getUsername());
         project.setProjectManager(user);
         this.projectPositionService.saveOrUpdateAll(projectService.save(project), projectPosition.getPositions());
         return new ApiResponse<>(HttpStatus.OK.value(), "Project saved successfully.", project);
@@ -70,10 +70,11 @@ public class ProjectController {
 
 
     @PutMapping("/{id}")
-    public ApiResponse<Project> update(@RequestBody ProjectPositionsDto projectPosition) throws NotFoundException {
+    public ApiResponse<Project> update(@RequestBody ProjectDetailsDto projectPosition) throws NotFoundException {
 
         Project project = projectService.update(projectPosition.getProject());
         this.projectPositionService.saveOrUpdateAll(project, projectPosition.getPositions());
+        this.projectPositionService.delete(project, projectPosition.getPositionsToDelete());
         return new ApiResponse<>(HttpStatus.OK.value(), "Project updated successfully.", project);
     }
 
