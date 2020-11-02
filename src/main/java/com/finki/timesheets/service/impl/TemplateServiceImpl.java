@@ -13,11 +13,13 @@ import javassist.NotFoundException;
 import org.apache.poi.ooxml.POIXMLException;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -27,18 +29,21 @@ import java.util.zip.ZipOutputStream;
 public class TemplateServiceImpl implements TemplateService {
 
 
-    private static final String CLASS_PATH = "/templates/";
+    private static final String CLASS_PATH = "classpath:/templates/";
     private TimesheetService timesheetService;
     private ItemService itemService;
     private ReportService reportService;
     private HashMap<String, String> replacementValues = new HashMap<>();
     private String today = StringUtils.formatDateToString_DDMMYYYY(LocalDateTime.now());
+    private ResourceLoader resourceLoader;
 
 
-    public TemplateServiceImpl(TimesheetService timesheetService, ItemService itemService, ReportService reportService) {
+    public TemplateServiceImpl(TimesheetService timesheetService, ItemService itemService, ReportService reportService,
+                               ResourceLoader resourceLoader) {
         this.timesheetService = timesheetService;
         this.itemService = itemService;
         this.reportService = reportService;
+        this.resourceLoader = resourceLoader;
     }
 
     @Override
@@ -253,11 +258,10 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     private XWPFDocument openDocument(String file) {
-        Resource resource = new ClassPathResource(file);
+        Resource resource = resourceLoader.getResource(file);
         XWPFDocument document = null;
         try {
-            InputStream fis = new FileInputStream(resource.getFile());
-            document = new XWPFDocument(fis);
+            document = new XWPFDocument(resource.getInputStream());
         } catch (Exception e) {
             e.printStackTrace();
         }
